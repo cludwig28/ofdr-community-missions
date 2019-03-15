@@ -1,0 +1,109 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <UserData>
+    <PerMissionState>
+      <MapView ViewCenterX="2873.108" ViewCenterY="-8332.516" ViewScale="0.358318" ViewRotation="0" />
+    </PerMissionState>
+  </UserData>
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="4" MultiplayerMaxServerBandwidth="8192" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="Just a mission to help me wrap my head around this stuff again" Group="TestMissions" Name="Test v001" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="levelScript" TemplateID="130338588799821875" TemplateName="levelScript" X="-77.09756" Y="-2996.972">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="level">
+          <Script>--[[
+We only need to use the level script for some basic configuration of the EDX.
+The EDX retroutes some of the games event handlers so they can be used on secondary scripts.
+Because of this it is strongly recommended that you not use the level script to code any elements
+of your mission.  If you do so and things do not work, you were warned!
+]]--
+
+DEBUG = true --this enables the built in EDX debugging mechanism and generates a file in the main game directory called "EDX DEBUG.txt"
+
+DISPLAY = true --this enables the on screen debug message display linked to the EDX debugger.  If DEBUG is false this will be inactive as well.
+
+logEdexToFile = false --this enables the internal logging for the EDX itself and is not necessary for mission creators.
+
+disableEdexTimer = false --this disables the EDX timing mechanism which inturn will disable the EDX timers and hotkeys.  Keep false unless you have a good reason to deactivate them.
+
+
+--[[
+This should be all you need in your level script at any time.  If you have any questions feel free to contact tvig0r0us
+on the True OFDR Community Forums at:
+http://operationflashpoint.forummotion.com/t396-official-ofdr-mission-editor-expansion#2886
+]]--</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="3" Name="missionScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="-79.80197" Y="-2834.708">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="mission">
+          <Script>
+--[[
+If you have any questions feel free to contact tvig0r0us on the True OFDR Community Forums at:
+http://operationflashpoint.forummotion.com/t396-official-ofdr-mission-editor-expansion#2886
+
+
+onEDXInitialized is the same as onCreate() but it fires after the EDX has been initialized.  It is Recommended to use this instead
+of onCreate to prevent any script from firing prior to the complete initialization of the EDX.
+
+***** I strongly recommend registering the player entity and all playable enitites to the EDX as this will make other functions available
+]]--
+function onEDXInitialized()
+--Place your playerteam on the map and use the functions below to register its members to the EDX.  THIS IS IMPORTANT!!!
+	
+	EDX:registerPlayerEchelon("echelonName",false) --change the name to the echelon name of the player's team
+	-- Change false to true to remove the playable entities from the game that are not used by a human player at mission start.
+	
+	--You can also use the commands below to register the enitites in the player team individually.
+	--EDX:registerPlayer("playerEntityName") --change the name in quotes to the name of the player entity in the editor
+	--EDX:registerPlayable("playableEntityName", false) --change the name in quotes to the name of the playable entity in the editor.  If you want to remove the entity if it is not used by a coop player, change false to true.
+	--Simply copy/paste the line above for all of the multiplayer playable entities you are using in your mission.
+	
+	--You can now add anything you want to the onEDXInitialized just as you would in the onCreate without the EDX.
+end
+
+--[[
+***I strongly recommend setting all time and weather conditions using the functions provided by the EDX.
+This way the EDX can keep track of and change the environment including displaying information about the time and weather. 
+In this script I have included all of the functions prewritten to do just that.
+This should be done in the onMissionStart.
+]]--
+function onMissionStart()	
+	--By using EDX time and weather functions you give the EDX information that allows you to track the ingame time and start random weather cycles and similar items.
+	EDX:setTimeOfDay(00, 00, 00) -- You can change the starting time as you desire here.  You can also comment out this line and set it in the Mission Properties tab of the editor
+	--EDX:setRandomTime() --If you want a randomly generated starting time, simply comment the line above and uncomment this line.
+	
+	EDX:setWeatherCurrent("clear") --You can use this line to set the starting weather type or set it in the Mission Properties tab of the editor.  Note that you can use the weather type name instead of a number with this function.
+	EDX:setFogCurrent(0) --You can set the fog density here
+	--EDX:setRandomWeather() --If you would like the starting weather to be randomly generated simply uncomment this line and comment the previous 2 lines.
+	
+	--To run a randomly changing weather sequence simply uncomment the next line.
+	--EDX:randomizeWeather(30) --You can change the time in minutes between weather changes by changing the number to any number you want.
+	
+	--You can now add anything you want to the onMissionStart just as you would do without the EDX.
+end
+
+--The EDX is now completely configured and ready to go.  You can import modules, create your own or just code your missions from here!  Have fun!!
+</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="4" Name="iu06usfldr" TemplateID="58919030522669205" TemplateName="iu06usfldr" X="2864.438" Y="-8373.239">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="Player" />
+        <PersonaProperties Surname="Wilkie" Rank="3" HeadTexture="c_head_cau_setG" HeadModel="c_head_cau_07" Voice="Marine07" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2864.438, 0, -8373.239, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>
