@@ -1,0 +1,279 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <UserData>
+    <PerMissionState>
+      <MapView ViewCenterX="2492.855" ViewCenterY="-8068.205" ViewScale="1.104123" ViewRotation="0" />
+    </PerMissionState>
+  </UserData>
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="levelScript" TemplateID="130338588799821875" TemplateName="levelScript" X="-77.09756" Y="-2996.972">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="level">
+          <Script>--[[
+We only need to use the level script for some basic configuration of the EDX.
+The EDX retroutes some of the games event handlers so they can be used on secondary scripts.
+Because of this it is strongly recommended that you not use the level script to code any elements
+of your mission.  If you do so and things do not work, you were warned!
+]]--
+
+DEBUG = true --this enables the built in EDX debugging mechanism and generates a file in the main game directory called "EDX DEBUG.txt"
+
+DISPLAY = true --this enables the on screen debug message display linked to the EDX debugger.  If DEBUG is false this will be inactive as well.
+
+logEdexToFile = false --this enables the internal logging for the EDX itself and is not necessary for mission creators.
+
+disableEdexTimer = false --this disables the EDX timing mechanism which inturn will disable the EDX timers and hotkeys.  Keep false unless you have a good reason to deactivate them.
+
+
+</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="3" Name="missionScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="-79.80197" Y="-2834.708">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="mission">
+          <Script>
+
+function onEDXInitialized()
+	EDX:registerPlayer("")
+	--EDX:registerPlayable("", false)
+end
+
+function onMissionStart()	
+	EDX:setTimeOfDay(00, 00, 00)
+	--EDX:setRandomTime()
+	
+	EDX:setWeatherCurrent("clear")
+	EDX:setFogCurrent(0)
+	--EDX:setRandomWeather()
+	--EDX:randomizeWeather(30)
+	OFP:patrol("targetheli","waypointI4p","EBACKANDFORTH",1,"OVERRIDE")
+end
+
+function numpad0()
+	EDX:fireSamMissile("sam","targetheli");
+	OFP:displaySystemMessage("Firing Missile")
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="4" Name="missileScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="2005.325" Y="-7824.194">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="missileMod">
+          <Script>-- Missile mod v001 by tvig0r0us
+
+INFO = "Missile Mod v001 by tvig0r0us";
+
+function onEDXInitialized()
+	function EDX:fireSamMissile(missileName,target)
+		doTravelingEffect("X_WEP_CANN_Master1",missileName,target,100);
+	end
+end
+
+function onMissionStart()
+	spawned = {};
+	effects = {};
+	trigTime = OFP:getMissionTime() + 1000;
+	frameCount = 0;
+	lastFrame = 0;
+	currentFPS = 0;
+	ID = 0;
+end
+
+function getNewID()
+	ID = ID+1;
+	return ID;
+end
+
+function updateFrame(currentTime, frameNo)
+	frameCount = frameCount + 1
+	if currentTime &gt;= trigTime and frameCount &gt; lastFrame then
+		currentFPS = frameCount - lastFrame
+		lastFrame = frameCount
+		trigTime = currentTime + 1000
+	end
+	for _,fx in pairs(effects) do
+		fx:move();
+	end
+end
+
+function doTravelingEffect(effectName,startPos,target,speed)
+	effect = {};
+	effect.fx = effectName;
+	effect.spd = speed;
+	effect.tar = target;
+	effect.ey = ey;
+	effect.ez = ez;
+	if type(startPos) == "table" then
+		effect.pos = startPos;
+		effect.start = startPos;
+	elseif type(startPos) == "string" and OFP:getDistance(startPos,startPos) ~= -1 then
+		local sx,sy,sz = OFP:getPosition(startPos)
+		if debug:getTemplateName(startPos) == "ev12sama" then
+			sy = sy + 2.5;
+		end
+		effect.pos = {sx,sy,sz};
+		effect.start = {sx,sy,sz};
+	end
+	effect.ID = getNewID();
+	effect.sets = {};
+	OFP:playOneShotSound ("flashpoint2", "WpnFX", "BY_ATM", effect.pos[1],effect.pos[2],effect.pos[3])
+	
+	function effect:move()
+		local travelDist = self.spd/currentFPS;
+		local x,y,z = unpack(self.pos);
+		local sx,xy,xz = unpack(self.start);
+		local tx, ty, tz;
+		local nx, ny, nz;
+		if type(self.tar) == "table" then
+			tx, ty, tz = unpack(self.tar)
+		elseif type(self.tar) == "string" then
+			tx, ty, tz = OFP:getPosition(self.tar)
+		end
+		if EDX:get3dDistance(x, y, z, tx, ty, tz) &lt;= travelDist or self.hit then
+			self.hit = true
+			if #self.sets &gt; 0 then
+				OFP:destroyEntitySet(self.sets[1]);
+				table.remove(self.sets,1);
+			else
+				onTargetReached(self.tar);
+				effects[self.ID] = nil;
+				OFP:displaySystemMessage("Target reached!!")
+			end
+		else
+			local da = EDX:get3dDistance(x, y, z, tx, ty, tz)
+			local db = EDX:get2dDistance(x, z, tx, tz)
+			local dc = ty - y
+			local tb = EDX:getBearing(x, z, tx, tz)
+			local ratio = travelDist/da
+			local dxz = db * ratio
+			local dy = dc * ratio
+			nx, ny, nz = EDX:get360Coordinates({x, y, z},tb,0,dxz)
+			ny = y + dy
+			local terrainHeight = OFP:getTerrainHeight(nx, nz)
+			if EDX:get3dDistance(x, y, z, sx, sy, sz) &lt;= 10 then
+				ny = y + .4;
+			elseif EDX:get3dDistance(x, y, z, sx, sy, sz) &gt; 10 then
+			elseif ny &lt;= terrainHeight then
+				-- insert code here for ground collision
+				ny = ny + .1;
+			end
+			
+			--pending code for course correction to prevent jagged missile path
+			local lyd = math.abs(ny-y)
+			if self.lyd then
+				local YMAX = .015;
+				if math.abs(self.ayd-lyd) &gt; YMAX then
+					if ny &gt; y then
+						if self.lyd &gt; lyd then
+							ny = y + self.ayd - YMAX;
+							OFP:displaySystemMessage("Upward adjustment Down Arc")
+						elseif self.lyd &lt; lyd then
+							ny = y + self.ayd + YMAX;
+							OFP:displaySystemMessage("Upward adjustment Up Arc")
+						end
+					else
+						if self.lyd &gt; lyd then
+							ny = y - self.ayd + YMAX;
+						OFP:displaySystemMessage("Downward adjustment Up Arc");
+						elseif self.lyd &lt; lyd then
+							ny = y - self.ayd - YMAX;
+						OFP:displaySystemMessage("Downward adjustment Down Arc");
+						end
+					end
+				end
+			end
+			self.ayd = math.abs(ny-y);
+			self.lyd = lyd;
+			
+			self.pos = {nx,ny,nz};
+			local sid = OFP:spawnEntitySetAtLocation("sfxwp",nx,ny-1,nz);
+			self.sets[#self.sets+1] = sid;
+			spawned[sid] = self.ID;
+		end
+	end
+	
+	effects[effect.ID] = effect;
+end
+
+function onTargetReached(targetName)
+	--OFP:destroyVehicle(targetName)
+end
+
+function onSpawnedReady( setName, setID, tableOfEntities, errorCode)
+	if not spawned[setID] then return end
+	local fx = effects[spawned[setID]];
+	spawned[setID] = nil;
+	local x,y,z = OFP:getPosition(tableOfEntities[1])
+	OFP:doParticleEffect(fx.fx,tableOfEntities[1]);
+	OFP:destroyEntitySet(fx.sets[1]);
+	table.remove(fx.sets,1);
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="5" Name="particlesystem" TemplateID="63873590966642808" TemplateName="particlesystem" X="2482.382" Y="-7993.402">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <ParticleSystemProperties EffectName="X_EXPL_MISS_Master1" LoopCount="0" Playing="False" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2482.382, 0, -7993.402, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="6" Name="playera" TemplateID="58919030522669205" TemplateName="iu06usfldr" X="2539.758" Y="-8209.638">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="Player" />
+        <PersonaProperties Surname="Van Day" Rank="3" HeadTexture="c_head_cau_setA" HeadModel="c_head_cau_01" Voice="Marine07" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="0.1045284, 0, 0.9945219, 0, 0, 1, 0, 0, -0.9945219, 0, 0.1045284, 0, 2539.758, 0, -8209.638, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="7" Name="fxwp" TemplateID="130425489857996851" TemplateName="waypoint" X="1957.923" Y="-7829.188">
+        <EntityProperties ParentEntitySetID="8" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1957.923, 0, -7829.188, 1" AltitudeMode="GroundLevel" />
+        <WaypointProperties RapidMove="False" BlockerLogic="And" Delay="0" UserScript="" />
+      </Marker>
+      <Marker SerializationID="8" Name="sfxwp" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="9" Name="targetheli" TemplateID="60238308956465372" TemplateName="vu23ah1zattack" X="2215.054" Y="-7984.024">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2215.054, 50, -7984.024, 1" AltitudeMode="GroundLevel" />
+        <VehicleMountProperties VirtualCrew="True" MovingAtStart="True" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="10" Name="waypointI4" TemplateID="130425489857996851" TemplateName="waypoint" X="2194.88" Y="-8074.476">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2194.88, 25, -8074.476, 1" AltitudeMode="GroundLevel" />
+        <WaypointProperties NextWaypoint="11" RapidMove="False" BlockerLogic="And" Delay="0" UserScript="" />
+      </Marker>
+      <Marker SerializationID="11" Name="waypointI5" TemplateID="130425489857996851" TemplateName="waypoint" X="2371.417" Y="-8341.159">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2371.417, 100, -8341.159, 1" AltitudeMode="GroundLevel" />
+        <WaypointProperties RapidMove="False" BlockerLogic="And" Delay="0" UserScript="" />
+      </Marker>
+      <Marker SerializationID="12" Name="sam" TemplateID="66932992621459616" TemplateName="ev12sama" X="2519.055" Y="-8203.05">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-0.4999998, 0, 0.8660259, 0, 0, 1, 0, 0, -0.8660259, 0, -0.4999998, 0, 2519.055, 0, -8203.05, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="13" Name="ob16binc" TemplateID="67628066638968992" TemplateName="ob16binc" X="1981.018" Y="-7832.012">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1981.018, 0, -7832.012, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

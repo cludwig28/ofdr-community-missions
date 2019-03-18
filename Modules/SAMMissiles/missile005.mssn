@@ -1,0 +1,850 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <UserData>
+    <PerMissionState>
+      <MapView ViewCenterX="2864.753" ViewCenterY="-8270.287" ViewScale="0.02834902" ViewRotation="0" />
+    </PerMissionState>
+  </UserData>
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="4" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="SAM Test" Name="SAM Test" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="levelScript" TemplateID="130338588799821875" TemplateName="levelScript" X="-77.09756" Y="-2996.972">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="level">
+          <Script>--[[
+We only need to use the level script for some basic configuration of the EDX.
+The EDX retroutes some of the games event handlers so they can be used on secondary scripts.
+Because of this it is strongly recommended that you not use the level script to code any elements
+of your mission.  If you do so and things do not work, you were warned!
+]]--
+
+DEBUG = true --this enables the built in EDX debugging mechanism and generates a file in the main game directory called "EDX DEBUG.txt"
+
+DISPLAY = true --this enables the on screen debug message display linked to the EDX debugger.  If DEBUG is false this will be inactive as well.
+
+logEdexToFile = false --this enables the internal logging for the EDX itself and is not necessary for mission creators.
+
+disableEdexTimer = false --this disables the EDX timing mechanism which inturn will disable the EDX timers and hotkeys.  Keep false unless you have a good reason to deactivate them.
+
+
+</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="3" Name="missionScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="-79.80197" Y="-2834.708">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="mission">
+          <Script>function onEDXInitialized()
+	EDX:registerPlayer("playera")
+	--EDX:registerPlayable("", false)
+end
+
+function onMissionStart()	
+	EDX:setTimeOfDay(12, 00, 00)
+	--EDX:setRandomTime()
+	
+	EDX:setWeatherCurrent("clear")
+	EDX:setFogCurrent(0)
+	--EDX:setRandomWeather()
+	--EDX:randomizeWeather(30)
+	
+	
+---------------------------------------------------------------------------------------------
+-----------------------------------This is how to create automated sam missile objects-------
+	--[[
+	sams = {};
+	sams[1] = EDX:newSAM("sam",0); --creates the sam object and returns an samID to the sam1 variable 
+	EDX:setSAMAmmo(sams[1], 8); ----overrides the default unlimited ammo with 4 missiles
+	
+	sams[2] = EDX:newSAM("sami1",0); 
+	EDX:setSAMAmmo(sams[2], 8);
+	
+	sams[3] = EDX:newSAM("sami2",0); 
+	EDX:setSAMAmmo(sams[3], 8);
+	
+	--Now we group the SAMs together and put their fire control in the hands of the radar
+	radar1 = EDX:newRadar("radar",sams,0); --creates a radar object that controls targeting for the SAMs in the array
+	]]
+	
+	sams,radars = EDX:newSAMArray("radar",{"sam","sami1","sami2"},0);
+	
+---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
+
+--These guys are gonna die
+	OFP:move("heli","waypoint","OVERRIDE")
+	OFP:move("helii1","waypoint","OVERRIDE")
+	OFP:move("helii2","waypoint","OVERRIDE")
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="4" Name="missileScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="29000" Y="-3000.02">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="missileMod">
+          <Script>--[[				Missile mod v001 by
+       ___         ___                     ___          ___          ___          ___          ___          ___     
+      /\  \       /\__\         ___       /\  \        /\  \        /\  \        /\  \        /\__\        /\  \    
+      \:\  \     /:/  /        /\  \     /::\  \      /::\  \      /::\  \      /::\  \      /:/  /       /::\  \   
+       \:\  \   /:/  /         \:\  \   /:/\:\  \    /:/\:\  \    /:/\:\  \    /:/\:\  \    /:/  /       /:/\ \  \  
+       /::\  \ /:/__/  ___     /::\__\ /:/  \:\  \  /:/  \:\  \  /::\~\:\  \  /:/  \:\  \  /:/  /  ___  _\:\~\ \  \ 
+      /:/\:\__\|:|  | /\__\ __/:/\/__//:/__/_\:\__\/:/__/ \:\__\/:/\:\ \:\__\/:/__/ \:\__\/:/__/  /\__\/\ \:\ \ \__\
+     /:/  \/__/|:|  |/:/  //\/:/  /   \:\  /\ \/__/\:\  \ /:/  /\/_|::\/:/  /\:\  \ /:/  /\:\  \ /:/  /\:\ \:\ \/__/
+    /:/  /     |:|__/:/  / \::/__/     \:\ \:\__\   \:\  /:/  /    |:|::/  /  \:\  /:/  /  \:\  /:/  /  \:\ \:\__\  
+    \/__/       \::::/__/   \:\__\      \:\/:/  /    \:\/:/  /     |:|\/__/    \:\/:/  /    \:\/:/  /    \:\/:/  /  
+                 ~~~~        \/__/       \::/  /      \::/  /      |:|  |       \::/  /      \::/  /      \::/  /   
+                                          \/__/        \/__/        \|__|        \/__/        \/__/        \/__/    
+]]
+
+--Below are examples of all of the event handlers fired by the missileMod script. You can use these on any script!
+
+function onEnterRadarRange(radarID,targetName)
+	OFP:displaySystemMessage("Helicopter "..targetName.." has entered the range of radar "..radarID);
+end
+
+function onRadarLock(radarID,targetName)
+	OFP:displaySystemMessage("Radar "..radarID.." has locked on to "..targetName);
+end
+
+function onRadarDestroyed(radarEntity,attacker)
+	OFP:displaySystemMessage("Radar entity "..radarEntity.." has been destroyed by "..attacker);
+end
+
+function onEnterSAMRange(samID,targetName)
+	OFP:displaySystemMessage("Helicopter "..targetName.." has entered the range of SAM "..samID);
+end
+
+function onSAMLock(samID,targetName)
+	OFP:displaySystemMessage("SAM "..samID.." has locked on to "..targetName);
+end
+
+function onSAMFiring(samID,targetName,missileID)
+	OFP:displaySystemMessage("SAM "..samID.." has fired on "..targetName.." with missile "..missileID);
+end
+
+function onSAMOutOfAmmo(samID)
+	OFP:displaySystemMessage("SAM "..samID.." has run out of missiles!");
+end
+
+function onSAMDestroyed(samEntity,attacker)
+	OFP:displaySystemMessage("SAM missile entity "..samEntity.." has been destroyed by "..attacker);
+end
+
+function onMissileHitGround(x,y,z)
+	OFP:displaySystemMessage("Missile has hit the ground at "..x..", "..y..", "..z);
+end
+
+function onMissileHitTarget(targetName)
+	OFP:displaySystemMessage("Missile has hit "..targetName);
+	if OFP:isAlive(targetName) then
+		--[[
+		--This is an alternative that allows the helicopter to take a couple of shots with lesser damage
+		if not OFP:isTailRotorDestroyed(targetName) then
+			OFP:damageVehicle(targetName,"tailrotor");
+			OFP:damageVehicle(targetName,"firepower");
+		elseif not OFP:isMainRotorDestroyed(targetName) then
+			OFP:damageVehicle(targetName,"mainrotor");
+		else
+			OFP:destroyVehicle(targetName);
+		end
+		]]
+		OFP:destroyVehicle(targetName); --default action when a missile hits its target
+	end
+end
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+--GLOBAL SCRIPT PARAMETERS
+LOCK_TIME = 8; --Time required for SAM's to get an initial lock on a target
+FIRE_DELAY = 5; --Delay from lock to actual fire time
+
+--[[***************************************************************************************************
+----------------------------------DO NOT EDIT BELOW THIS POINT!!!!-------------------------------------
+*****************************************************************************************************]]
+
+INFO = "Missile Mod v001 by tvig0r0us";
+
+function onCreate()
+----------------------------------reinitialize functions on mission checkpoint load
+	if missiles then
+		for i,v in pairs(missiles) do
+			v.move = move;
+		end
+	end
+	if sams then
+		for i,v in pairs(sams) do
+			v.fire = fire;
+		end
+	end
+end
+
+function onEDXInitialized()
+	-------------------------------FUNCTIONS AVAILABLE TO OTHER SCRIPTS VIA EDX:functionCall()----------
+	
+	--Fires a missile from entity or position named
+	--Params: missileName- An entity name, table of x,y,z coordinates or samID to fire a missile from
+	--		target- the name of a target for a missile to track
+	--		reqLOS- whether or not to require line of sight to fire missile (true/false)
+	function EDX:fireSAM(missileName,target,reqLOS)
+		local _samName = missileName;
+		if type(_samName) == "number" then
+			if sams[_samName] then
+				_samName = sams[_samName];
+			else
+				debugInfo = "ERROR[fireSAM]: Invalid missileName";
+				return debugInfo;
+			end
+		end
+		if reqLOS and EDX:isInLOS(_samName,target) then
+			return fireMissile(_samName,target,150);
+		elseif not reqLOS then
+			return fireMissile(_samName,target,150);
+		end
+	end
+	
+	--Will detonate a missile in flight 
+	--Params: missileID- ID from event handler or fireSAM function
+	function EDX:detonateMissile(missileID)
+		if not missiles[missileID] then
+			debugInfo = "ERROR[detonateMissile]: Invalid missileID";
+			return debugInfo;
+		else
+			missiles[missileID].ground = true;
+			return true;
+		end
+	end
+	
+	--Creates a new lua object for the radarName passed
+	--Params: radarName- can be any object
+	--		samArray- an array of samID's for the radar to assume fire control
+	--		targetSide- The side to set the automated targeting system 0=US 1=PLA
+	function EDX:newRadar(radarName,samArray,targetSide)
+		return newRadar(radarName,samArray,targetSide);
+	end
+	
+	--Returns a lua object containing the data for a script created radar by radarID
+	--Params: radarID- the radarID retuned by newRadar and several script event handlers
+	function EDX:getRadarObject(radarID)
+		return radars[radarID];
+	end
+	
+	--Removes a radar script object from the game (not the entity it was assigned to)
+	--Params: radarID- the radarID retuned by newRadar and several script event handlers
+	function EDX:deleteRadar(radarID)
+		if not radars[radarID] then
+			debugInfo = "ERROR[deleteRadar]: Invalid radarID";
+			return debugInfo;
+		else
+			OFP:destroyEntitySet(radars[radarID].trigID);
+			for _,sam in ipairs(radars[radarID].sams) do
+				if sams[sam] then
+					sams[sam].active = true;
+				end
+			end
+			radarTrigs[radars[radarID].trig] = nil;
+			radars[radarID] = nil;
+			return true;
+		end
+	end
+	function EDX:setRadarEnemySide(radarID,targetSide)
+		if not radars[radarID] then
+			debugInfo = "ERROR[setRadarEnemySide]: Invalid radarID";
+			return debugInfo;
+		else
+			radars[radarID].ts = targetSide;
+			for i,v in ipairs(radars[radarID].sams) do
+				if sams[v] then
+					sams[v].ts = targetSide;
+				end
+			end
+			return true;
+		end
+	end
+	
+	--Returns a lua object containing the data for a script created SAM by samID
+	--Params: samID- the samID retuned by newSam and several script event handlers
+	function EDX:getSAMObject(samID)
+		return sams[samID];
+	end
+	
+	--Creates a new lua object for the samName passed
+	--Params: samName- can be any object
+	--		targetSide- The side to set the automated targeting system 0=US 1=PLA
+	function EDX:newSAM(samName,targetSide)
+		return newSAM(samName,targetSide);
+	end
+	
+	--Sets the side for a sam missile to target
+	--Params: samID- the samID retuned by newSam and several script event handlers
+	--		targetSide- The side to set the automated targeting system 0=US 1=PLA
+	function EDX:setSAMEnemySide(samID,targetSide)
+		if not sams[samID] then
+			debugInfo = "ERROR[setSAMEnemySide]: Invalid samID";
+			return debugInfo;
+		else
+			sams[samID].ts = targetSide;
+			return true;
+		end
+	end
+	
+	--Sets a sam's active targeting
+	--Params: samID- the samID retuned by newSam and several script event handlers
+	--		active- true or false  default is true
+	function EDX:setSAMActive(samID,active)
+		local _act = active;
+		if _act == nil then _act = true end 
+		if not sams[samID] then
+			debugInfo = "ERROR[setSAMActive]: Invalid samID";
+			return debugInfo;
+		else
+			sams[samID].active = _act;
+			return true;
+		end
+	end
+	
+	--Sets the total number of missiles a sam can fire
+	--Params: samID- the samID retuned by newSam and several script event handlers
+	--		ammoCount- the number of missiles  default = -1(unlimited)
+	function EDX:setSAMAmmo(samID,ammoCount)
+		if not sams[samID] then
+			debugInfo = "ERROR[setSAMAmmo]: Invalid samID";
+			return debugInfo;
+		else
+			sams[samID].ammo = ammoCount;
+			return true;
+		end
+	end
+	
+	--Removes a sam missile script object from the game (not the entity it was assigned to)
+	--Params: samID- the samID retuned by newSam and several script event handlers
+	function EDX:deleteSAM(samID)
+		if not sams[samID] then
+			debugInfo = "ERROR[deleteSAM]: Invalid samID";
+			return debugInfo;
+		else
+			OFP:destroyEntitySet(sams[samID].trigID);
+			samTrigs[sams[samID].trig] = nil;
+			sams[samID] = nil;
+			return true;
+		end
+	end
+	
+	--Creates a new missile array with with a single radar.
+	--Params: radarName- the name of the radar, samNames- an array of SAM missile names, targetSide- the side to target
+	function EDX:newSAMArray(radarName,samNames,targetSide)
+		local ns = {};
+		for i,v in ipairs(samNames)do
+			ns[#ns+1] = newSAM(v,targetSide);
+		end
+		local nr = newRadar(radarName,ns,targetSide);
+		return nr,ns
+	end
+end
+
+function onMissionStart()
+	spawned = {};
+	missiles = {};
+	sams = {};
+	samTrigs = {};
+	radars = {};
+	radarTrigs = {};
+	tt = OFP:getMissionTime() + 1000;
+	fc = 0;
+	lf = 0;
+	fps = 60;
+	ID = 0;
+end
+
+function getNewID()
+	ID = ID+1;
+	return ID;
+end
+
+function updateFrame(currentTime, frameNo)
+	fc = fc + 1
+	if currentTime &gt;= tt and fc &gt; lf then
+		fps = fc - lf
+		lf = fc
+		tt = currentTime + 1000
+	end
+	for _,fx in pairs(missiles) do
+		fx:move();
+	end
+end
+
+function fireMissile(startPos,target,speed)
+	missile = {};
+	missile.spd = speed;
+	missile.tar = target;
+	missile.ey = ey;
+	missile.ez = ez;
+	if type(startPos) == "table" then
+		missile.pos = startPos;
+		missile.start = startPos;
+	elseif type(startPos) == "string" and OFP:getDistance(startPos,startPos) ~= -1 then
+		local sx,sy,sz = OFP:getPosition(startPos);
+		if debug:getTemplateName(startPos) == "ev12sama" then
+			sy = sy + 2.5;
+		end
+		missile.pos = {sx,sy,sz};
+		missile.start = {sx,sy,sz};
+	end
+	missile.ID = getNewID();
+	missile.sets = {};
+	OFP:playOneShotSound ("flashpoint2", "WpnFX", "BY_ATM", missile.pos[1],missile.pos[2],missile.pos[3]);
+	missile.move = move;
+	missiles[missile.ID] = missile;
+	return missile.ID;
+end
+	
+function move(self)
+	local travelDist = self.spd/fps;
+	local x,y,z = unpack(self.pos);
+	local sx,sy,sz = unpack(self.start);
+	local tx, ty, tz;
+	local nx, ny, nz;
+	if type(self.tar) == "table" then
+		tx, ty, tz = unpack(self.tar);
+	elseif type(self.tar) == "string" then
+		tx, ty, tz = OFP:getPosition(self.tar);
+	end
+	if EDX:get3dDistance(x, y, z, tx, ty, tz) &lt;= travelDist then
+		OFP:particleEffect("X_EXPL_MISS_Master1_Med",tx,ty,tz);
+		OFP:playOneShotSound ("flashpoint2", "EXP", "explosion",tx,ty,tz);
+		missiles[self.ID] = nil;
+		return EDX:distributeFunction("onMissileHitTarget",self.tar);
+		--OFP:displaySystemMessage("Target reached!!")
+	else
+		local da = EDX:get3dDistance(x, y, z, tx, ty, tz);
+		local db = EDX:get2dDistance(x, z, tx, tz);
+		local dc = ty - y;
+		local tb = EDX:getBearing(x, z, tx, tz);
+		local ratio = travelDist/da;
+		local dxz = db * ratio;
+		local dy = dc * ratio;
+		nx, ny, nz = EDX:get360Coordinates({x, y, z},tb,0,dxz);
+		ny = y + dy;
+		local terrainHeight = OFP:getTerrainHeight(nx, nz);
+		local sDist = EDX:get3dDistance(x, y, z, sx, sy, sz);
+		if  sDist &lt;= 10 then
+			ny = y + .4;
+		elseif ny &lt;= terrainHeight then
+			ny = terrainHeight;
+			OFP:particleEffect("X_EXPL_MISS_Master1_Med",nx,ny,nz);
+			OFP:playOneShotSound ("flashpoint2", "EXP", "explosion",nx,ny,nz);
+			missiles[self.ID] = nil;
+			return EDX:distributeFunction("onMissileHitGround",nx,ny,nz);
+		end
+		
+		self.pos = {nx,ny,nz};
+		if EDX:getEntity3dDistance(EDX:getPrimaryPlayer(),nx,ny,nz) &lt;= 2000 then
+			OFP:particleEffect("X_IMPT_EXPL_Master1_Small",nx,ny,nz);
+		end
+	end
+end
+
+function newSAM(samName,targetSide)
+	local samObj = {};
+	samObj.nm = samName;
+	samObj.ts = targetSide;
+	samObj.ammo = -1;--default to unlimited ammo count on creation of sam object
+	samObj.active = true;
+	samObj.tar = {};
+	samObj.ID = getNewID();
+	local x,y,z = OFP:getPosition(samName);
+	local sid = OFP:spawnEntitySetAtLocation("ssamtrig",x,y,z);
+	samObj.trigID = sid;
+	spawned[sid] = samObj.ID;
+	sams[samObj.ID] = samObj;
+	return samObj.ID;
+end
+
+function newRadar(radarName,samArray,targetSide)
+	local radObj = {};
+	radObj.nm = radarName;
+	radObj.sams = samArray;
+	for _,sam in ipairs(samArray) do
+		if sams[sam] then
+			sams[sam].active = false;
+		end
+	end
+	radObj.ts = targetSide;
+	radObj.active = true;
+	radObj.tar = {};
+	radObj.ID = getNewID();
+	local x,y,z = OFP:getPosition(radarName);
+	local sid = OFP:spawnEntitySetAtLocation("sradtrig",x,y,z);
+	radObj.trigID = sid;
+	spawned[sid] = radObj.ID;
+	radars[radObj.ID] = radObj;
+	return radObj.ID
+end
+
+function samLock(samID,targetName,timerID)
+	if sams[samID] then
+		local sam = sams[samID];
+		local tar = sam.tar[targetName];
+		if not sam.active or sam.ammo == 0 then
+			EDX:setTimer(timerID,1000);
+			tar.lock = 0;
+			return;
+		end
+		if OFP:isAlive(targetName) and OFP:isInTrigger(targetName,sam.trig) then
+			if OFP:getSide(targetName) == sam.ts then
+				tar.lock = tar.lock + 1;
+				if tar.lock &lt; LOCK_TIME and not EDX:isInLOS(sam.nm,targetName) then
+					tar.lock = 0;
+				end
+				if tar.lock &gt; LOCK_TIME + FIRE_DELAY then
+					local mis = fireMissile(sam.nm,targetName,150);
+					EDX:distributeFunction("onSAMFiring",samID,targetName,mis);
+					if sam.ammo &gt; 0 then
+						sam.ammo = sam.ammo - 1;
+						if sam.ammo == 0 then
+							EDX:distributeFunction("onSAMOutOfAmmo",sam.ID)
+						end
+					end
+					if EDX:isInLOS(sam.nm,targetName) then
+						tar.lock = LOCK_TIME;
+					else
+						tar.lock = 0;
+					end
+				elseif tar.lock == LOCK_TIME then
+					EDX:distributeFunction("onSAMLock",samID,targetName);
+				end
+			else
+				tar.lock = 0;
+			end
+		else
+			sam.tar[targetName] = nil;
+			EDX:deleteTimer(timerID);
+			return;
+		end
+	else
+		EDX:deleteTimer(timerID);
+		return;
+	end
+	EDX:setTimer(timerID,1000);
+end
+
+function radarLock(radarID,targetName,timerID)
+	if radars[radarID] then
+		local radar = radars[radarID];
+		local tar = radar.tar[targetName];
+		if not radar.active then
+			EDX:setTimer(timerID,1000);
+			tar.lock = 0;
+			return;
+		end
+		if OFP:isAlive(targetName)
+		and OFP:isInTrigger(targetName,radar.trig) then
+			if OFP:getSide(targetName) == radar.ts then
+				tar.lock = tar.lock + 1;
+				if tar.lock &lt; LOCK_TIME and not EDX:isInLOS(radar.nm,targetName) then
+					tar.lock = 0;
+				end
+				if tar.lock &gt; LOCK_TIME + FIRE_DELAY then
+					local minDist = 99999;
+					local sam;
+					for i,v in ipairs(radar.sams) do
+						if sams[v] then
+							local td = OFP:getDistance(targetName,sams[v].nm);
+							if td &lt; minDist and sams[v].ammo ~= 0 then
+								if EDX:isInLOS(sams[v].nm,targetName) then
+									minDist = td;
+									sam = sams[v];
+								end
+							end
+						end
+					end
+					if sam then
+						local mis = fireMissile(sam.nm,targetName,150);
+						EDX:distributeFunction("onSAMFiring",sam.ID,targetName,mis);
+						if sam.ammo &gt; 0 then
+							sam.ammo = sam.ammo - 1;
+							if sam.ammo == 0 then
+								EDX:distributeFunction("onSAMOutOfAmmo",sam.ID)
+							end
+						end
+						if EDX:isInLOS(radar.nm,targetName) then
+							tar.lock = LOCK_TIME;
+						else
+							tar.lock = 0;
+						end
+					elseif not EDX:isInLOS(radar.nm,targetName) then
+						tar.lock = 0;
+					else
+						tar.lock = LOCK_TIME + FIRE_DELAY;
+					end
+				elseif tar.lock == LOCK_TIME then
+					EDX:distributeFunction("onRadarLock",radarID,targetName);
+				end
+			else
+				tar.lock = 0;
+			end
+		else
+			radar.tar[targetName] = nil;
+			EDX:deleteTimer(timerID);
+			return;
+		end
+	else
+		EDX:deleteTimer(timerID);
+		return;
+	end
+	EDX:setTimer(timerID,1000);
+end
+
+function newTarget(samObject,targetName)
+	local tar = {};
+	tar.lock = 0;
+	tar.timer = EDX:serialTimer("samLock",1000,samObject.ID,targetName);
+	samObject.tar[targetName] = tar;
+end
+
+function newRadarTarget(radarObject,targetName)
+	local tar = {};
+	tar.lock = 0;
+	tar.timer = EDX:serialTimer("radarLock",1000,radarObject.ID,targetName);
+	radarObject.tar[targetName] = tar;
+end
+
+function onEnter(zoneName, unitName)
+	if samTrigs[zoneName] and OFP:getBroadUnitCategory(unitName) == "BROAD_UNIT_AIRCRAFT" then
+		local sam = sams[samTrigs[zoneName]];
+		newTarget(sam,unitName);
+		EDX:distributeFunction("onEnterSAMRange",sam.ID,unitName);
+	elseif radarTrigs[zoneName] and OFP:getBroadUnitCategory(unitName) == "BROAD_UNIT_AIRCRAFT" then
+		local radar = radars[radarTrigs[zoneName]];
+		newRadarTarget(radar,unitName);
+		EDX:distributeFunction("onEnterRadarRange",radar.ID,unitName);
+	end
+end
+
+function onMount(vehicleName, unitName, echelonName)
+	if OFP:getBroadUnitCategory(vehicleName) == "BROAD_UNIT_AIRCRAFT" then
+		for i,v in pairs(sams) do
+			if OFP:isInTrigger(vehicleName,v.trig)
+			and not v.tar[vehicleName] then
+				newTarget(v,vehicleName);
+				EDX:distributeFunction("onEnterSAMRange",v.ID,vehicleName);
+				return;
+			end
+		end
+		for i,v in pairs(radars) do
+			if OFP:isInTrigger(vehicleName,v.trig)
+			and not v.tar[vehicleName] then
+				newTarget(v,vehicleName);
+				EDX:distributeFunction("onEnterRadarRange",v.ID,vehicleName);
+				return;
+			end
+		end
+	end
+end
+
+function onPlaceableKill(placeable, attacker)
+	for i,v in pairs(sams) do
+		if v.nm == placeable then
+			samTrigs[v.trig] = nil;
+			OFP:destroyEntitySet(v.trigID);
+			sams[i] = nil;
+			EDX:distributeFunction("onSAMDestroyed",placeable,attacker);
+			return;
+		end
+	end
+	for i,v in pairs(radars) do
+		if v.nm == placeable then
+			for _,sam in ipairs (v.sams) do
+				if sams[sam] then
+					sams[sam].active = true;
+				end
+			end
+			radarTrigs[v.trig] = nil;
+			OFP:destroyEntitySet(v.trigID);
+			radars[i] = nil;
+			EDX:distributeFunction("onRadarDestroyed",placeable,attacker);
+			return;
+		end
+	end
+end
+
+function onSpawnedReady(setName, setID, tableOfEntities, errorCode)
+	if spawned[setID] then
+		if setName == "ssamtrig" then
+			local sam = sams[spawned[setID]];
+			sam.trig = tableOfEntities[1];
+			samTrigs[sam.trig] = sam.ID;
+			spawned[setID] = nil;
+			return;
+		elseif setName == "sradtrig" then
+			local radar = radars[spawned[setID]];
+			radar.trig = tableOfEntities[1];
+			radarTrigs[radar.trig] = radar.ID;
+			spawned[setID] = nil;
+			return;
+		end
+	else
+		for i,v in ipairs(tableOfEntities) do
+			if EDX:isAir(v) then
+				for k,radar in pairs(radars) do
+					if OFP:isInTrigger(v,radar.trig) then
+						newRadarTarget(radar,v);
+						EDX:distributeFunction("onEnterRadarRange",radar.ID,v);
+					end
+				end
+				for k,sam in pairs(sams) do
+					if OFP:isInTrigger(v,sam.trig) then
+						newTarget(sam,v);
+						EDX:distributeFunction("onEnterSAMRange",sam.ID,v);
+					end
+				end
+			end
+		end
+	end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="5" Name="sam" TemplateID="66932992621459616" TemplateName="ev12sama" X="3014.355" Y="-8143.234">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="0.2923716, 0, -0.9563055, 0, 0, 1, 0, 0, 0.9563055, 0, 0.2923716, 0, 3014.355, 0, -8143.234, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="6" Name="samI1" TemplateID="66932992621459616" TemplateName="ev12sama" X="1622.362" Y="-8136.474">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-0.2923712, 0, 0.9563056, 0, 0, 1, 0, 0, -0.9563056, 0, -0.2923712, 0, 1622.362, 0, -8136.474, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="7" Name="ssamtrig" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="17" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="8" Name="samtrig" TemplateID="130252823392184388" TemplateName="triggerzone" X="28998.09" Y="-2995.756">
+        <EntityProperties ParentEntitySetID="7" Description="" />
+        <PolygonProperties Top="1000" Bottom="-1000" AltitudeMode="SeaLevel">
+          <Points>
+            <Point X="29993.1934" Y="-2995.75562" />
+            <Point X="29859.877" Y="-2498.20483" />
+            <Point X="29495.6445" Y="-2133.97217" />
+            <Point X="28998.0938" Y="-2000.654" />
+            <Point X="28500.541" Y="-2133.97217" />
+            <Point X="28136.31" Y="-2498.20483" />
+            <Point X="28002.9922" Y="-2995.75586" />
+            <Point X="28136.31" Y="-3493.307" />
+            <Point X="28500.541" Y="-3857.539" />
+            <Point X="28998.0938" Y="-3990.85718" />
+            <Point X="29495.6445" Y="-3857.539" />
+            <Point X="29859.877" Y="-3493.3064" />
+          </Points>
+        </PolygonProperties>
+        <GroupMemberProperties />
+      </Marker>
+      <Marker SerializationID="9" Name="samI2" TemplateID="66932992621459616" TemplateName="ev12sama" X="2937.254" Y="-8578.769">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-0.9998491, 0, -0.01745197, 0, 0, 1, 0, 0, 0.01745197, 0, -0.9998491, 0, 2937.254, 0, -8578.769, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="10" Name="radtrig" TemplateID="130252823392184388" TemplateName="triggerzone" X="28990.44" Y="-3009.12">
+        <EntityProperties ParentEntitySetID="11" Description="" />
+        <PolygonProperties Top="2000" Bottom="-1000" AltitudeMode="SeaLevel">
+          <Points>
+            <Point X="31998.5469" Y="-3009.12036" />
+            <Point X="31595.5352" Y="-1505.06665" />
+            <Point X="30494.49" Y="-404.0218" />
+            <Point X="28990.4355" Y="-1.01106262" />
+            <Point X="27486.38" Y="-404.0218" />
+            <Point X="26385.3359" Y="-1505.065" />
+            <Point X="25982.3242" Y="-3009.12036" />
+            <Point X="26385.3359" Y="-4513.176" />
+            <Point X="27486.38" Y="-5614.21875" />
+            <Point X="28990.4355" Y="-6017.22949" />
+            <Point X="30494.49" Y="-5614.21875" />
+            <Point X="31595.5352" Y="-4513.174" />
+          </Points>
+        </PolygonProperties>
+        <GroupMemberProperties />
+      </Marker>
+      <Marker SerializationID="11" Name="sradtrig" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="17" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="12" Name="radar" TemplateID="66932991363168416" TemplateName="ev12fcra" X="2939.851" Y="-8570.699">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2939.851, 0, -8570.699, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="13" Name="waypoint" TemplateID="130425489857996851" TemplateName="waypoint" X="2413.881" Y="-8415.166">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2413.881, 0, -8415.166, 1" AltitudeMode="GroundLevel" />
+        <WaypointProperties RapidMove="False" BlockerLogic="And" Delay="0" UserScript="" />
+      </Marker>
+      <Marker SerializationID="14" Name="heliI1" TemplateID="60238315667351772" TemplateName="vu24ah1zground" X="7061.187" Y="-6718.398">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-0.4067367, 0, 0.9135457, 0, 0, 1, 0, 0, -0.9135457, 0, -0.4067367, 0, 7061.187, 20, -6718.398, 1" AltitudeMode="SeaLevel" />
+        <VehicleMountProperties VirtualCrew="True" MovingAtStart="True" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="15" Name="heli" TemplateID="60238315667351772" TemplateName="vu24ah1zground" X="172.8359" Y="-11962.2">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="0.8571683, 0, -0.5150389, 0, 0, 1, 0, 0, 0.5150389, 0, 0.8571683, 0, 172.8359, 20, -11962.2, 1" AltitudeMode="SeaLevel" />
+        <VehicleMountProperties VirtualCrew="True" MovingAtStart="True" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="16" Name="heliI2" TemplateID="60238315667351772" TemplateName="vu24ah1zground" X="4603.731" Y="-11467.7">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="0.8660261, 0, 0.4999997, 0, 0, 1, 0, 0, -0.4999997, 0, 0.8660261, 0, 4603.731, 20, -11467.7, 1" AltitudeMode="GroundLevel" />
+        <VehicleMountProperties VirtualCrew="True" MovingAtStart="True" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="17" Name="mismodule" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="False" Exportable="False" />
+      </Marker>
+      <Marker SerializationID="18" Name="Echelon" TemplateID="67298535397422246" TemplateName="Echelon" X="2852.603" Y="-8260.575">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_a_custom" UIArtName="blank" UIEchelonName="#ofp_unitname_fireteam" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="19" Name="playera" TemplateID="58976911495555221" TemplateName="iu27useng" X="2867.872" Y="-8273.567">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="Player" />
+        <PersonaProperties Surname="Borchers" Rank="1" HeadTexture="c_head_cau_setG" HeadModel="c_head_cau_07" Voice="Marine05" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="0.08715516, 0, -0.9961979, 0, 0, 1, 0, 0, 0.9961979, 0, 0.08715516, 0, 2867.872, 3, -8273.567, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="18" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="20" Name="playerb" TemplateID="67211877107677231" TemplateName="hidalgoaslt" X="2868.544" Y="-8270.22">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="MultiplayerPlayable" />
+        <PersonaProperties Surname="Johnson" Rank="7" HeadTexture="c_head_blk_setC" HeadModel="c_head_blk_03" Voice="Marine08" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="0.3583679, 0, -0.9335804, 0, 0, 1, 0, 0, 0.9335804, 0, 0.3583679, 0, 2868.544, 0, -8270.22, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="18" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

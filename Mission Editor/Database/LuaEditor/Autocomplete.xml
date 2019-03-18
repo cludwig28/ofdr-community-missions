@@ -1,0 +1,2442 @@
+<AutoList name="OFP MissionEditor auto-completion words list">
+
+  <!-- Lua keywords-->
+  <word text="while" insert="while"/>
+  <word text="while ... do ... end" insert="while  do &#10;&#10;end"/>
+  <word text="(" insert=")"/>
+  <word text="and"/>
+  <word text="break"/>
+  <word text="collectgarbage" insert="+()"/>
+  <word text="coroutine.create" insert="+()"/>
+  <word text="coroutine.resume" insert="+()"/>
+  <word text="coroutine.status" insert="+()"/>
+  <word text="coroutine.wrap" insert="+()"/>
+  <word text="coroutine.yield" insert="+()"/>
+  <word text="do"/>
+  <word text="dofile" insert="+()"/>
+  <word text="dostring" insert="+()"/>
+  <word text="else"/>
+  <word text="elseif" insert="elseif"/>
+  <word text="elseif ... then ... end" insert="elseif  then &#10;&#10;end"/>
+  <word text="end"/>
+  <word text="false"/>
+  <word text="for" insert="for  do &#10;&#10;nend"/>
+  <word text="function" insert="function"/>
+  <word text="function ... end" insert="function &#10;&#10;end"/>
+  <word text="if" insert="if"/>
+  <word text="if ... then ... end" insert="if  then &#10;&#10;end"/>
+  <word text="in"/>
+  <word text="io.close" insert="+()"/>
+  <word text="io.flush" insert="+()"/>
+  <word text="io.input" insert="+()"/>
+  <word text="io.lines" insert="+()"/>
+  <word text="io.open" insert="+()"/>
+  <word text="io.read" insert="+()"/>
+  <word text="io.stderr" insert="+()"/>
+  <word text="io.stdout" insert="+()"/>
+  <word text="io.tmpfile" insert="+()"/>
+  <word text="io.type" insert="+()"/>
+  <word text="io.write" insert="+()"/>
+  <word text="ipairs" insert="+()"/>
+  <word text="ldexp" insert="+()"/>
+  <word text="loadfile" insert="+()"/>
+  <word text="loadlib" insert="+()"/>
+  <word text="loadstring" insert="+()"/>
+  <word text="local"/>
+  <word text="math.abs" insert="+()"/>
+  <word text="math.acos" insert="+()"/>
+  <word text="math.asin" insert="+()"/>
+  <word text="math.atan" insert="+()"/>
+  <word text="math.atan2" insert="+()"/>
+  <word text="math.ceil" insert="+()"/>
+  <word text="math.cos" insert="+()"/>
+  <word text="math.deg" insert="+()"/>
+  <word text="math.exp" insert="+()"/>
+  <word text="math.floor" insert="+()"/>
+  <word text="math.frexp" insert="+()"/>
+  <word text="math.ldexp" insert="+()"/>
+  <word text="math.log" insert="+()"/>
+  <word text="math.log10" insert="+()"/>
+  <word text="math.max" insert="+()"/>
+  <word text="math.min" insert="+()"/>
+  <word text="math.mod" insert="+()"/>
+  <word text="math.pi" insert="+()"/>
+  <word text="math.rad" insert="+()"/>
+  <word text="math.random" insert="+()"/>
+  <word text="math.randomseed" insert="+()"/>
+  <word text="math.sin" insert="+()"/>
+  <word text="math.sqrt" insert="+()"/>
+  <word text="math.tan" insert="+()"/>
+  <word text="math.pow" insert="+()"/>
+  <word text="nil"/>
+  <word text="not"/>
+  <word text="or"/>
+  <word text="os.clock" insert="+()"/>
+  <word text="os.date" insert="+()"/>
+  <word text="os.difftime" insert="+()"/>
+  <word text="os.execute" insert="+()"/>
+  <word text="os.exit" insert="+()"/>
+  <word text="os.getenv" insert="+()"/>
+  <word text="os.remove" insert="+()"/>
+  <word text="os.rename" insert="+()"/>
+  <word text="os.setlocale" insert="+()"/>
+  <word text="os.time" insert="+()"/>
+  <word text="os.tmpname" insert="+()"/>
+  <word text="print" insert="+()"/>
+  <word text="return"/>
+  <word text="repeat"/>
+  <word text="string.byte" insert="+()"/>
+  <word text="string.char" insert="+()"/>
+  <word text="string.dump" insert="+()"/>
+  <word text="string.find" insert="+()"/>
+  <word text="string.format" insert="+()"/>
+  <word text="string.gfind" insert="+()"/>
+  <word text="string.gsub" insert="+()"/>
+  <word text="string.len" insert="+()"/>
+  <word text="string.lower" insert="+()"/>
+  <word text="string.rep" insert="+()"/>
+  <word text="string.sub" insert="+()"/>
+  <word text="string.upper" insert="+()"/>
+  <word text="table.concat" insert="+()"/>
+  <word text="table.foreach" insert="+()"/>
+  <word text="table.foreachi" insert="+()"/>
+  <word text="table.getn" insert="+()"/>
+  <word text="table.insert" insert="+()"/>
+  <word text="table.remove" insert="+()"/>
+  <word text="table.setn" insert="+()"/>
+  <word text="table.sort" insert="+()"/>
+  <word text="then"/>
+  <word text="tonumber" insert="+()"/>
+  <word text="tostring" insert="+()"/>
+  <word text="true"/>
+  <word text="type" insert="+()"/>
+  <word text="unpack" insert="+()"/>
+  <word text="until"/>
+  <word text="while"/>
+  <word text="while ... do ... end" insert="while  do &#10;&#10;end"/>
+
+  <!-- OFP functions-->
+  <word text="onEnter(zoneName, unitName)" insert="+&#10;&#10;end"/>
+  <word text="onLeave(zoneName, unitName)" insert="+&#10;&#10;end"/>
+  <word text="onEnterRVPoint(entityName, index) " insert="+&#10;&#10;end"/>
+  <word text="onArriveAtWaypoint(entityName, waypointName)" insert="+&#10;&#10;end"/>
+  <word text="onMount(vehicleName, unitName, echelonName)" insert="+&#10;&#10;end"/>
+  <word text="onDismount(vehicleName, unitName, echelonName)" insert="+&#10;&#10;end"/>
+  <word text="onMobilityKill(vehicle)" insert="+&#10;&#10;end"/>
+  <word text="onFirepowerKill(vehicle)" insert="+&#10;&#10;end"/>
+  <word text="onLand(HelicopterName)" insert="+&#10;&#10;end"/>
+  <word text="onFiring(firingSoldierName, weaponComponentName, magazineComponentName, fireMode)" insert="+&#10;&#10;end"/>
+  <word text="onOffboardSupp(firingSoldierName, supportType)" insert="+&#10;&#10;end"/>
+  <word text="onDeath(victim, killer)" insert="+&#10;&#10;end"/>
+  <word text="onAllPlayersDead()" insert="+&#10;&#10;end"/>
+  <word text="onIncap(victim, killer, method)" insert="+&#10;&#10;end"/>
+  <word text="onHit(victim, attacker)" insert="+&#10;&#10;end"/>
+  <word text="onPlaceableKill(placeable, attacker)" insert="+&#10;&#10;end"/>
+  <word text="onObjectDamage(guid)" insert="+&#10;&#10;end"/>
+  <word text="onUnderfire(underfireID, shooterID, method)" insert="+&#10;&#10;end"/>
+  <word text="onNoAmmo(ownerEntity)" insert="+&#10;&#10;end"/>
+  <word text="onNoAmmoAll(unit)" insert="+&#10;&#10;end"/>
+  <word text="onSuspected(victim, suspector)" insert="+&#10;&#10;end"/>
+  <word text="onIdentified(identifiedID, identifierID)" insert="+&#10;&#10;end"/>
+  <word text="onSuppressed(entityID)" insert="+&#10;&#10;end"/>
+  <word text="onUnsuppressed(entityID)" insert="+&#10;&#10;end"/>
+  <word text="onPinned(entityID)" insert="+&#10;&#10;end"/>
+  <word text="onCmdCompleted(commandID,commandName, unitorechelonName, isSuccessful)" insert="+&#10;&#10;end"/>
+  <word text="onObjectiveCompleted(objectiveName)" insert="+&#10;&#10;end"/>
+  <word text="onObjectiveFailed(objectiveName)" insert="+&#10;&#10;end"/>
+  <word text="onObjectiveVisible(objectiveName)" insert="+&#10;&#10;end"/>
+  <word text="onMissionStart()" insert="+&#10;&#10;end"/>
+  <word text="onMissionTime_HHxMMxSS(missionTimeInMilliSeconds)" insert="+&#10;&#10;end"/>
+  <word text="onCreate()" insert="+&#10;&#10;end"/>
+  <word text="updateFrame(currentTime, frameNo)" insert="+&#10;&#10;end"/>
+  <word text="onSpeechEnd(soldier, sentence, handle)" insert="+&#10;&#10;end"/>
+  <word text="onPlayEnter(echelon, play, layer)" insert="+&#10;&#10;end"/>
+  <word text="onPlayInvalid(echelon, play, layer)" insert="+&#10;&#10;end"/>
+  <word text="onPlayDone(echelon, play, layer)" insert="+&#10;&#10;end"/>
+  <word text="onPlayFailed(echelon, play, layer)" insert="+&#10;&#10;end"/>
+  <word text="onButtonPressed(actionID)" insert="+&#10;&#10;end"/>
+  <word text="onRespawn(entityName)" insert="+&#10;&#10;end"/>
+  <word text="onSpawnedReady( setName, setID, tableOfEntities, errorCode )" insert="+&#10;&#10;end"/>
+  <word text="onDespawnEntitySet( setID )" insert="+&#10;&#10;end"/>
+  <word text="onDespawnEntity( entityName )" insert="+&#10;&#10;end"/>
+  <word text="onPvPMissionEnd(condition)" insert="+&#10;&#10;end"/>
+  <word text="onMultiplayerMissionLoaded()" insert="+&#10;&#10;end"/>
+  <word text="onKeyPress(key)" insert="+&#10;&#10;end"/>
+  <word text="numpad0()" insert="+&#10;&#10;end"/>
+  <word text="numpad1()" insert="+&#10;&#10;end"/>
+  <word text="numpad2()" insert="+&#10;&#10;end"/>
+  <word text="numpad3()" insert="+&#10;&#10;end"/>
+  <word text="numpad4()" insert="+&#10;&#10;end"/>
+  <word text="numpad5()" insert="+&#10;&#10;end"/>
+  <word text="numpad6()" insert="+&#10;&#10;end"/>
+  <word text="numpad7()" insert="+&#10;&#10;end"/>
+  <word text="numpad8()" insert="+&#10;&#10;end"/>
+  <word text="numpad9()" insert="+&#10;&#10;end"/>
+  <word text="numpadDecimal()" insert="+&#10;&#10;end"/>
+  <word text="numpadDiv()" insert="+&#10;&#10;end"/>
+  <word text="numpadMult()" insert="+&#10;&#10;end"/>
+  <word text="numpadMinus()" insert="+&#10;&#10;end"/>
+  <word text="numpadPlus()" insert="+&#10;&#10;end"/>
+  <word text="numpadClear()" insert="+&#10;&#10;end"/>
+  <word text="numpadPgUp()" insert="+&#10;&#10;end"/>
+  <word text="numpadPgDn()" insert="+&#10;&#10;end"/>
+  <word text="numpadHome()" insert="+&#10;&#10;end"/>
+  <word text="numpadEnd()" insert="+&#10;&#10;end"/>
+  <word text="numpadIns()" insert="+&#10;&#10;end"/>
+  <word text="numpadDel()" insert="+&#10;&#10;end"/>
+  <word text="numpadUp()" insert="+&#10;&#10;end"/>
+  <word text="numpadDn()" insert="+&#10;&#10;end"/>
+  <word text="numpadLt()" insert="+&#10;&#10;end"/>
+  <word text="numpadRt()" insert="+&#10;&#10;end"/>
+  <word text="onEDXInitialized()" insert="+&#10;&#10;end"/>
+  <word text="onLoadCheckpoint()" insert="+&#10;&#10;end"/>
+  <word text="onTransportPickup(entityGroupOrEchelonName)" insert="+&#10;&#10;end"/>
+  <word text="onTransportDropoff(entityGroupOrEchelonName)" insert="+&#10;&#10;end"/>
+  <word text="onTransportMounted(entityGroupOrEchelonName)" insert="+&#10;&#10;end"/>
+  <word text="onTransportDismounted(entityGroupOrEchelonName)" insert="+&#10;&#10;end"/>
+  <word text="onAllJumpersOut()" insert="+&#10;&#10;end"/>
+  <word text="onHeloDestroyed()" insert="+&#10;&#10;end"/>
+  <word text="onCamMoveCompleted(target, speed)" insert="+&#10;&#10;end"/>
+  <word text="onCamRotateCompleted(target, speed)" insert="+&#10;&#10;end"/>
+  <word text="onMenuTimeout(menuID)" insert="+&#10;&#10;end"/>
+  <word text="OFP:clearCommandQueue" insert="+()" desc="Clears the current command queue of the unit, group or echelon.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The Name of the unit, group or echelon to clear the command queue for."/>
+    </input>
+  </word>
+  <word text="OFP:move" insert="+()" desc="Issue a move command to the specified target.  &#10;(It doesn't mean following moving units, just moving to the target's position at the command issuing time.)   &#10;The target can be an entity name (unit/waypoint/triggerzone) or a path (group of waypoints)">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc="The name of a target."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:rapidMove" insert="+()" desc="Issue a rapid move command to the specified target.  &#10;(It doesn't mean following moving units, just moving to the target's position at the command issuing time.)   &#10;The target can be an entity name (unit/waypoint/triggerzone) or a path (group of waypoints)">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc="The name of a target."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:stop" insert="+()" desc="Issues a stop command to the specified target. ">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:stopForTime" insert="+()" desc="Issues a 'stop' command to the specified target which will stand still as long it has been defined, it  can be a unit a group or echelon, making them stop what they are currently doing.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="Time" type="number" desc="How long you want the unit group or echelon to stop for. "/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:follow" insert="+()" desc="Issue a follow command to the specified target, with the specified maximum distance.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc=" The name of the object or army element the unit(s) should follow"/>
+      <argument name="maxDistance" type="number" desc="The furthest distance to stray from the follow target"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:escortWithOffset" insert="+()" desc="Issue an escort command to the entity to escort the desired entity,     &#10; intX sets left &amp; right, intZ sets front and behind.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc=" The unit(s) to issue the command to"/>
+      <argument name="targetName" type="string" desc=" The name of the object or army element the unit(s) should escort"/>
+      <argument name="xOffsetMetres" type="number" desc="The distance to maintain along the x axis"/>
+      <argument name="zOffsetMetres" type="number" desc="The distance to maintain along the z axis"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:escortLeft" insert="+()" desc="Issues an 'escort' command to the specified unit(s).    &#10;The escort is performed two metres to the left, facing the direction of the escorted.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc=" name of the object or army element the unit(s) should escort"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:escortRight" insert="+()" desc="Issues an 'escort' command to the specified unit(s).    &#10;The escort is performed two metres to the right, facing the direction of the escorted.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc=" name of the object or army element the unit(s) should escort"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:patrol" insert="+()" desc="Issues a 'patrol' command to the specified unit(s).    &#10;The unit(s) will patrol along the waypoints in the group, in the manner stated by pathType.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="pathName" type="string" desc="The name of the waypoint group to patrol"/>
+      <argument name="pathType" type="string" desc="The manner in which to patrol: ESINGLE, ECYCLIC or EBACKANDFORTH."/>
+      <argument name="startWaypoint" type="number" desc="The index of the waypoint within the group at which to begin patrolling. (between 1 and the number of waypoints in the path.)"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:engage" insert="+()" desc="Issues a command to the specified unit(s) to engage(attack) the target unit.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc="The name of the target to engage.  This should be a single unit/entity."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:assault" insert="+()" desc="Issues a command to the specified unit(s), telling them to assault the given enitiy.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of echelon."/>
+      <argument name="targetEntityName " type="string" desc="Target entity name - this can be any entity."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+
+  <word text="OFP:assaultBuilding" insert="+()" desc="Issues a command to the specified unit(s), telling them to assault the given building.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of echelon."/>
+      <argument name="buildingName" type="string" desc="The name of the building to assault."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:defendBuilding" insert="+()" desc="Issues a command to the specified unit(s), telling them to defend the given building.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of echelon."/>
+      <argument name="buildingName" type="string" desc="The name of the building to defend."/>
+      <argument name="radius" type="number" desc="In meters. It specifies area where units will actively start fighting. Outside this area enemies will not start firing at the enemy until they are shot at"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:searchAndDestroy" insert="+()" desc="Issues a 'search and destroy' command to the specified unit(s).  &#10;The unit(s) will search around the given location within the stated radius, engaging anything they find.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of echelon."/>
+      <argument name="locationName" type="string" desc="The name of the location to search and destroy."/>
+      <argument name="radius" type="number" desc="The furthest distance from the target to perform the search."/>
+      <argument name="stickTogether" type="boolean " desc="whether or not the units should stick together.  Options are true or false."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:regroup" insert="+()" desc="Regroup the given echelon.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of echelon."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:forceRegroup" insert="+()" desc="Issues a regroup order to the player’s fireteam.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of echelon."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:defendUnit" insert="+()" desc="Issues a 'defend' command to the specified unit(s), who will proceed to defend the other given unit(s). ">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to."/>
+      <argument name="unitName" type="string" desc="The name of the unit(s) to defend."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:defendPos" insert="+()" desc="Issues a 'defend' command to the specified unit(s), who will proceed to defend the given location without straying further than the supplied distance.">
+    <input>
+      <argument name="EntityOrEchelonName" type="string" desc="The name of the unit or echelon to issue the command to."/>
+      <argument name="locationName" type="string" desc="The name of the position to defend."/>
+      <argument name="radius" type="number" desc="in meters: It specifies area where units will actively start fighting. Outside this area enemies will not start firing at enemy unitl they are shot at."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:defendLocation" insert="+()" desc="Issues a 'defend' command to the specified unit(s), who will proceed to defend the given location. ">
+    <input>
+      <argument name="EntityOrEchelonName" type="string" desc="The name of the unit or echelon to issue the command to."/>
+      <argument name="locationName" type="string" desc="The name of the position to defend. "/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:defendPerimeter" insert="+()" desc="Issues a 'defend' command to the specified unit(s), who will proceed to defend their current position.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:defendDirByPosition" insert="+()" desc="Issues a 'defendDir' command to the specified unit(s), who will proceed to defend the given area. ">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to."/>
+      <argument name="locationName" type="string" desc="The name of the location to defend."/>
+      <argument name="directionByPosition" type="string" desc="The name of an entity that will be used to work out the direction; the direction is vector from entity specified by locationName to entity specified by directionByPosition."/>
+      <argument name="angleInDeg" type="number" desc="The angle to defend in degree."/>
+      <argument name="radius" type="number" desc="in meters. It specifies area where units will actively start fighting. Outside this area enemies will not start firing at the enemy until they are shot at."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:throwGrenade" insert="+()" desc="Tells the specified unit to throw a grenade of the given type at the supplied target.">
+    <input>
+      <argument name="unitName" type="string" desc="The name of the unit to issue the command to.  This should be a single soldier."/>
+      <argument name="targetName" type="string" desc="The name of the unit / location to throw a grenade at."/>
+      <argument name="grenadeType" type="string" desc="The type of the grenade, FragGrenage or SmokeGrenade"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:suppress" insert="+()" desc="Sets the stance of the specified units to the stated stance.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of either an entity a group or echelon."/>
+      <argument name="targetName" type="string" desc="The name of the unit / echelon / group to suppress."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:breakMorale" insert="+()" desc="Sets the morale status of the specified unit(s) to 'broken'.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit(s) to break the morale of."/>
+    </input>
+  </word>
+  <word text="OFP:damage" insert="+()" desc="Inflicts the stated amount of damage to the given zone of the specified unit. The unit should be always a single unit (even if groupname given!). ">
+    <input>
+      <argument name="EntityOrGroupName" type="string" desc="The name of the unit or group to damage."/>
+      <argument name="Location" type="string" desc="The name of the zone to do the damage it can be (headzone,chestzone,abdomenzone,larmzone,rarmzone,llegzone,rlegzone)."/>
+      <argument name="damageHP" type="number" desc="The amount of damage to inflict."/>
+    </input>
+  </word>
+  <word text="OFP:setNonRevivable" insert="+()" desc="Loop all soldiers defined by the name, and flag them to be either non-revivable (true) or revivable (false).  This means when they become incapacitated, they will not call for a medic.   ">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit(s) to set Non Revivable."/>
+      <argument name="nonRevivable" type="boolean" desc="True or False"/>
+    </input>
+  </word>
+  <word text="OFP:lookAtEntity" insert="+()" desc="Will make the soldier or collection of soldiers look at a particular entity.  They will turn their heads until they have the entity in their field of view, and look at it for lookAtTimer milliseconds.  ">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to."/>
+      <argument name="entityName" type="string" desc="Can be the name of any entity that supports the transform component – waypoints, zones, vehicles, soldiers, place-able sandbags, etc."/>
+      <argument name="LifetimeTimer" type="number" desc="Whether they can or cannot get the entity in their field of view, the look-at will cancel itself after lifetimeTimer milliseconds."/>
+      <argument name="lookAtTimer" type="number" desc="Defines how long the unit  should look at the defined entity. "/>
+    </input>
+  </word>
+  <word text="OFP:lookAt" insert="+()" desc="Will make the given entity look at the given target, the speed is how long it will take to reach its destination, time is the length of time the entity will look at the target for.">
+    <input>
+      <argument name="unitName" type="string" desc="The unit to make look at the target."/>
+      <argument name="targetName" type="string" desc="Where to make the unit look."/>
+      <argument name="speed" type="number" desc="How long it will take to turn to look at the target."/>
+      <argument name="time" type="number" desc="How long to look at the target for."/>
+    </input>
+  </word>
+  <word text="OFP:lookAtDefault" insert="+()" desc="Will restore the default look at game behaviour.">
+    <input>
+      <argument name="Entityname" type="string" desc="The unit to set the look status to default for."/>
+    </input>
+  </word>
+  <word text="OFP:allowPlayerMovement" insert="+()" desc="Enables / disables player movement.">
+    <input>
+      <argument name="allow" type="boolean" desc="Whether or not to allow the player to move (true or false). "/>
+    </input>
+  </word>
+  <word text="OFP:allowPlayerFire" insert="+()" desc="Enables / disables players firing ability.">
+    <input>
+      <argument name="allow" type="boolean" desc="Whether or not to allow the player to fire (true or false)."/>
+    </input>
+  </word>
+  <word text="OFP:allowSoldierSpeaker" insert="+()" desc="Call with false to stop this entity speaking non-scripted speech, for cutscenes.  Call with true to unblock at the end of a cutscene.  Lua conversations will do this automatically.">
+    <input>
+      <argument name="Speaker" type="string" desc="The name of the entity to block/unblock - (player) special-case will use player's current entity."/>
+      <argument name="canSpeak" type="boolean" desc="true allows this entity to speak, false blocks it. Reference counted."/>
+    </input>
+  </word>
+  <word text="OFP:addToGroup" insert="+()" desc="Finds the group and adds everyone in unitOrGroupName to that group.  The group must exist before you call this function. ">
+    <input>
+      <argument name="UnitOrGroupName" type="string" desc="The unit or group which we want to assign into a group."/>
+      <argument name="GroupName" type="string" desc="The group to assign the unit or group to. "/>
+    </input>
+  </word>
+  <word text="OFP:removeFromGroup" insert="+()" desc="finds the group and removes everyone in unitOrGroupName that was in that group.  Will error if the unit you try to remove was not already in that group. ">
+    <input>
+      <argument name="UnitOrGroupName" type="string" desc="The unit or group which we want to remove from a group."/>
+      <argument name="GroupName" type="string" desc="The group to remove the unit or group from. "/>
+    </input>
+  </word>
+  <word text="OFP:stopInfinite" insert="+()" desc="Stops a vehicle for infinite amount of time.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The entity,unit or group to issue the command stop."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:popFrontCommand" insert="+()" desc="Release the stopinfinite command.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name or group of the vehicle to issue the command release."/>
+    </input>
+  </word>
+
+  <word text="OFP:damageVehicle" insert="+()" desc="Damages the specified unit in the stated way.  &#10;Catastrophic damage will not destroy a vehicle, just cosmetic. This is preferably used   &#10;for start of mission entities that need to be destroyed without blowing them up on start up.  ">
+    <input>
+      <argument name="vehicleName" type="string" desc="The unit to damage.  This should be always a single vehicle."/>
+      <argument name="damageType" type="string" desc="Can be: mobility, firepower, mainrotor, tailrotor or catastrophic."/>
+    </input>
+  </word>
+  <word text="OFP:destroyVehicle" insert="+()" desc="This will destroy a vehicle, with associated explosions and onDeath callback.">
+    <input>
+      <argument name="vehicleName" type="string" desc="The unit to destroy. This should be a single vehicle."/>
+    </input>
+  </word>
+  <word text="OFP:mountVehicle" insert="+()" desc="The soldier, group or echelon will mount the given vehicle as the given role.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to mount."/>
+      <argument name="vehicleName" type="string" desc="The name of the vehicle to mount."/>
+      <argument name="role" type="string" desc="Crew, Passengers or Any for multiple units.  Driver, Commander, Gunner, Troop or Any for a single unit."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:dismountVehicle" insert="+()" desc="The soldier, group or echelon will dismount from their  current vehicle.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc=" The name of the unit group or echelon unit(s) to issue the command to dismount."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:forceDismountVehicle" insert="+()" desc="Issues a dismount order to the player’s fire team including the player.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc=" The name of the unit group or echelon unit(s) to issue the command to dismount."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:manEmplacementWeapon" insert="+()" desc="This script command will send a manWeapon command to the soldier specified.  The soldier will mount the weapon and use it until he receives another command from script.  At this point the soldier will dismount and undertake his new command.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to mount (man)."/>
+      <argument name="GunName" type="string" desc="The name of the gun to mount (man)."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:teleport" insert="+()" desc="Instant teleport of the given entity (or group) to the specified destination (in case of groups the members keep their original).">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon unit(s) to issue the command to teleport."/>
+      <argument name="targetName" type="string" desc="The name of the entity where the unit(s) should be teleported to."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:land" insert="+()" desc="Checks if helicopter is above ground, then will slow and land near to current position.">
+    <input>
+      <argument name="helicopterName/echelonName" type="string" desc="The helicopterunit or echelonName to issue the command to take off . "/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:takeoff" insert="+()" desc="Checks if a helicopter is on the ground, then will vertically take off into the air.">
+    <input>
+      <argument name="helicopterName/echelonName" type="string" desc="The helicopterunit or echelonName to issue the command to take off . "/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:damageBuilding" insert="+()" desc="Destroys the building with the name given from the mission editor.">
+    <input>
+      <argument name="BuildingName" type="string" desc="The name of the buildign to damage. "/>
+    </input>
+  </word>
+  <word text="OFP:attach" insert="+()" desc="Attach the specified unit to the given echelon. You can only attach a FireTeam to a Squad - or an Unit to a FireTeam.">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of the echelon to attach the unit/echelon to."/>
+      <argument name="UnitorEchelonName" type="string" desc="The unit or echelon to attach to the first echelon. This should be a single unit or echelon."/>
+    </input>
+  </word>
+  <word text="OFP:detach" insert="+()" desc="Detach the specified unit or echelon from the given echelon. ">
+    <input>
+      <argument name="echelonName" type="string" desc="The name of the echelon to detach the unit/echelon from."/>
+      <argument name="UnitorEchelonName" type="string" desc="The unit or echelon to detach from the first echelon. This should be a single unit or echelon.  "/>
+    </input>
+  </word>
+  <word text="OFP:callArtilleryStrike" insert="+()" desc="The specified unit calls in an artillery strike on the target.">
+    <input>
+      <argument name="Army" type="number" desc="Army: 0 US, 1 PLA"/>
+      <argument name="Target" type="string" desc="The target for the strike to attack (This can be anything (vehicles, people, buildings, etc.)."/>
+      <argument name="ammoSize" type="string" desc="The size of the ammunition: Mortar, HeavyMortar or Howitzer."/>
+      <argument name="ammoType" type="string" desc="The type of the ammunition: Smoke or HE."/>
+      <argument name="formationType" type="string" desc="The formation of the strike: Barrage, Scattered, Tight, Harassing or Single."/>
+      <argument name="HitTime" type="number" desc="The time of delay before the artillery are released. "/>
+    </input>
+  </word>
+  <word text="OFP:callAirStrike" insert="+()" desc="The specified unit calls in an airstrike on the target.">
+    <input>
+      <argument name="Army" type="number" desc="Army: 0 US, 1 PLA"/>
+      <argument name="Target" type="string" desc="The target for the strike to attack (This can be anything (vehicles, people, buildings, etc.)."/>
+      <argument name="ammoType" type="string" desc="The type of the ammunition: Small, Large, JDAM."/>
+    </input>
+  </word>
+  <word text="OFP:setArtilleryStrikeCount" insert="+()" desc="Sets the type and amount of the Artillery Strikes.">
+    <input>
+      <argument name="Army" type="number" desc="Army: 0 US, 1 PLA, 2 Neutral"/>
+      <argument name="Size" type="string" desc="Can be Mortar, HeavyMortar, Howitzer"/>
+      <argument name="Amount" type="number" desc="The number of the specified Artillery strikes "/>
+    </input>
+  </word>
+  <word text="OFP:setAirStrikeCount" insert="+()" desc="Sets the type and amount of the Air Strikes">
+    <input>
+      <argument name="Army" type="number" desc="Army: 0 US, 1 PLA, 2 Neutral"/>
+      <argument name="Size" type="string" desc="Can be Small, Large, JDAM ."/>
+      <argument name="Amount" type="number" desc="The number of the specified Air strikes.  "/>
+    </input>
+  </word>
+  <word text="OFP:enableArtilleryStrike" insert="+()" desc="Enables or disables Artillery Strikes">
+    <input>
+      <argument name="Army" type="number" desc="Army: 0 US, 1 PLA, 2 Neutral"/>
+      <argument name="Size" type="string" desc="Mortar, HeavyMortar, Howitzer"/>
+      <argument name="Type" type="string" desc="HE or Smoke"/>
+      <argument name="Enable" type="string" desc="Whether or not the Artillery Strike should be enabled: true or false."/>
+    </input>
+  </word>
+  <word text="OFP:enableAirStrike" insert="+()" desc="Enables or disables Air Strikes.">
+    <input>
+      <argument name="Army" type="number" desc="Army: 0 US, 1 PLA, 2 Neutral"/>
+      <argument name="Size" type="string" desc="Small, Large, JDAM"/>
+      <argument name="Enable" type="string" desc="Whether or not the AIR Strike should be enabled: true or false."/>
+    </input>
+  </word>
+  <word text="OFP:addTimer" insert="+()" desc="Adds (and starts) a new timer with the given name and interval. ">
+    <input>
+      <argument name="timerName" type="string" desc="A unique name for the timer to add."/>
+      <argument name="time" type="number" desc="The amount of time to wait before triggering. The minimum is 100. "/>
+    </input>
+  </word>
+  <word text="OFP:removeTimer" insert="+()" desc="Removes (and stops) the timer with the given name. ">
+    <input>
+      <argument name="timerName" type="string" desc="The unique name of the timer to remove."/>
+    </input>
+  </word>
+  <word text="OFP:convertTimeToMilliSeconds" insert="+()" desc="Returns the given number of hours, minutes and seconds into a single value in milliseconds.">
+    <input>
+      <argument name="Hours" type="number" desc="The number of hours you wish to represent."/>
+      <argument name="Minutes" type="number" desc="The number of minutes you wish to represent."/>
+      <argument name="Seconds" type="number" desc="The number of seconds you wish to represent."/>
+    </input>
+  </word>
+  <word text="OFP:convertTimeToHMS" insert="+()" desc="Returns the time (milliseconds) in (hours, minutes, seconds). ">
+    <input>
+      <argument name="timeInMilliSeconds" type="number" desc="The time in milliseconds you want to convert. "/>
+    </input>
+  </word>
+  <word text="OFP:activateEntitySet" insert="+()" desc="Creates the Entity Set exactly where you placed it in the mission editor. All the unit properties including the entity’s name are kept the same.">
+    <input>
+      <argument name="setName " type="string" desc="The name of the entity set already set up in the mission editor."/>
+    </input>
+  </word>
+  <word text="OFP:spawnEntitySetAtLocation" insert="+()" desc="Creates the entity set and moves it to the location specified. All the unit properties are kept the same except the entity names which are assigned by the engine. ">
+    <input>
+      <argument name="setName " type="string" desc="The name of the entity set already set up in the mission editor."/>
+      <argument name="x  " type="number" desc="The x coordinate."/>
+      <argument name="y  " type="number" desc="The y coordinate."/>
+      <argument name="z  " type="number" desc="The z coordinate."/>
+    </input>
+  </word>
+  <word text="OFP:despawnEntity" insert="+()" desc="De-spawns the entity entityName. You can despawn any entity.">
+    <input>
+      <argument name="entityName" type="string" desc="The name of the entity to be despawned."/>
+    </input>
+  </word>
+  <word text="OFP:destroyEntitySet" insert="+()" desc="Despawns the Entity Set with the given ID. ">
+    <input>
+      <argument name="setID" type="string" desc="The set ID of the entity to despawn. This ID is always unique and created when the entityset has been spawned. "/>
+    </input>
+  </word>
+  <word text="OFP:despawnEntity" insert="+()" desc="Despawns a single Entity with the given name IF AND ONLY IF the entity is a vehicle or character ">
+    <input>
+      <argument name="setID" type="string" desc="The name entity to despawn."/>
+    </input>
+  </word>
+  <word text="OFP:disableEvent" insert="+()" desc="Disable the given event-function, so it won't be invoked until you enable it again. ">
+    <input>
+      <argument name="eventFunctionName" type="string" desc="The event to disable."/>
+    </input>
+  </word>
+  <word text="OFP:enableEvent" insert="+()" desc="Enable the given event-function.">
+    <input>
+      <argument name="eventFunctionName" type="string" desc="The event to enable."/>
+    </input>
+  </word>
+  <word text="OFP:activateRVChain" insert="+()" desc="Activates the named chain. Only 1 chain can ever be active at any time.">
+    <input>
+      <argument name="chainName " type="string" desc="The name of the RVchain. "/>
+    </input>
+  </word>
+  <word text="OFP:setRVChainVisibility" insert="+()" desc="Sets the visibility of the RV system. This is independent to the active chain.">
+    <input>
+      <argument name="state " type="boolean" desc="Can true or false "/>
+    </input>
+  </word>
+  <word text="OFP:registerOnReconFunction" insert="+()" desc="Allows a unit of fireteam to perform recon.  When the specified unit(s) see the given point for the stated amount of time, the provided function will be called, passing the name of the unit that reconned the point.">
+    <input>
+      <argument name="functionName" type="string" desc="The function to call when the point has been seen by the unit(s)."/>
+      <argument name="pointName" type="string" desc="The name of the position to report having seen."/>
+      <argument name="unitName" type="string" desc="The name of the unit to monitor the recon of."/>
+      <argument name="Time" type="number" desc="The amount of time the point must be visible for before calling the function."/>
+      <argument name="viewCone" type="number" desc="How centrally the unit must view the point."/>
+      <argument name="Distance" type="number" desc="How close the unit must be to the point for it to be valid recon."/>
+    </input>
+  </word>
+  <word text="OFP:unregisterOnReconFunction" insert="+()" desc="Cancels any registered recon for the specified unit(s).">
+    <input>
+      <argument name="UnitorEchelonName" type="string" desc="The unit(s) to cancel recon for."/>
+    </input>
+  </word>
+  <word text="OFP:setROE" insert="+()" desc="Sets the Rules of engagement for the specified unit(s).">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to setROE."/>
+      <argument name="Rules" type="string" desc="Can be  EHOLDFIRE, ERETURNFIRE, EFIREONMYLEAD, ESUPPRESSEDWEAPONSFIREATWILL or EFIREATWILL. If the rule is set to eFireOnMyLead then     &#10;you must provide the name of the unit that will trigger the entity or group to start firing."/>
+      <argument name="fireOnMyLeadEntityName" type="string" desc="The name of the unit to take the lead from (applies to EFIREONMYLEAD rule)"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:forceSetROE" insert="+()" desc="Issues a ROE order for the player’s FT. ">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to setROE."/>
+      <argument name="Rules" type="string" desc="Can be  EHOLDFIRE, ERETURNFIRE, EFIREONMYLEAD, ESUPPRESSEDWEAPONSFIREATWILL or EFIREATWILL. If the rule is set to eFireOnMyLead then     &#10;you must provide the name of the unit that will trigger the entity or group to start firing."/>
+      <argument name="fireOnMyLeadEntityName" type="string" desc="The name of the unit to take the lead from (applies to EFIREONMYLEAD rule)"/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:setHoldFire" insert="+()" desc="Tells the specified unit(s) whether they should hold fire.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to setHoldFire."/>
+      <argument name="holdFire" type="boolean" desc="Whether or not the unit(s) should hold their fire: true or false."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:setStance" insert="+()" desc="Sets the stance of the specified unit(s) to the stated stance.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to setStance."/>
+      <argument name="stance" type="string" desc="The stance to change to: EAI, ESTANDING, ECROUCHING or EPRONE."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:setDoctrine" insert="+()" desc="Sets the doctrine of the specified unit(s) to the stated doctrine.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to setDoctrine."/>
+      <argument name="stance" type="string" desc="The the doctrine to adhere to: ECOMBAT, EAWARE, ENORMAL or EATEASE."/>
+    </input>
+  </word>
+  <word text="OFP:setMood" insert="+()" desc="Sets the mood of the specified units to the stated mood.">
+    <input>
+      <argument name="entityOrEchelonName" type="string" desc="The name of the unit or echelon to issue the command."/>
+      <argument name="mood" type="string" desc="The Mood can be: EMoodPassive, EMoodCautious, EMoodNormal, EMoodAggressive."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:setFormation" insert="+()" desc="Sets the formation of the specified echelon to the given formation.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name echelon to issue the command to setFormation."/>
+      <argument name="formation" type="string" desc="The formation can be: F_LINE, F_COLUMN, F_DIAMOND, F_ECHELON_LEFT, F_ECHELON_RIGHT, F_WEDGE, F_VEE, F_CUSTOM or F_AI."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+  <word text="OFP:setIsControlledByParent" insert="+()" desc="Function returns true when an entity is controlled by a parent echelon and false if not”">
+    <input>
+      <argument name="EchelonName" type="string" desc="The name of the Echelon to issue the command to."/>
+      <argument name="isControlledByParent" type="boolean" desc="Whether or not the unit(s) are controlled by their parent: true or false"/>
+    </input>
+  </word>
+  <word text="OFP:setInvulnerable" insert="+()" desc="Sets the specified unit(s) to be invulnerable or not.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to issue the command to setInvulnerable."/>
+      <argument name="invulnerable" type="boolean" desc="Whether or not the unit(s) should be invulnerable: true or false."/>
+    </input>
+  </word>
+  <word text="OFP:setAmmoCount" insert="+()" desc="Sets the number of bullets of the specified units (or groups) actual weapon. (Works only for infantry units!)">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The name of the unit group or echelon to set the ammo count for."/>
+      <argument name="ammoCount" type="number" desc="The amount of ammo to set the unit to have."/>
+    </input>
+  </word>
+  <word text="OFP:setRallyPoint" insert="+()" desc="Sets the rally point of the specified unit.">
+    <input>
+      <argument name="entityOrGroupName" type="string" desc="The unit(s) to issue the command to."/>
+      <argument name="targetName" type="string" desc="The name of the unit / location to use as a rally point."/>
+    </input>
+  </word>
+  <word text="OFP:setMaxSpeed" insert="+()" desc="Sets a maximum speed for a land vehicle in Kph.  A value of 0 will disable this check in AI steering. Works just for vehicles!">
+    <input>
+      <argument name="EntityorGroupName" type="string" desc="The unit or group to set the maximum speed of."/>
+      <argument name="Speed" type="number" desc="maximum speed"/>
+    </input>
+  </word>
+  <word text="OFP:setVehicleIsMountable" insert="+()" desc="Restrict the player mounting vehicles">
+    <input>
+      <argument name="VehicleName" type="string" desc="The vehicle which we want the player not to mount in. "/>
+      <argument name="Value" type="boolean" desc="True or False "/>
+    </input>
+  </word>
+  <word text="OFP:setVehicleMountableStatus" insert="+()" desc="Marks the vehicle (or all vehicles in the group) as not mountable, mountable in passenger seats only, or mountable in all seats.">
+    <input>
+      <argument name="VehicleName" type="string" desc="The vehicle which we want the player not to mount in. "/>
+      <argument name="vehicleMountableFlag" type="number" desc="0 = not mountable, 1 = mountable in passenger seats only,2 = mountable in all seats (ie unrestricted)"/>
+    </input>
+  </word>
+  <word text="OFP:setVehicleIgnoredByAI" insert="+()" desc="Sets the defined vehicle or groups of vehicles to be ignored by the AI. ( not mounts in) ">
+    <input>
+      <argument name="vehicleOrGroupName" type="string" desc="The Vehicle or groups or vehicles to check. "/>
+      <argument name="vehicleIgnoredByAI" type="boolean" desc="true or false "/>
+    </input>
+  </word>
+  <word text="OFP:setAIConfigPropertyValue" insert="+()" desc="Allows AIConfig.xml property values to be overridden in mission onCreate() function.">
+      <input>
+        <argument name="PropertyName" type="string" desc="AI config property name. (see AIConfig.xml)"/>
+        <argument name="PropertyValue" type="string" desc="Overridden property value."/>
+      </input>
+  </word>
+  <word text="OFP:setAIInaccuracy" insert="+()" desc="Set the AI inaccuracy for a given entity. The state is saved and restored for saved games. When enabled the min dispersion code and ballistic inaccuracy aim adjustments are used.">
+    <input>
+      <argument name="entityOrGroupName" type="string" desc="The unit or group to set inaccuracy."/>
+      <argument name="Value" type="string" desc="OFF, NORMAL or FORCED"/>
+    </input>
+  </word>
+  <word text="OFP:setLights" insert="+()" desc="Switches the lights of vehicles on or off.  ">
+    <input>
+      <argument name="EntityName " type="string" desc="The name of the vehicle."/>
+      <argument name="Value" type="boolean" desc="true to set lights on, false to set lights off"/>
+    </input>
+  </word>
+  <word text="OFP:setVehicleMood" insert="+()" desc="Sets the mood of the specified vehicle to the stated mood.">
+    <input>
+      <argument name="vehicleName" type="string" desc="The name of the vehicle to issue the command to setMood."/>
+      <argument name="mood" type="string" desc="The Mood can be: EMoodPassive, EMoodCautious, EMoodNormal, EMoodAggressive."/>
+      <argument name="issueCommandOption" type="string" desc="Where to put the command in the command queue (ADDTOFRONT, ADDTOEND, or OVERRIDE)"/>
+    </input>
+  </word>
+
+  <word text="OFP:setArmiesRelationship" insert="+()" desc="Funtion sets relationship between 2 armies.">
+    <input>
+      <argument name="armyIndex1" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+      <argument name="armyIndex1" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+      <argument name="armyIndex1" type="number" desc="ENEMY, NEUTRAL, FRIENDLY"/>
+    </input>
+  </word>
+  <word text="OFP:setArmy" insert="+()" desc="Function sets army index to a unit or all units from a specified group.">
+    <input>
+      <argument name="entityOrGroupName" type="string" desc="The unit or group we want to set. "/>
+      <argument name="armyIndex1" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+    </input>
+  </word>
+  <word text="OFP:setMissionTime" insert="+()" desc="Sets the mission-time (in milliseconds). ">
+    <input>
+      <argument name="timeInMilliSeconds" type="number" desc="The value to set the mission time to."/>
+    </input>
+  </word>
+  <word text="OFP:setTimeOfDay" insert="+()" desc="Sets the actual current time of day, in hours, minutes and seconds (24 hour clock).">
+    <input>
+      <argument name="Hours" type="number" desc="The hour of the day."/>
+      <argument name="Minutes" type="number" desc="The minute."/>
+      <argument name="Seconds" type="number" desc="The second ."/>
+    </input>
+  </word>
+  <word text="OFP:setTimer" insert="+()" desc="Sets the remaining time until the timers activation.">
+    <input>
+      <argument name="timerName" type="string" desc="The name of the (pre-existing) timer to manipulate."/>
+      <argument name="timeInMilliSeconds" type="number" desc="The amount of time remaining on the timer."/>
+    </input>
+  </word>
+  <word text="OFP:setWeatherCurrent" insert="+()" desc="Sets the current weather type based on the five main types of weather.">
+    <input>
+      <argument name="weatherType" type="number" desc="The current weather type (0=clear, 1=foggy, 2=cloudy, 3=overcast, 4=stormy)"/>
+    </input>
+  </word>
+  <word text="OFP:setWeatherTarget" insert="+()" desc="Sets the weather system to begin blending from the current weather type to the target weather type.">
+    <input>
+      <argument name="weatherType" type="number" desc="Sets the weather system to begin blending from the current weather type to the target weather type.  The time of day specified is absolute, not relative."/>
+      <argument name="Hours" type="number" desc="The hour of the day in which the target weather type should be in full effect."/>
+      <argument name="Minutes" type="number" desc="The minute, in which the target weather type should be in full effect."/>
+      <argument name="Seconds" type="number" desc="The second, in which the target weather type should be in full effect."/>
+    </input>
+  </word>
+  <word text="OFP:setFogCurrent" insert="+()" desc="Sets the current fog level percentage.  This affects general visibility, and is not exclusive to the foggy weatherType.">
+    <input>
+      <argument name="fog" type="number" desc="The current amount of fog (0 - 100)."/>
+    </input>
+  </word>
+  <word text="OFP:setFogTarget" insert="+()" desc="Sets the fog to begin blending from the current fog level to the target fog level.  The time of day specified is absolute, not relative.">
+    <input>
+      <argument name="fog" type="number" desc="The target amount of fog (0 - 100)."/>
+      <argument name="Hours" type="number" desc="The hour of the day in which the target fog level should be in full effect."/>
+      <argument name="Minutes" type="number" desc="The minute,in which the target fog level should be in full effect."/>
+      <argument name="Seconds" type="number" desc="The second , in which the target fog level should be in full effect."/>
+    </input>
+  </word>
+  <word text="OFP:missionCompleted" insert="+()" desc="Set the mission to Completed state.">
+  </word>
+  <word text="OFP:missionFailed" insert="+()" desc="Set the mission to Failed state.">
+  </word>
+  <word text="OFP:missionFailedKIA" insert="+()" desc="Set the mission to Failed state with the string description “All players were killed in action”.">
+  </word>
+  <word text="OFP:missionFailedMIA" insert="+()" desc="Set the mission to Failed state with the string description “Missing in action”.">
+  </word>
+  <word text="OFP:setObjectiveState" insert="+()" desc="Sets the state of the specified objective to the given state.">
+    <input>
+      <argument name="objectiveID" type="string" desc="ID(name) of the objective to set the state of."/>
+      <argument name="State" type="string" desc="Can be IN_PROGRESS, COMPLETED or FAILED."/>
+    </input>
+  </word>
+  <word text="OFP:setObjectiveVisibility" insert="+()" desc="Sets the visibility of the specified objective to the given state.">
+    <input>
+      <argument name="objectiveID" type="string" desc="ID(name) of the objective to set the visibility of."/>
+      <argument name="Visible" type="boolean" desc="Whether the objective is visible: true or false."/>
+    </input>
+  </word>
+  <word text="OFP:setObjectiveMarkerVisibility" insert="+()" desc="Sets the objectivemarker ( just and only) to invisible or visible. Default is visible. Note this does not affect the visibility or state of the objective itself. ">
+    <input>
+      <argument name="objectiveID" type="string" desc="ID(name) of the objective marker to set the visibility of."/>
+      <argument name="Visible" type="boolean" desc="Whether the objective marker is visible: true or false."/>
+    </input>
+  </word>
+  <word text="OFP:enableCheckpoint" insert="+()" desc="Enables the checkpoint, so if the player gets closer to it can trigger the save function.  ">
+    <input>
+      <argument name="CheckpointName" type="string" desc="The name of the checkpoint you want to enable. "/>
+    </input>
+  </word>
+  <word text="OFP:disableCheckpoint" insert="+()" desc="Disables the checkpoint. ">
+    <input>
+      <argument name="CheckpointName" type="string" desc="The name of the checkpoint you want to disable. "/>
+    </input>
+  </word>
+  <word text="OFP:checkpoint" insert="+()" desc="Saves the mission instantly.">
+  </word>
+  <word text="OFP:cancelCheckpoints" insert="+()" desc="When called this will cancel any pending checkpoint saves.">
+  </word>
+  <word text="OFP:isControlledByParent" insert="+()" desc="Function returns true whether an entity is controlled by parent echelon and false if not.">
+    <input>
+      <argument name="entityName" type="string" desc="The name of the unit to check if it is being controlled by its parent."/>
+    </input>
+  </word>
+  <word text="OFP:isUnit" insert="+()" desc="The bool returns true if the specified object is a unit and false if not. ">
+    <input>
+      <argument name="name" type="string" desc="The name of the object to check the unit status of."/>
+    </input>
+  </word>
+  <word text="OFP:isGroup" insert="+()" desc="The bool returns true if the specified object is a group and false if not.">
+    <input>
+      <argument name="name" type="string" desc="The name of the object to check the group status of."/>
+    </input>
+  </word>
+  <word text="OFP:isEchelon" insert="+()" desc="The bool returns true if the specified object is an echelon and false if not.">
+    <input>
+      <argument name="name" type="string" desc="The name of the object to check the echelon status of."/>
+    </input>
+  </word>
+  <word text="OFP:isAlive" insert="+()" desc="The bool returns true if the specified object is an echelon and false if not.In case of groups and echelons: one alive unit is enough to be alive.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the life of."/>
+    </input>
+  </word>
+  <word text="OFP:isCombatEffective" insert="+()" desc="The bool returns true if the specified object is an echelon and false if not.In case of groups and echelons: one alive unit is enough to be alive.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="return true if any units defined by the name which are capable of firing back. "/>
+    </input>
+  </word>
+  <word text="OFP:isPlayer" insert="+()" desc="The bool returns true if the soldier identified by entityName is controlled by player and false if not.">
+    <input>
+      <argument name="entityName" type="string" desc="The name of the unit to check ."/>
+    </input>
+  </word>
+  <word text="OFP:isInGroup" insert="+()" desc="Checks whether an entity is inside a group (named by the second parameter). Returns true if the specified unit belongs to the given group and false if not.">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the group status of."/>
+      <argument name="groupName" type="string" desc="The group potentially containing the unit."/>
+    </input>
+  </word>
+  <word text="OFP:wasInGroup" insert="+()" desc="Checks whether an entity was inside a group (given by the second parameter).">
+    <input>
+      <argument name="entityName" type="string" desc="The unit(s) to get the group status of."/>
+      <argument name="groupName" type="string" desc="The group that potentially used to contain the unit(s)."/>
+    </input>
+  </word>
+  <word text="OFP:isInEchelon" insert="+()" desc="Checks whether an entity or echelon is inside an echelon. The bool returns true if the specified unit or echelon belongs to the given echelon and false if not.">
+    <input>
+      <argument name="EntityorEchelonName" type="string" desc="The unit or echelon to get the echelon status of."/>
+      <argument name="echelonName" type="string" desc="The echelon potentially containing the unit or echelon."/>
+    </input>
+  </word>
+  <word text="OFP:isAllMounted" insert="+()" desc="Returns true if all soldier in the specified group, echelon or soldier name are mounted in a vehicle and false if not. This does not mean that it has to be the same vehicle!">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the mount status of."/>
+    </input>
+  </word>
+  <word text="OFP:isAnyMounted" insert="+()" desc="Returns true if any soldier in the specified group, echelon or soldier name is mounted in a vehicle and false if not. This does not mean that it has to be the same vehicle!">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the mount status of."/>
+    </input>
+  </word>
+  <word text="OFP:isInTrigger" insert="+()" desc="Checks whether an entity a group or echelon is inside a trigger-zone (given by the second parameter).">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the status of."/>
+      <argument name="triggerName" type="string" desc="The trigger zone  area potentially containing the unit(s)."/>
+    </input>
+  </word>
+  <word text="OFP:isAllInTrigger" insert="+()" desc="Checks that all are in the zone before returning true.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the status of."/>
+      <argument name="triggerName" type="string" desc="The trigger zone  area potentially containing the unit(s)."/>
+    </input>
+  </word>
+  <word text="OFP:isInvulnerable" insert="+()" desc="Requiring the invulnerable flag of characters when multiple units are given, if there is any character with false flag, the result will be false.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the invulnerability of."/>
+    </input>
+  </word>
+  <word text="OFP:isPrimaryPlayer" insert="+()" desc="Returns true if the string passed is the same as the name of an entity that is the primary player – defined as set as (player) control mode in the mission editor.">
+    <input>
+      <argument name="EntityName" type="string" desc="The unit to check if it's the primary player"/>
+    </input>
+  </word>
+  <word text="OFP:isSecondaryPlayer" insert="+()" desc="Returns true if the string passed is the same as the name of an entity that is the secondary player – defined as currently controlled by a human and set as “multiplayer playable” in the mission editor.">
+    <input>
+      <argument name="EntityName" type="string" desc="The unit to check if it's the secondary player"/>
+    </input>
+  </word>
+  <word text="OFP:isDestroyed" insert="+()" desc="Returns true if a vehicle is destroyed and false if not, crew may survive with injuries.">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle name to check the destruction state of.  This should be a single vehicle unit."/>
+    </input>
+  </word>
+  <word text="OFP:isCatastrophicallyDestroyed" insert="+()" desc="Returns true if a vehicle is Catastrophically destroyed and false if not, the crew will all be killed.">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle name to check the catastrophic destruction state of.  This should be a single vehicle unit."/>
+    </input>
+  </word>
+  <word text="OFP:isMobilityKill" insert="+()" desc="Returns true if a vehicle has a mobility kill (immboilised), so can not be driven/flown and false if not.">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle to check the mobility kill status of.  This should be a single vehicle unit."/>
+    </input>
+  </word>
+  <word text="OFP:isFirepowerKill" insert="+()" desc="Returns true if a vehicle has a firepower kill, so all the weapon systems are destroyed and false if not.">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle to check the firepower of.  This should be a single vehicle unit."/>
+    </input>
+  </word>
+  <word text="OFP:isVehicleIgnoredByAI" insert="+()" desc="Returns true if the AI is set to ignore the defined vehicle/ vehicle group. ">
+    <input>
+      <argument name="vehicleOrGroupName" type="string" desc="The Vehicle or groups or vehicles to check. "/>
+    </input>
+  </word>
+  <word text="OFP:isVehicleMountable" insert="+()" desc="Returns true if the player can’t mount the vehicle. ">
+    <input>
+      <argument name="vehicleName" type="string" desc="The Vehicle to check.  "/>
+    </input>
+  </word>
+  <word text="OFP:isMainRotorDestroyed" insert="+()" desc="Returns true if the main rotor is destroyed and false if not.">
+    <input>
+      <argument name="helicopterName" type="string" desc="The unit to check the main rotor state of.  This should be a single helicopter unit."/>
+    </input>
+  </word>
+  <word text="OFP:isTailRotorDestroyed" insert="+()" desc="Returns true if the tail rotor is destroyed and false if not.">
+    <input>
+      <argument name="helicopterName" type="string" desc="The unit to check the tail rotor state of.  This should be a single helicopter unit."/>
+    </input>
+  </word>
+  <word text="OFP:isPlaceableDestroyed" insert="+()" desc="Returns true if the named placeable object has been destroyed and false if not.">
+    <input>
+      <argument name="placeableName" type="string" desc="The editor-placed object to query the destruction state of."/>
+    </input>
+  </word>
+  <word text="OFP:isObjectiveVisible" insert="+()" desc="Returns true, when the objective is set to be visible and false if not.">
+    <input>
+      <argument name="objectiveID" type="string" desc="The ID of the objective to query the visibility of."/>
+    </input>
+  </word>
+  <word text="OFP:isBuildingDestroyed" insert="+()" desc="Returns true if the building is completely destroyed.">
+    <input>
+      <argument name="BuildingName" type="string" desc="The ID of the building."/>
+    </input>
+  </word>
+  <word text="OFP:isBuildingPartDestroyed" insert="+()" desc="Returns true if 1 section of a building is destroyed, returns false if the building is completely destroyed or is undamaged.">
+    <input>
+      <argument name="BuildingName" type="string" desc="The ID of the building."/>
+    </input>
+  </word>
+  <word text="OFP:getNearestEnemy" insert="+()" desc="Returns the nearest enemy found to the specified unit, under the given parameters.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the nearest enemy to."/>
+      <argument name="armyIndex" type="number" desc="Friendly army index (0: USA, 1: PLA)"/>
+      <argument name="onlyDetected" type="string" desc="Passing true means that only units that have been detected will be available to return."/>
+    </input>
+  </word>
+  <word text="OFP:getNearestFriend" insert="+()" desc="Returns the nearest friendly unit to the specified unit, under the given parameters.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the nearest friend to."/>
+      <argument name="armyIndex" type="number" desc="Friendly army index (0: USA, 1: PLA)"/>
+    </input>
+  </word>
+  <word text="OFP:getNearestNeutralUnit" insert="+()" desc="Returns the nearest neutral unit to the specified unit, under the given parameters.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the nearest neutral to."/>
+      <argument name="armyIndex" type="number" desc="Friendly army index (0: USA, 1: PLA)"/>
+    </input>
+  </word>
+  <word text="OFP:getNearestDeadEnemy" insert="+()" desc="Returns the entity ID of the nearest dead enemy unit (related to the specified army) from the given entitys position.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the nearest dead enemy to."/>
+      <argument name="armyIndex" type="number" desc="Friendly army index (0: USA, 1: PLA)"/>
+      <argument name="onlyDetected" type="string" desc="Passing true means that only units that have been detected will be available to return."/>
+    </input>
+  </word>
+  <word text="OFP:getNearestDeadFriend" insert="+()" desc="Returns the entity ID of the nearest friendly unit (related to the specified army) from the given entitys position.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the nearest dead friend to."/>
+      <argument name="armyIndex" type="number" desc="Friendly army index (0: USA, 1: PLA)"/>
+    </input>
+  </word>
+  <word text="OFP:getNearestDeadNeutralUnit" insert="+()" desc="Returns the entity ID of the nearest neutral unit (related to the specified army) from the given entitys position.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the nearest dead neutral to."/>
+      <argument name="armyIndex" type="number" desc="Friendly army index (0: USA, 1: PLA)"/>
+    </input>
+  </word>
+  <word text="OFP:getDistance" insert="+()" desc="Returns the distance in metres between the two units groups or echelons.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The first unit/group/echelon. "/>
+      <argument name="EntityGroupOrEchelonNameto" type="string" desc="The second unit/group/echelon. "/>
+    </input>
+  </word>
+  <word text="OFP:getPosition" insert="+()" desc=": Will return the position of an entity.">
+    <input>
+      <argument name="EntityOrGroupName" type="string" desc="The unit or group to get the position from."/>
+    </input>
+  </word>
+  <word text="OFP:getAmmoCount" insert="+()" desc="Returns the number of bullets of the specified units actual weapon. In case of groups the result is the sum of these ammos. (Works only for infantry units!)">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to get the ammo count of."/>
+    </input>
+  </word>
+  <word text="OFP:getROE" insert="+()" desc="Returns the current rules of engagement for the specified unit / echelon: eHoldFire, eReturnFire, eFireOnMyLead, eSuppressedWeaponsFireAtWill or eFireAtWill.">
+    <input>
+      <argument name="EntityOrEchelonName" type="string" desc="The name of the unit /echelon to get the rules of engagement of. This should be a single unit / echelon."/>
+    </input>
+  </word>
+  <word text="OFP:getHoldFire" insert="+()" desc="Returns true if the specified unit group or echelon is currently holding fire and false if not.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit group or echelon to check the firing state of."/>
+    </input>
+  </word>
+  <word text="OFP:getStance" insert="+()" desc="Returns the current stance of the unit: EStanding, ECrouching or EProne.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit, group or echelon to get the stance of. This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getMorale" insert="+()" desc="Returns returns the current morale of the specified unit: EBroken, EBreaking, EFailing, ELowering or EFull.">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the morale of.  This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getDoctrine" insert="+()" desc="Returns the current doctrine of the unit: EAI, ECombat, EAware, Enormal or EAtEase.">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the doctrine of.  This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getMood" insert="+()" desc="Returns returns the current mood of the echelon: eMoodPassive, eMoodNormal or eMoodAggressive.">
+    <input>
+      <argument name="echelonName" type="string" desc="The echelon to get the mood of. This should be an echelon."/>
+    </input>
+  </word>
+  <word text="OFP:getSide" insert="+()" desc="Returns 0 for US or 1 for PLA.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit, group or echelon to get the side of."/>
+    </input>
+  </word>
+  <word text="OFP:getUnitCategory" insert="+()" desc="Returns the units category.">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the category of. Should be a single unit. "/>
+    </input>
+  </word>
+  <word text="OFP:getBroadUnitCategory" insert="+()" desc="Returns the broad category of the unit">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the broad category of."/>
+    </input>
+  </word>
+  <word text="OFP:getGroupSize" insert="+()" desc="Returns the size of the requested group.">
+    <input>
+      <argument name="groupName" type="string" desc="The group to get the number of units within."/>
+    </input>
+  </word>
+  <word text="OFP:getGroupMember" insert="+()" desc="Returns the entity ID (name) of the group-member at index in the given group.">
+    <input>
+      <argument name="groupName" type="string" desc="The group to get the member from."/>
+      <argument name="Index" type="number" desc="The indexnumber of the member in the specified group."/>
+    </input>
+  </word>
+  <word text="OFP:getNearestGroupMemberIndex" insert="+()" desc="Returns the index of the nearest member of the specified group from the given entity.(Between 1 and group-size / 0 in case of error.)">
+    <input>
+      <argument name="entityName" type="string" desc="The unit within the group to get the index of nearest member to."/>
+      <argument name="groupName" type="string" desc="The name of the group to find a member within."/>
+    </input>
+  </word>
+  <word text="OFP:getEchelonSize" insert="+()" desc="Returns the size of the given echelon and the number of it's sub-armyelements (which can be either echelons or units).">
+    <input>
+      <argument name="echelonName" type="string" desc="The echelon to get the size of."/>
+    </input>
+  </word>
+  <word text="OFP:getEchelonFullSize" insert="+()" desc="Returns the total number (full size) of the given echelon and the number of all the contained units at the bottom level.">
+    <input>
+      <argument name="echelonName" type="string" desc="The echelon to get the full size of."/>
+    </input>
+  </word>
+  <word text="OFP:getEchelonMember" insert="+()" desc="Returns the entity ID (name) of the echelon-member at index in the given echelon.">
+    <input>
+      <argument name="echelonName" type="string" desc="The echelon to get the member from."/>
+      <argument name="index" type="number" desc="The indexnumber of the member in the group."/>
+    </input>
+  </word>
+  <word text="OFP:getParentEchelon" insert="+()" desc="Returns the entity ID of the topmost parent echelon of the given armyelement.">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the parent echelon of.  This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getLeader" insert="+()" desc="Returns the entity ID of the echelon leader.">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the leader of.  This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getLeaderOfEchelon" insert="+()" desc="Returns the name of the current leader of the echelon. ">
+    <input>
+      <argument name="echelonName" type="string" desc="The echelon to get the leader from. "/>
+    </input>
+  </word>
+  <word text="OFP:getFormation" insert="+()" desc="Returns the current formation of the given echelon. It can be: F_LINE, F_COLUMN, F_DIAMOND, F_ECHELON_LEFT, F_ECHELON_RIGHT, F_WEDGE, F_VEE, F_CUSTOM or F_AI.">
+    <input>
+      <argument name="echelonName" type="string" desc="The echelon to get the formation of."/>
+    </input>
+  </word>
+  <word text="OFP:getNextWaypoint" insert="+()" desc=" Returns the entity ID (name) of the next waypoint for the given unit, group or echelon.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit, group or echelon to get the next waypoint to."/>
+    </input>
+  </word>
+  <word text="OFP:getNearestWaypoint" insert="+()" desc="Returns the entity ID (name) of the nearest waypoint from the given unit, group or echelon.">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit, group or echelon to get the nearest waypoint to."/>
+    </input>
+  </word>
+  <word text="OFP:getNearestPath" insert="+()" desc="Returns path-name of the nearest waypoint path from the given unit, group or echelon. So it is not necessarily the nearest path!">
+    <input>
+      <argument name="EntityGroupOrEchelonName" type="string" desc="The unit, group or echelon to get the nearest waypoint path to."/>
+    </input>
+  </word>
+  <word text="OFP:getArmiesRelationship" insert="+()" desc="Funtion gets relationship between 2 armies. Returns: ENEMY, NEUTRAL or FRIENDLY ">
+    <input>
+      <argument name="armyIndex1" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+      <argument name="armyIndex1" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+    </input>
+  </word>
+  <word text="OFP:getAirStrikeCount" insert="+()" desc="Funtion gets back the number of the amount of the airstikes of the spcified army. ">
+    <input>
+      <argument name="Army" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+    </input>
+  </word>
+  <word text="OFP:getAirStrikeCountBySize" insert="+()" desc="Funtion gets back the number of the amount of the airstikes of the spcified army. ">
+    <input>
+      <argument name="Army" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+      <argument name="Size" type="number" desc="Small, Large, JDAM"/>
+    </input>
+  </word>
+  <word text="OFP:getArtilleryStrikeCount" insert="+()" desc="Funtion gives back the number of the amount of the Artillery Strike of the spcified army.  ">
+    <input>
+      <argument name="Army" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+    </input>
+  </word>
+  <word text="OFP:getArtilleryStrikeCountBySize" insert="+()" desc="Funtion gives back the number of the amount of the Artillery Strike of the spcified army.  ">
+    <input>
+      <argument name="Army" type="number" desc="0 US, 1 PLA, 2 Neutral"/>
+      <argument name="Size" type="number" desc="Mortar, HeavyMortar, Howitzer"/>
+    </input>
+  </word>
+  <word text="OFP:getMountedVehicle" insert="+()" desc="If soldier is mounted in a vehicle then this function returns name of that vehicle.">
+    <input>
+      <argument name="soldierName" type="string" desc="The unit to get the vehicle of.  This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getSpeed" insert="+()" desc="Returns the current speed of a vehicle in Kph. ">
+    <input>
+      <argument name="entityName" type="string" desc="The unit to get the speed of.  This should be a single unit."/>
+    </input>
+  </word>
+  <word text="OFP:getVehicleLeaderSoldier" insert="+()" desc="Returns the name of the soldier that's the leader of the echelon that is mounted as crew of the vehicle, returns empty string if there is now crew.">
+    <input>
+      <argument name="entityName" type="string" desc="The name of the vehicle to get the leader of."/>
+    </input>
+  </word>
+  <word text="OFP:getVehicleMountableStatus" insert="+()" desc="Returns status of vehicle mountable flag if the vehicle (or all vehicles within the group) are restricted in any way">
+    <input>
+      <argument name="VehicleName" type="string" desc="• If any vehicle is scripted as not mountable then it returns 0.• If any vehicle is scripted as mountable in passenger seats only (and NONE are set to not mountable) then it returns 1.• If all are mountable in all seats (ie none are restricted) then it returns 2."/>
+    </input>
+  </word>
+  <word text="OFP:getHeight" insert="+()" desc="Returns the height above ground in metres for a helicopter unit.">
+    <input>
+      <argument name="helicopterName" type="string" desc="The unit to get the height of.  This should be a single helicopter unit."/>
+    </input>
+  </word>
+  <word text="OFP:getBuildingGuid" insert="+()" desc="Returns the guid for a building when given its name from the mission editor">
+    <input>
+      <argument name="BuildingName" type="string" desc="The name of the BuildingName. "/>
+    </input>
+  </word>
+  <word text="OFP:getTimer" insert="+()" desc="Returns with the remaining time until the timers activation (in milliseconds).">
+    <input>
+      <argument name="timerName" type="string" desc="The timer to get the remaining time of."/>
+    </input>
+  </word>
+  <word text="OFP:getMissionTime" insert="+()" desc="Returns the current mission-time in milliseconds.">
+  </word>
+  <word text="OFP:getObjectiveState" insert="+()" desc="Returns the current state of the specified objective: IN_PROGRESS, COMPLETED or FAILED.">
+    <input>
+      <argument name="objectiveID" type="string" desc="The ID (name) of the objective to query the state of."/>
+    </input>
+  </word>
+  <word text="OFP:getMissionQuota" insert="+()" desc="Returnes the unit limits of the mission pool. ">
+  </word>
+  <word text="OFP:getRVChainName" insert="+()" desc="Returns the active chain name as passed in the function above.">
+  </word>
+  <word text="OFP:getCurrentRVPoint" insert="+()" desc="Returns the current RV point. This will be the one the OSD is pointing towards">
+  </word>
+  <word text="OFP:getNextRVPoint" insert="+()" desc="Returns the next RV point">
+  </word>
+  <word text="OFP:playSpeech" insert="+()" desc=""/>
+  <word text="OFP:playSpeech3" insert="+()" desc=""/>
+  <word text="OFP:playPlayerSpeech" insert="+()" desc="Makes the player's character say the given speech. Returns a handle to this playback, use in onSpeechEnd() event.">
+    <input>
+      <argument name="Speech" type="string" desc="The set of speech for the player's character to say."/>
+    </input>
+  </word>
+  <word text="OFP:playNPCSpeech" insert="+()" desc="The set of speech for the player's character to say. New sentences must be exported from the editor before use in game.">
+    <input>
+      <argument name="unitName" type="string" desc="The name of the unit who should speak."/>
+      <argument name="speech" type="string" desc="The set of speech for the unit to say."/>
+    </input>
+  </word>
+  <word text="OFP:blockCommandAndReportFeedback" insert="+()" desc="">
+    <input>
+      <argument name="blockFlag" type="boolean" desc="passing true or false will stop or allow command and report feedback, such as target reports and orders.  Scripted speech will still be allowed."/>
+    </input>
+  </word>
+  <word text="OFP:startParticleSystem" insert="+()" desc="Use this to start a particle system component that has been placed in the mission editor..  Calling this on an already started effect is equivalent to calling stopParticleSystem() followed by startParticleSystem.">
+    <input>
+      <argument name="name" type="string" desc="Name is the name of the particle system component. "/>
+      <argument name="loopCount " type="number " desc="  If loop count is 0 (or less) it will loop forever.  A value of 1 or higher will dictate the number of times the particle effect will loop."/>
+    </input>
+  </word>
+  <word text="OFP:setParticleSystemEffect" insert="+()" desc="Use this to change the particle effect specified on the current particle effect component, this will take effect next time the effect is started or loops again.">
+    <input>
+      <argument name="name" type="string" desc="Name is the name of the particle system component. "/>
+      <argument name="effectName  " type="string " desc=" Name of the effect."/>
+    </input>
+  </word>
+  <word text="OFP:stopParticleSystem" insert="+()" desc=".  A started particle effect with non-infinite loop count value is not required to be stopped with this function, but can be terminated early using this function. ">
+    <input>
+      <argument name="name" type="string" desc="Name is the name entered in the entity editor.  "/>
+    </input>
+  </word>
+  <word text="OFP:doParticleEffect" insert="+()" desc="This will play the given particle effect at the given position.  Once the particle effect has played once it will be destroyed automatically">
+    <input>
+      <argument name="effectName" type="string" desc="The name of the particle effect to trigger."/>
+      <argument name="entityName" type="string" desc="The x coordinate of the location of the particle effect."/>
+    </input>
+  </word>
+  <word text="OFP:createParticleEffect" insert="+()" desc="This will create (a looping) particle effect at position, the difference is it will loop forever until a call to destroyParticleEffect">
+    <input>
+      <argument name="effectName" type="string" desc="The name of the particle effect to trigger."/>
+      <argument name="entityName" type="string" desc="The x coordinate of the location of the particle effect."/>
+    </input>
+  </word>
+  <word text="OFP:destroyParticleEffect" insert="+()" desc="This will create (a looping) particle effect at position, the difference is it will loop forever until a call to destroyParticleEffect">
+    <input>
+      <argument name="particleEffect" type="string" desc="Destroys a previously created (looping) particle effect"/>
+    </input>
+  </word>
+  <word text="OFP:particleEffect" insert="+()" desc="Will play the named particle effect at the given position. ">
+    <input>
+      <argument name="effectName" type="string" desc="The name of the particle effect to trigger."/>
+      <argument name="x" type="number" desc="The x coordinate of the location of the particle effect."/>
+      <argument name="y" type="number" desc="The y coordinate of the location of the particle effect."/>
+      <argument name="z" type="number" desc="The z coordinate of the location of the particle effect."/>
+    </input>
+  </word>
+  <word text="OFP:addLog" insert="+()" desc="Shows the given text on-screen, via ingame debug logging. ">
+    <input>
+      <argument name="Message" type="string" desc="The text to log."/>
+    </input>
+  </word>
+  <word text="OFP:addLogColoured" insert="+()" desc="Shows the given text on-screen, via ingame debug logging, in the specified colour.">
+    <input>
+      <argument name="Message" type="string" desc="The integer specifying the colour to log in."/>
+      <argument name="Message" type="string" desc="The text to log."/>
+    </input>
+  </word>
+  <word text="OFP:clearLog" insert="+()" desc="Clears all the log messages from the screen.">
+  </word>
+  <word text="OFP:showLetterBoxOsd" insert="+()" desc="Opens &amp; closes the letterbox osd.">
+    <input>
+      <argument name="Visible" type="boolean" desc="Whether to show the letterbox or not ( true opens it, false closes it )."/>
+    </input>
+  </word>
+  <word text="OFP:showPopup" insert="+()" desc="Brings up a popup window with the relevant text on.">
+    <input>
+      <argument name="titleID" type="string" desc="The localisation key of the title of the popup."/>
+      <argument name="detailed" type="string" desc="The localisation key of the detail of the popup."/>
+    </input>
+  </word>
+  <word text="OFP:displaySystemMessage" insert="+()" desc="This will allows to send a message to the chat buffer to be displayed on screen. ">
+    <input>
+      <argument name="Message" type="string" desc="This will allows to send a message to the chat buffer to be displayed on screen. "/>
+    </input>
+  </word>
+  <word text="OFP:assert" insert="+()" desc="AF 27/4/09: if condition is false, message is displayed in a red assert box">
+    <input>
+      <argument name="condition" type="string" desc=""/>
+      <argument name="message" type="string" desc=" "/>
+    </input>
+  </word>
+  <word text="connectToWaypoint"/>
+  <word text="disconnectFromWaypoint"/>
+  <word text="OFP:scriptedCheckpoint" insert="+()" desc="Saves first checkpoint.">
+  </word>
+  <word text="OFP:setAIWeaponUsageFireRate" insert="+()" desc="Allows AI\GlobalKnowledge\WeaponUsageValues.xml fire rate values to be overridden in mission onCreate() function.">
+    <input>
+      <argument name="weaponName" type="string" desc="Name of weapon entity (or 'default' for base weapon)."/>
+      <argument name="paramName" type="string" desc="'Slow', 'Normal', 'Fast', 'Special'."/>
+      <argument name="paramType" type="string" desc="'Minimum', 'Maximum'"/>
+      <argument name="paramValue " type="string" desc="Value to set param name and type for this weapon entity."/>
+    </input>
+  </word>
+  <word text="OFP:setAIWeaponUsageBurstLength" insert="+()" desc="Allows AI\GlobalKnowledge\WeaponUsageValues.xml burst length values to be overridden in mission onCreate() function.">
+    <input>
+      <argument name="weaponName" type="string" desc="Name of weapon entity (or 'default' for base weapon)."/>
+      <argument name="paramName" type="string" desc="'Short', 'Normal', 'Long'."/>
+      <argument name="paramType" type="string" desc="'Minimum', 'Maximum'."/>
+      <argument name="paramValue " type="string" desc="Value to set param name and type for this weapon entity"/>
+    </input>
+  </word>
+  <word text="OFP:setAIWeaponUsageDispersionRadius" insert="+()" desc="Allows AI\GlobalKnowledge\WeaponUsageValues.xml dispersion radius values to be overridden in mission onCreate() function.">
+    <input>
+      <argument name="weaponName" type="string" desc="Name of weapon entity (or 'default' for base weapon)."/>
+      <argument name="paramName" type="string" desc="'AimedShot', 'NormalShot', 'SnapShot'."/>
+      <argument name="paramValue" type="string" desc="Value to set param name and type for this weapon entity."/>
+    </input>
+  </word>
+  <word text="OFP:setAIDispersionSystemPropertyValue" insert="+()" desc="Allows DispersionSystem\DispersionSystem.xml property values to be overridden in mission onCreate() function.">
+    <input>
+      <argument name="PropertyName" type="string" desc="Name of property to modify."/>
+      <argument name="PropertyValue" type="string" desc="Value to set."/>
+    </input>
+  </word>
+  <word text="OFP:setAIDispersionSystemDRBlock" insert="+()" desc="Allows DispersionSystem\DispersionSystem.xml DR block values to be overridden in mission onCreate() function.">
+    <input>
+      <argument name="weaponName" type="string" desc="Name of weapon entity to modify."/>
+      <argument name="playerFilterStart" type="number" desc="For Player % filter effectiveness 0 - 100."/>
+      <argument name="playerFilterEnd" type="number" desc="For Player % filter effectiveness 0 - 100."/>
+      <argument name="playerSustain" type="number" desc="For Player Time in seconds to hold start value."/>
+      <argument name="playerFade" type="number" desc="For Player Time in seconds to fade from start to end value."/>
+      <argument name="playerProneFilter" type="number" desc="For Player % min filter effectiveness when prone 0 - 100."/>
+      <argument name="aiFilterStart" type="number" desc="For AI % filter effectiveness 0 - 100."/>
+      <argument name="aiFilterEnd" type="number" desc="For AI % filter effectiveness 0 - 100."/>
+      <argument name="aiSustain" type="number" desc="For AI Time in seconds to hold start value."/>
+      <argument name="aiFade" type="number" desc="For AI Time in seconds to fade from start to end value."/>
+    </input>
+  </word>
+  <word text="OFP:setAIDispersionSystemAimOffset" insert="+()" desc="Allows DispersionSystem\DispersionSystem.xml aim offset values to be overridden in mission onCreate() function.">
+    <input>
+      <argument name="weaponName" type="string" desc="Name of weapon entity to modify."/>
+      <argument name="filter" type="string" desc="'vsPlayer', 'vsAI', 'vsHelicopter'"/>
+      <argument name="speed" type="number" desc="Speed ( must be &gt; 0 )."/>
+      <argument name="angleRange" type="number" desc="Angle range in degrees ( 0 - 360 )."/>
+      <argument name="distMin" type="number" desc="Minimum distance."/>
+      <argument name="distMax" type="number" desc="Maximum distance."/>
+      <argument name="timeSustain" type="number" desc="Sustain time."/>
+      <argument name="timeFade" type="number" desc="Fade time."/>
+    </input>
+  </word> 
+  <word text="OFP:loadAudioProject" insert="+()" desc="Allows a custom FMOD project to be loaded into the mission so that additional sounds can be used.">
+      <input>
+        <argument name="projectName" type="string" desc="Name of FMOD audio project to load."/>
+      </input>
+  </word>  
+  <word text="OFP:getTerrainHeight" insert="+()" desc="Returns the height of the terrain at given co-ordinates.">
+    <input>
+      <argument name="x" type="number" desc="x co-ordinate on landscape."/>
+      <argument name="z" type="number" desc="z co-ordinate on landscape."/>
+    </input>
+  </word>  
+<!--Haywood's Timer library functions.--><word text="timer:set" insert="+()" desc="Schedules an event to be executed once.">
+        <input>
+            <argument name="event" type="string" desc="The name of a function to be executed."/>
+            <argument name="delay" type="number" desc="The delay (in milliseconds) until the event is executed."/>
+        </input>
+    </word>
+<word text="timer:remove" insert="+()" desc="Removes the event from the timer.">
+        <input>
+            <argument name="event" type="function" desc="The name of the scheduled timer event to be removed."/>
+        </input>
+    </word>
+<!--Undocumented functions.-->
+<word text="OFP:scriptedCheckpoint" insert="+() " desc="Saves the mission instantly (even in hardcore mode)."> </word>
+<word text="OFP:heal" insert="+()" desc="Orders the medic to heal the designated soldier.">
+        <input>
+            <argument name="medicName" type="string" desc="The medic to issue the order to"/>
+            <argument name="unitName" type="string" desc="The soldier to be healed"/>
+            <argument name="commandType" type="string" desc="one of 'ADDTOFRONT', 'ADDTOEND', or 'OVERRIDE'"/>
+        </input>
+    </word>
+<word text="OFP:gameplaySprint" insert="+()" desc="Enable or disable the ability for the unit to sprint.">
+        <input>
+            <argument name="unitName" type="string" desc="The name of the unit to disable/enable sprinting."/>
+            <argument name="mode" type="boolean" desc="true enables sprinting, false disables sprinting."/>
+        </input>
+    </word>
+<word text="OFP:isBleeding" insert="+()" desc="Returns true is the unit is bleeding, returns false otherwise.">
+        <input>
+            <argument name="unitName" type="string" desc="Name of the unit to check."/>
+        </input>
+    </word>
+<word text="OFP:deployCounterMeasures" insert="+()" desc="Cause vehicles(?) to deploy countermeasures. At least known to work for helipcopter, not sure about other vehicles.">
+        <input>
+            <argument name="vehicleName" type="string" desc="The name of the vehicle that should deploy the countermeasures"/>
+            <argument name="issueCommandOption" type="string" desc="one of 'ADDTOFRONT', 'ADDTOEND', or 'OVERRIDE'"/>
+        </input>
+    </word>
+<word text="OFP:spawnEntitySetAtEntityPosition" insert="+()" desc="Spawns the entity set at the other entity's location. Returns the ID of the spawned entity set.">
+        <input>
+            <argument name="entitySet" type="string" desc="the name of the entity set to spawn"/>
+            <argument name="targetEntity" type="string" desc="the entity set will spawn at this entity's location"/>
+        </input>
+    </word>
+<word text="OFP:spawnEntitySet" insert="+()" desc="Spawns the entity set where placed in the editor. Returns the ID of the spawned entity set.">
+        <input>
+            <argument name="entitySet" type="string" desc="the name of the entity set to spawn"/>
+        </input>
+    </word>
+<word text="OFP:playOffmapSpeech" insert="+()" desc="this works the same as playPlayerSpeech but will make the radio say the speech"/>
+<word text="OFP:particleEffect" insert="+()" desc="works the same as doParticleEffect but creates a looping effect at posistion">
+        <input>
+            <argument name="effectName" type="string" desc="the particle effect to play"/>
+            <argument name="x" type="number"/>
+            <argument name="y" type="number"/>
+            <argument name="z" type="number"/>
+        </input>
+    </word>
+<word text="OFP:selectCamera" insert="+()" desc="move the camera view point to the named multiplayer camera">
+        <input>
+            <argument name="camname" type="string" desc="the name of the camera"/>
+        </input>
+    </word>
+<word text="OFP:getMovementStyle" insert="+()" desc="Returns one of 'eMovementStyleDefault', 'eMovementStyleFastest', 'eMovementStyleSmoothest', or 'eMovementStyleSafest'">
+        <input>
+            <argument name="entityName" type="string" desc="The name of the entity to check."/>
+        </input>
+    </word>
+<word text="OFP:setMovementStyle" insert="+()" desc="Changes the movement style (path finding?) of the AI.">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to change the movement style of."/>
+            <argument name="style" type="string" desc="one of 'eMovementStyleDefault', 'eMovementStyleFastest', 'eMovementStyleSmoothest', or 'eMovementStyleSafest'"/>
+        </input>
+    </word>
+<word text="OFP:getPlatform" insert="+() " desc="Returns the platform being used. The only known return value is 'win'."/>
+<word text="OFP:showPopupAndIcon" insert="+()" desc="Shows a tutorial popup dialog.">
+        <input>
+            <argument name="title" type="string" desc="String that will be used as the title of the dialog."/>
+            <argument name="message" type="string" desc="String that will be used as the message in the dialog."/>
+            <argument name="action1" type="string" desc="Use unknown"/>
+            <argument name="action2" type="string" desc="Use unknown"/>
+        </input>
+    </word>
+<word text="onMissionRestart()" insert="+&#10;&#10;end"/>
+<!--Tvigs editor expansion functions-->
+<word text="EDX:simpleTimer" insert="+()" desc="Creates a simple timer.">
+        <input>
+            <argument name="timerName" type="string" desc="The name of the function to be fired when the timer expires"/>
+            <argument name="delay" type="number" desc="The timer delay in ms"/>
+            <argument name="args" type="any" desc="Arguments that will be passed to the function"/>
+        </input>
+    </word>
+<word text="EDX:serialTimer" insert="+()" desc="Creates a serialized timer.">
+        <input>
+            <argument name="timerName" type="string" desc="The name of the function to be fired when the timer expires"/>
+            <argument name="delay" type="number" desc="The timer delay in ms"/>
+            <argument name="args" type="any" desc="Arguments that will be passed to the function"/>
+        </input>
+    </word>
+<word text="EDX:setTimer" insert="+()" desc="Reset an already existing timer">
+        <input>
+            <argument name="timerID" type="string or number" desc="Name of the timer or the timerID to reset"/>
+            <argument name="delay" type="number" desc="The timer delay in ms"/>
+            <argument name="args" type="any" desc="Optional- Arguments that will be passed to the function. Will retain original args if left blank"/>
+        </input>
+    </word>
+<word text="EDX:triggerTimer" insert="+()" desc="Forces an existing timer to fire wether running or not">
+        <input>
+            <argument name="timerID" type="string or number" desc="Name of the timer or the timerID to trigger"/>
+        </input>
+    </word>
+<word text="EDX:serializeTimer" insert="+()" desc="Converts a simple timer into a serialized timer">
+        <input>
+            <argument name="timerID" type="string" desc="Name of the simple timer to convert"/>
+        </input>
+    </word>
+<word text="EDX:disableTimer" insert="+()" desc="Disables a running timer, but does not delete it">
+        <input>
+            <argument name="timerID" type="string" desc="Name of the timer to disable"/>
+        </input>
+    </word>
+<word text="EDX:deleteTimer" insert="+()" desc="Deletes an existing timer">
+        <input>
+            <argument name="timerID" type="string or number" desc="Name or timer ID of the timer to delete"/>
+        </input>
+    </word>
+<word text="EDX:setTimerVar" insert="+()" desc="Sets a variable in an existing timer independent of passed arguments">
+        <input>
+            <argument name="timerID" type="string or number" desc="Name or timer ID of the timer "/>
+            <argument name="varName" type="string" desc="The name for the variable to set"/>
+            <argument name="value" type="any" desc="The value of the variable to set"/>
+        </input>
+    </word>
+<word text="EDX:getTimerVar" insert="+()" desc="Returns the value of an existing variable in a timer">
+        <input>
+            <argument name="timerID" type="string or number" desc="Name or timer ID of the timer "/>
+            <argument name="varName" type="string" desc="The name of the variable to return"/>
+        </input>
+    </word>
+<word text="EDX:deleteTimerVar" insert="+()" desc="Deletes a variable stored in a timer (sets it nil)">
+        <input>
+            <argument name="timerID" type="string or number" desc="Name or timer ID of the timer "/>
+            <argument name="varName" type="string" desc="The name of the variable to delete"/>
+        </input>
+    </word>
+<word text="EDX:setVar" insert="+()" desc="Sets a variable in the EDX to be acessed from any script with EDX:getVar">
+        <input>
+            <argument name="varName" type="string" desc="The name for the variable to set"/>
+            <argument name="value" type="any" desc="The value of the variable to set"/>
+        </input>
+    </word>
+<word text="EDX:getVar" insert="+()" desc="Returns the value of an existing variable stored in the EDX (nil if not present)">
+        <input>
+            <argument name="varName" type="string" desc="The name of the variable to return"/>
+        </input>
+    </word>
+<word text="EDX:deleteVar" insert="+()" desc="Deletes a variable stored to the EDX (sets it nil)">
+        <input>
+            <argument name="varName" type="string" desc="The name of the variable to delete"/>
+        </input>
+    </word>
+<word text="EDX:distributeFunction" insert="+()" desc="Fires the named function on all of the scripts where it exists.  Used to create script event handlers">
+        <input>
+            <argument name="functionName" type="string" desc="Name of the function to fire"/>
+            <argument name="..." type="any" desc="Any number of comma separated variables to pass to the function"/>
+        </input>
+    </word>
+<word text="EDX:setDeadID" insert="+()" desc="Places an entity set in buffer for removal">
+        <input>
+            <argument name="setID" type="number" desc="The set ID to place into the buffer"/>
+        </input>
+    </word>
+<word text="EDX:setDeadIDBuffer" insert="+()" desc="Set the size of the buffer for dead setID removal (default = 10)">
+        <input>
+            <argument name="bufferSize" type="number" desc="The number of sets to hold in the buffer before removal"/>
+        </input>
+    </word>
+<word text="scripts.mission.waypoints.registerFunction" insert="+()" desc="Registers a function to the EDX.  The function can then be called from any script with EDX:functionName">
+        <input>
+            <argument name="functionName" type="string" desc="Name of the function to fire"/>
+            <argument name="..." type="any" desc="Any number of comma separated variables to pass to the function"/>
+        </input>
+    </word>
+<word text="EDX:canSeeAny" insert="+()" desc="Returns true if given entity can see any member of the given group">
+        <input>
+            <argument name="entityName" type="string" desc="Name of the function to fire"/>
+            <argument name="groupOrEchelonName" type="string" desc="Group or Echelon to see"/>
+        </input>
+    </word>
+<word text="EDX:getSquadEchelons" insert="+()" desc="Returns a table of all echelons and soldiers of a squad including the leader soldier indexed by echelon name">
+        <input>
+            <argument name="squadEchelonName" type="string" desc="Name of squad echelon"/>
+        </input>
+    </word>
+<word text="EDX:condenseSquad" insert="+()" desc="Condenses a squad into the most compact configuration of fireteams of the given maximum size.  Empty echelons are removed">
+        <input>
+            <argument name="squadEchelonName" type="string" desc="Name of squad echelon to condense"/>
+            <argument name="maxSize" type="number" desc="The target size of each fireteam after squad is condensed"/>
+        </input>
+    </word>
+<word text="EDX:getNearest" insert="+()" desc="Returns the name and distance to nearest of the named table, group or echelon to the entity named.  Returns '',-1 if none">
+        <input>
+            <argument name="entityName" type="string" desc="The central entity to check the nearest to"/>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table, group or echelon name to check the nearest of"/>
+            <argument name="minDist" type="number" desc="Closer than this distance to the central entity will not be included in the check"/>
+            <argument name="maxDist" type="number" desc="Further than this distance to the central entity will not be included in the check"/>
+        </input>
+    </word>
+<word text="EDX:getFurthest" insert="+()" desc="Returns the name and distance to furthest of the named table, group or echelon to the entity named.  Returns '',-1 if none">
+        <input>
+            <argument name="entityName" type="string" desc="The central entity to check the furthest to"/>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table, group or echelon name to check the furthest of"/>
+            <argument name="minDist" type="number" desc="Closer than this distance to the central entity will not be included in the check"/>
+            <argument name="maxDist" type="number" desc="Further than this distance to the central entity will not be included in the check"/>
+        </input>
+    </word>
+<word text="EDX:get4Nearest" insert="+()" desc="Returns the names of the 4 nearest of the named table, group or echelon to the entity named in order of nearest to furthest.  Returns '' if none remain">
+        <input>
+            <argument name="entityName" type="string" desc="The central entity to check the nearest to"/>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table, group or echelon name to check the nearest of"/>
+            <argument name="minDist" type="number" desc="Closer than this distance to the central entity will not be included in the check"/>
+            <argument name="maxDist" type="number" desc="Further than this distance to the central entity will not be included in the check"/>
+        </input>
+    </word>
+<word text="EDX:getNearestGroupMember" insert="+()" desc="Returns the name ,distance and group index to nearest of the named group or echelon to the entity named.  Returns '','',-1 if none">
+        <input>
+            <argument name="entityName" type="string" desc="The central entity to check the nearest to"/>
+            <argument name="groupName" type="string" desc="The group to check the nearest of"/>
+        </input>
+    </word>
+<word text="EDX:isAnyInRange" insert="+()" desc="Returns true if any entities from the given table, group or echelon are within the specified distance of the given entity">
+        <input>
+            <argument name="entityName" type="string" desc="The central entity to check the distance from"/>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table, group or echelon to check the members of"/>
+            <argument name="distance" type="number" desc="The distance to check"/>
+        </input>
+    </word>
+<word text="EDX:isAllInRange" insert="+()" desc="Returns true if all entities from the given table, group or echelon are within the specified distance of the given entity">
+        <input>
+            <argument name="entityName" type="string" desc="The central entity to check the distance from"/>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table, group or echelon to check the members of"/>
+            <argument name="distance" type="number" desc="The distance to check"/>
+        </input>
+    </word>
+<word text="EDX:getCurrentWeapon" insert="+()" desc="Returns the current weapon and the weapon index of the given soldier">
+        <input>
+            <argument name="soldierName" type="string" desc="The soldier to get the current weapon of"/>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table, group or echelon to check the members of"/>
+            <argument name="distance" type="number" desc="The distance to check"/>
+        </input>
+    </word>
+<word text="EDX:isVehicle" insert="+()" desc="Returns true if the given entity is a vehicle of any kind">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check"/>
+        </input>
+    </word>
+<word text="EDX:isGround" insert="+()" desc="Returns true if the given entity is a ground vehicle">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check"/>
+        </input>
+    </word>
+<word text="EDX:isArmored" insert="+()" desc="Returns true if the given entity is an armored vehicle">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check"/>
+        </input>
+    </word>
+<word text="EDX:isAir" insert="+()" desc="Returns true if the given entity is a helicopter">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check"/>
+        </input>
+    </word>
+<word text="EDX:isStatic" insert="+()" desc="Returns true if the given entity is a static weapon">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check"/>
+        </input>
+    </word>
+<word text="EDX:isSoldier" insert="+()" desc="Returns true if the given entity is a soldier (infantry)">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check"/>
+        </input>
+    </word>
+<word text="EDX:grpToTable" insert="+()" desc="returns a table containing all members of the given group or echelon">
+        <input>
+            <argument name="groupOrEchelonName" type="string" desc="The group or echelon to create a table from"/>
+        </input>
+    </word>
+<word text="EDX:isInTable" insert="+()" desc="Returns the index found if the given element is in the given table, false if not">
+        <input>
+            <argument name="element" type="any" desc="The element to check the presence of"/>
+            <argument name="tableName" type="table" desc="The table to check"/>
+        </input>
+    </word>
+<word text="EDX:getRandom" insert="+()" desc="Returns a random element and it's index from the given table group or echelon.  Option to select only elements at given distance from a central object">
+        <input>
+            <argument name="tableGroupOrEchelonName" type="string or table" desc="The table group or echelon to pick the random element from"/>
+            <argument name="entityName" type="string" desc="Optional. A central entity for distance checking"/>
+            <argument name="minDist" type="number" desc="Optional. Closer than this distance to the central entity will not be included in the selection"/>
+            <argument name="maxDist" type="number" desc="Optional. Further than this distance to the central entity will not be included in the selection"/>
+        </input>
+    </word>
+<word text="EDX:randomChance" insert="+()" desc="Returns true or false randomly against the given percentage chance to 1/10 of a percent">
+        <input>
+            <argument name="percentageChance" type="number" desc="The percentage chance of a return value of true"/>
+        </input>
+    </word>
+<word text="EDX:getGridPosition" insert="+()" desc="Returns the map grid position of a given coordinate">
+        <input>
+            <argument name="x" type="number" desc="The x coordinate of the position"/>
+            <argument name="y" type="number" desc="The y coordinate of the position"/>
+            <argument name="z" type="number" desc="The z coordinate of the position"/>
+        </input>
+    </word>
+<word text="EDX:getGlobalGridPosition" insert="+()" desc="Returns the global map grid position of a given coordinate">
+        <input>
+            <argument name="x" type="number" desc="The x coordinate of the position"/>
+            <argument name="y" type="number" desc="The y coordinate of the position"/>
+            <argument name="z" type="number" desc="The z coordinate of the position"/>
+        </input>
+    </word>
+<word text="EDX:getLocalGridPosition" insert="+()" desc="Returns the local map grid position of a given coordinate">
+        <input>
+            <argument name="x" type="number" desc="The x coordinate of the position"/>
+            <argument name="y" type="number" desc="The y coordinate of the position"/>
+            <argument name="z" type="number" desc="The z coordinate of the position"/>
+        </input>
+    </word>
+<word text="EDX:get3dDistance" insert="+()" desc="Returns the distance between 2 sets of coords on 3 dimensions">
+        <input>
+            <argument name="x1" type="number" desc="The x coord of first set of coordinates"/>
+            <argument name="y1" type="number" desc="The y coord of first set of coordinates"/>
+            <argument name="z1" type="number" desc="The z coord of first set of coordinates"/>
+            <argument name="x2" type="number" desc="The x coord of second set of coordinates"/>
+            <argument name="y2" type="number" desc="The y coord of second set of coordinates"/>
+            <argument name="z2" type="number" desc="The z coord of second set of coordinates"/>
+        </input>
+    </word>
+<word text="EDX:getEntity3dDistance" insert="+()" desc="Returns the distance between a named entity and a set of coords on 3 dimensions">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check the 3d distance from"/>
+            <argument name="x" type="number" desc="The x coord of second set of coordinates"/>
+            <argument name="y" type="number" desc="The y coord of second set of coordinates"/>
+            <argument name="z" type="number" desc="The z coord of second set of coordinates"/>
+        </input>
+    </word>
+<word text="EDX:get2dDistance" insert="+()" desc="Returns the distance between 2 sets of coords on 2 dimensions">
+        <input>
+            <argument name="x1" type="number" desc="The x coord of first set of coordinates"/>
+            <argument name="z1" type="number" desc="The z coord of first set of coordinates"/>
+            <argument name="x2" type="number" desc="The x coord of second set of coordinates"/>
+            <argument name="z2" type="number" desc="The z coord of second set of coordinates"/>
+        </input>
+    </word>
+<word text="EDX:getEntity2dDistance" insert="+()" desc="Returns the distance between a named entity and a set of coords on 2 dimensions">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to check the 2d distance from"/>
+            <argument name="x" type="number" desc="The x coord of second set of coordinates"/>
+            <argument name="z" type="number" desc="The z coord of second set of coordinates"/>
+        </input>
+    </word>
+<word text="EDX:getEntities2dDistance" insert="+()" desc="Returns the distance between 2 named entities">
+        <input>
+            <argument name="entity1" type="string" desc="The name of the first entity"/>
+            <argument name="entity2" type="string" desc="The name of the second entity"/>
+        </input>
+    </word>
+<word text="EDX:getTimeOfDay" insert="+()" desc="Returns the current in game hour, min, sec, and a time display string">
+        <input>
+            <argument name="boolDisp" type="boolean" desc="Optional. If true the function will display the time of day in the debug text during the mission"/>
+        </input>
+    </word>
+<word text="EDX:setTimeOfDay" insert="+()" desc="Set the current time of day and updates the edex time (must be used for edex time functions to work)">
+        <input>
+            <argument name="h" type="number" desc="The hour to set"/>
+            <argument name="m" type="number" desc="The minute to set"/>
+            <argument name="s" type="number" desc="The seconds to set"/>
+        </input>
+    </word>
+<word text="EDX:advanceTime" insert="+()" desc="Advances the current ingame time by 1 hour">
+    </word>
+<word text="EDX:setRandomTime" insert="+()" desc="Sets the current ingame time to a random time">
+    </word>
+<word text="EDX:randomizeWeather" insert="+()" desc="Starts a random weather cycle at the interval specified">
+        <input>
+            <argument name="changeDelay" type="number" desc="The interval between weather changes in minutes"/>
+        </input>
+    </word>
+<word text="EDX:stopRandomizedWeather" insert="+()" desc="Stops the random weather cycle">
+    </word>
+<word text="EDX:setRandomWeather" insert="+()" desc="Immediate random weather change">
+    </word>
+<word text="EDX:setRandomWeatherTarget" insert="+()" desc="Selects random weather conditions and transitions to them in the given time in real minutes">
+            <argument name="transitionTime" type="number" desc="The time in minutes to make the transition to the weather"/>
+    </word>
+<word text="EDX:setFogCurrent" insert="+()" desc="Sets the current fog density">
+        <input>
+            <argument name="fog" type="number" desc="Fog density 0 - 100"/>
+        </input>
+    </word>
+<word text="EDX:setWeatherCurrent" insert="+()" desc="Sets the current weather type">
+        <input>
+            <argument name="weatherType" type="number" desc="The current weather type (0=clear, 1=foggy, 2=cloudy, 3=overcast, 4=stormy)"/>
+        </input>
+    </word>
+<word text="EDX:setFogTarget" insert="+()" desc="Sets a target fog density and time in real minutes to transition to the new fog density">
+        <input>
+            <argument name="fog" type="number" desc="Fog density 0 - 100"/>
+            <argument name="transitionTime" type="number" desc="The time in minutes to make the transition to the new fog density"/>
+        </input>
+    </word>
+<word text="EDX:setWeatherTarget" insert="+()" desc="Sets a target weather type and time in real minutes to transition to the new weather type">
+        <input>
+            <argument name="weatherType" type="number or string" desc="The current weather type (0 or 'clear', 1 or 'foggy', 2 or 'cloudy', 3 or 'overcast', 4= 'stormy')"/>
+            <argument name="transitionTime" type="number" desc="The time in minutes to make the transition to the new weather type"/>
+        </input>
+    </word>
+<word text="EDX:cycleWeatherType" insert="+()" desc="Cycles the current weather type (best for use with hotkeys)">
+    </word>
+<word text="EDX:cycleFogDensity" insert="+()" desc="Cycles the current fog density (best for use with hotkeys)">
+    </word>
+<word text="EDX:getWeatherType" insert="+()" desc="Returns the current or transitioning (forecast) weather type">
+    </word>
+<word text="EDX:getFogDensity" insert="+()" desc="Returns the current or transitioning (forecast) weather type">
+    </word>
+<word text="EDX:getHeading" insert="+()" desc="Returns the distance, direction and heading from an entity to a target entity.  Also returns a string for display and log use">
+        <input>
+            <argument name="entity1" type="string" desc="The entity to calculate the heading from"/>
+            <argument name="entity2" type="string" desc="The entity to calculate the heading to"/>
+            <argument name="boolDisp" type="boolean" desc="Optional. If true the function will display the heading information in the debug text during the mission"/>
+            <argument name="targetName" type="string" desc="Optional. A display name for the target used in the generation of the display text string"/>
+        </input>
+    </word>
+<word text="EDX:canSpawn" insert="+()" desc="Returns true if no friend or enemy entities are within the given distances from the given point">
+        <input>
+            <argument name="spawnPoint" type="string" desc="The spawnPoint to check around"/>
+            <argument name="fDist" type="number" desc="The distance to check for friendly units"/>
+            <argument name="eDist" type="number" desc="The distance to check for enemy units"/>
+            <argument name="side" type="number" desc="The side friendly to the unit to be spawned 0 = us, 1 = pla"/>
+        </input>
+    </word>
+<word text="EDX:isGroundLevel" insert="+()" desc="Returns true if the terrain height varies less than the given amount within the given distance">
+        <input>
+            <argument name="centerPos" type="table or string" desc="The center entity or 3d coords as a table to check the ground around"/>
+            <argument name="radius" type="number" desc="The distance from the center point to check the terrain height"/>
+            <argument name="maxDif" type="number" desc="The maximum allowed variation in terrain height before the ground is considered not level"/>
+            <argument name="Offset" type="number" desc="Optional. The height offset for the center position to check"/>
+        </input>
+    </word>
+<word text="EDX:isInLOS" insert="+()" desc="Returns true if there is no terrain obstructing the sight between one entity and another">
+        <input>
+            <argument name="entity1" type="table or string" desc="The entity to check LOS from (can be table of x,y,z coordinates)"/>
+            <argument name="entity1" type="table or string" desc="The entity to check LOS to (can be table of x,y,z coordinates)"/>
+        </input>
+    </word>
+<word text="EDX:get360Coordinates" insert="+()" desc="Returns terrain height x,y,z coords at specified distance and heading from central point.">
+        <input>
+            <argument name="centerPos" type="table or string" desc="The center entity or 3d coords(table)"/>
+            <argument name="degrees" type="number" desc="0 - 359 Heading in degrees from the center point to get the coordinates 0 is North (-1 is random)"/>
+            <argument name="angle" type="number" desc=" 1- 180 An angle with the heading as center from which the coordinate will be randomly chosen (not used if heading is -1, enter anything)"/>
+            <argument name="minRadius" type="number" desc="The minimum distance(or the distance) from the center point to calculate the coordinate"/>
+            <argument name="maxRadius" type="number" desc="Optional. If used, the distance will be randomly selected between minRadius and this number"/>
+        </input>
+    </word>
+<word text="EDX:isInWorld" insert="+()" desc="Returns true if the given coordinate falls inside the boundaries of the game world (0,0,0 returns false)">
+        <input>
+            <argument name="x" type="number" desc="The x coordinate"/>
+            <argument name="y" type="number" desc="The y coordinate"/>
+            <argument name="z" type="number" desc="The x coordinate"/>
+        </input>
+    </word>
+<word text="EDX:isOcean" insert="+()" desc="Returns the position at sea level as a table if the given x, z coordinate is in the ocean, false if not">
+        <input>
+            <argument name="x" type="number" desc="The x coordinate"/>
+            <argument name="z" type="number" desc="The x coordinate"/>
+        </input>
+    </word>
+<word text="EDX:isLake" insert="+()" desc="Returns a lake position as a table where the y coordinate is the surface of the water if the given coordinate is in a lake, false if not">
+        <input>
+            <argument name="x" type="number" desc="The x coordinate"/>
+            <argument name="z" type="number" desc="The x coordinate"/>
+        </input>
+    </word>
+<word text="EDX:getBearing" insert="+()" desc="Returns heading in degrees from x,y to x2,y2 coordinates">
+        <input>
+            <argument name="x1" type="number" desc="The x coord of first set of coordinates"/>
+            <argument name="z1" type="number" desc="The z coord of first set of coordinates"/>
+            <argument name="x2" type="number" desc="The x coord of second set of coordinates"/>
+            <argument name="z2" type="number" desc="The z coord of second set of coordinates"/>
+        </input>
+    </word>
+<word text="EDX:getBearing2" insert="+()" desc="Returns heading in degrees from one entity to a second entity">
+        <input>
+            <argument name="entityName" type="string" desc="The entity to get the bearing from"/>
+            <argument name="entityName" type="string" desc="The entity to get the bearing to"/>
+        </input>
+    </word>
+<word text="EDX:bearing2heading" insert="+()" desc="Returns direction of the given bearing as found on a compass rose">
+        <input>
+            <argument name="bearing" type="number" desc="Bearing number between 0 and 359"/>
+        </input>
+    </word>
+<word text="EDX:getOffset" insert="+()" desc="Returns the x,y,z offset from the first set of coords to the second">
+        <input>
+            <argument name="x1" type="number" desc="The x coord of first set of coordinates"/>
+            <argument name="y1" type="number" desc="The y coord of first set of coordinates"/>
+            <argument name="z1" type="number" desc="The z coord of first set of coordinates"/>
+            <argument name="x2" type="number" desc="The x coord of second set of coordinates"/>
+            <argument name="y2" type="number" desc="The y coord of second set of coordinates"/>
+            <argument name="z2" type="number" desc="The z coord of second set of coordinates"/>
+        </input>
+    </word>
+<word text="EDX:saveTable" insert="+()" desc="Saves a table to the specified location. From HaywoodSlap">
+        <input>
+            <argument name="theTable" type="table" desc="The table to save."/>
+            <argument name="tableName" type="table" desc="A name for the table in the save file"/>
+            <argument name="filename" type="string" desc="The file to save the table to."/>
+        </input>
+    </word>
+<word text="EDX:loadTable" insert="+()" desc="Loads a table from a file. From HaywoodSlap">
+        <input>
+            <argument name="filename" type="string" desc="The name of the file to load the table from."/>
+        </input>
+    </word>
+<word text="EDX:fileExists" insert="+()" desc="Returns true if the file exists, false otherwise. From HaywoodSlap">
+        <input>
+            <argument name="filename" type="string" desc="The name of the file to test."/>
+        </input>
+    </word>
+<word text="EDX:saveFile" insert="+()" desc="Saves the entries of a table into a file">
+        <input>
+            <argument name="table" type="table" desc="The name of the file to test."/>
+            <argument name="filename" type="string" desc="The file to save the table to."/>
+        </input>
+    </word>
+<word text="EDX:loadFile" insert="+()" desc="Loads the lines of a file and returns it as a table. Returns nil if file cannot be opened.">
+        <input>
+            <argument name="filename" type="string" desc="The file to save the table to."/>
+        </input>
+    </word>
+<word text="EDX:startsWith" insert="+()" desc="Returns true if the text starts with the prefix string, returns false otherwise.">
+        <input>
+            <argument name="text" type="string" desc="The string to test."/>
+            <argument name="prefix" type="string" desc="The prefix string."/>
+        </input>        
+    </word>
+<word text="EDX:endsWith" insert="+()" desc="Returns true if the text ends with the suffix string, returns false otherwise.">
+        <input>
+            <argument name="text" type="string" desc="The string to test."/>
+            <argument name="suffix" type="string" desc="The suffix string."/>
+        </input>        
+    </word>
+<word text="EDX:trim" insert="+()" desc="Removed leading and trailing whitespace from the input string.">
+        <input>
+            <argument name="input" type="string" desc="The input string."/>
+        </input>
+    </word>
+<word text="EDX:split" insert="+()" desc="Splits the input string into two parts at the separator character.">
+        <input>
+            <argument name="input" type="string" desc="The input string."/>
+            <argument name="separator" type="string" desc="The character to split the string at."/>
+        </input>
+    </word>
+<word text="EDX:filterTable" insert="+()" desc="Selects items from a table whose keys begin with the specified values.">
+        <input>
+            <argument name="tableName" type="string" desc="The name of the table to select items from."/>
+            <argument name="prefix" type="string" desc="Table elements will be selected if their key matches this prefix."/>
+        </input>
+    </word>
+<word text="EDX:deepcopy" insert="+()" desc="Performs a deep copy of the given table. From the Lua user's wiki.">
+        <input>
+            <argument name="tableName" type="string" desc="The table to copy."/>
+        </input>        
+    </word>
+<word text="EDX:getImmediateParent" insert="+()" desc="Returns the immediate parent echelon for the entity">
+        <input>
+            <argument name="entity" type="string" desc="The entity to find the parent of."/>
+        </input>
+    </word>
+<word text="EDX:round" insert="+()" desc="Rounds the value x to the nearest integer.">
+        <input>
+            <argument name="x" type="number" desc="The value to be rounded off."/>
+        </input>
+    </word>
+<word text="EDX:despawner" insert="+()" desc="Druid's despawner script. Despawns all given entities."/>
+<word text="EDX:getEchelon" insert="+()" desc="Returns the first echelon found in the table of entities">
+        <input>
+            <argument name="tableOfEntities" type="table" desc="A table of any kind of game entities."/>
+        </input>
+    </word>
+<word text="EDX:getVersion" insert="+()" desc="Returns the OFP version number as a string. (one of '1.00', '1.01', '1.02')"/>
+<word text="EDX:getPath" insert="+()" desc="Returns the best pathpoint for a vehicle calculated from current position and the position of the destination">
+        <input>
+            <argument name="echelonOrVehicleName" type="string" desc="The name of the vehicle or driving echelon"/>
+            <argument name="target" type="string" desc="The point or entity the vehicle the vehicle is trying to reach"/>
+            <argument name="pathTable" type="table" desc="A table of path points to follow"/>
+            <argument name="UsedPointsTable" type="table" desc="Table of used points to prevent the vehicle from doubling back"/>
+            <argument name="currentPoint" type="string" desc="The name of the current path point"/>
+        </input>
+    </word>
+<word text="EDX:getDriver" insert="+()" desc="Returns the driver of the named vehicle or '' if no driver present">
+        <input>
+            <argument name="vehicleName" type="string" desc="The name of the vehicle"/>
+        </input>
+    </word>
+<word text="EDX:getGunners" insert="+()" desc="Returns a table containing the name of all gunners in a vehicle.  Empty table if none or no gunner seat">
+        <input>
+            <argument name="vehicleName" type="string" desc="The name of the vehicle"/>
+        </input>
+    </word>
+<word text="EDX:setActiveScript" insert="+()" desc="Sets the disableScript flag true on all scripts except for the named script">
+        <input>
+            <argument name="scriptName" type="string" desc="The name of the script to set active"/>
+        </input>
+    </word>
+<word text="EDX:playOwpSound" insert="+()" desc="Play a sound using the OFDR wave player by Dschonny">
+        <input>
+            <argument name="soundName" type="string" desc="The name of the wave file to be played"/>
+        </input>
+    </word>
+<word text="EDX:registerPlayable" insert="+()" desc="Registers a playable entity if it is human controlled for use in the EDX(highly recommended). Also sets the coop flag in the EDX">
+        <input>
+            <argument name="entityName" type="string" desc="The name of the playable entity(the soldier that is set to 'playable')"/>
+            <argument name="removeAI" type="boolean" desc="optional- set true if you want the entity to be removed if it is not used by a human player"/>
+        </input>
+    </word>
+<word text="EDX:registerPlayer" insert="+()" desc="Registers the player entity for use in the EDX(highly recommended)">
+        <input>
+            <argument name="entityName" type="string" desc="The name of the player entity(the soldier that is set to 'player')"/>
+        </input>
+    </word>
+<word text="EDX:registerPlayerEchelon" insert="+()" desc="Registers the player echelon for use in the EDX. Automatically registers player entities(highly recommended)">
+        <input>
+            <argument name="echelonName" type="string" desc="The name of the player echelon(the echelon that is set to 'player')"/>
+            <argument name="removeAI" type="boolean" desc="optional- set true if you want non-human player entities to be removed"/>
+        </input>
+    </word>
+<word text="EDX:getPlayerEchelon" insert="+()" desc="Returns the echelonName of the primary player (player or echelon must be registered with EDX:registerPlayer or EDX:registerEchelon)">
+    </word>
+<word text="EDX:getPrimaryPlayer" insert="+()" desc="Returns the entity name of the primary (coop host or single player) player. Player must be registered using EDX:registerPlayer">
+    </word>
+<word text="EDX:getPlayerLeader" insert="+()" desc="Returns the entity name of the first living member of the registered player list in a coop or single player mission(the player leader)">
+    </word>
+<word text="EDX:getPlayerBearing" insert="+()" desc="Returns the bearing of the given human controlled entity(primary or secondary player).  Entity must be registered using EDX:registerPlayer or EDX:registerSecondaryPlayer">
+        <input>
+            <argument name="entityName" type="string" desc="Optional - The name of the player entity(can be any human controlled character.. uses registered primary player if left blank)"/>
+        </input>
+    </word>
+<word text="EDX:setBearingDist" insert="+()" desc="Sets how far the a player enitity moves before the bearing is calculated from last recorded position">
+        <input>
+            <argument name="distance" type="number" desc="The distance in meters. (default = 1)"/>
+        </input>
+    </word>
+<word text="EDX:isCoop" insert="+()" desc="Returns true if a mission is being played by more than one human player.  Entities must be registered using EDX:registerPlayer and/or EDX:registerSecondaryPlayer">
+    </word>
+<word text="EDX:getPlayers" insert="+()" desc="Returns a table containing all human controlled players.   Entities must be registered using EDX:registerPlayer and/or EDX:registerSecondaryPlayer">
+    </word>
+<word text="EDX:removeDictionaryElements" insert="+()" desc="Remove all entries matching the given element name from a dictionary table">
+        <input>
+            <argument name="dictionaryName" type="table" desc="The table to remove elements from"/>
+            <argument name="entryName" type="any" desc="The value of the element to remove from the dictionary table"/>
+        </input>
+    </word>
+<word text="EDX:removeArrayElements" insert="+()" desc="Remove all entries matching the given element name from an array table">
+        <input>
+            <argument name="arrayName" type="table" desc="The table to remove elements from"/>
+            <argument name="entryName" type="any" desc="The value of the element to remove from the array table"/>
+        </input>
+    </word>
+<word text="scripts.mission.waypoints.initScript" insert="+()" desc="Initialize a script so it can be accessed from all other scripts">
+        <input>
+            <argument name="scriptName" type="string" desc="The name of the script to initialize"/>
+            <argument name="prefix" type="string" desc="An abbreviation to use when calling the script.  Optional."/>
+        </input>
+    </word>
+  <word text="EDX:setMissionFolder" insert="+()" desc="Registers the mission folder path in the EDX to be easily accessed with EDX:getMissionFolder (data_win/missions/folderName)">
+    <input>
+      <argument name="folderName" type="string" desc="The name of the folder"/>
+    </input>
+  </word>
+  <word text="EDX:getMissionFolder" insert="+()" desc="Returns the folder path to the registered mission folder as a string  format = './data_win/missions/registeredMissionFolder/'">
+  </word>
+  <word text="EDX:setAutoLights" insert="+()" desc="Registers an entity group or echelon to the auto lights control system and starts the system if not already running">
+    <input>
+      <argument name="entityGroupOrEchelonName" type="string" desc="The name of a unit, vehicle, group or echelon to register to the auto lights system"/>
+    </input>
+  </word>
+  <word text="EDX:setAutoLightsHours" insert="+()" desc="Sets the time of day for the auto lights system to turn lights on and off (default on at 20:00 and off at 5:00)">
+    <input>
+      <argument name="onHour" type="number" desc="The number of the hour in military time to turn on auto lights"/>
+      <argument name="offHour" type="number" desc="The number of the hour in military time to turn off auto lights"/>
+    </input>
+  </word>
+  <word text="EDX:disableAutoLights" insert="+()" desc="Disables auto lights and resets erases the names of entities registered to the auto lights system">
+  </word>
+  <word text="EDX:newMenu" insert="+()" desc="Creates a new menu and returns the menu id or name given">
+    <input>
+      <argument name="menuName" type="string or number" desc="A name or number used to identify the menu"/>
+    </input>
+  </word>
+  <word text="EDX:setMenuItem" insert="+()" desc="Adds a new menu item or overwrites an existing menu item">
+    <input>
+      <argument name="menuName" type="string or number" desc="The menu to set the item"/>
+      <argument name="display" type="string" desc="What is to be displayed in game for the menu item (first 5 items only!)"/>
+      <argument name="key" type="string" desc="The key that triggers the menu item to fire (list of valid keys in menu script)"/>
+      <argument name="functionName" type="string" desc="The function to be fired when a menu item is selected (closeMenu or openMenu native menu functions)"/>
+      <argument name="parameters" type="table" desc="The parameters to pass to the function fired by the menu item (as a table {})"/>
+      <argument name="index" type="number" desc="The position to place the item in the menu (if not named or out of bounds item will be placed at end of menu)"/>
+    </input>
+  </word>
+  <word text="EDX:removeMenuItem" insert="+()" desc="Removes an item from a menu by the given index">
+    <input>
+      <argument name="menuName" type="string or number" desc="The menu to remove the item from"/>
+      <argument name="index" type="number" desc="The index of the item to remove"/>
+    </input>
+  </word>
+  <word text="EDX:openMenu" insert="+()" desc="Opens a menu on screen and sets it active until a selection is made(default timeout 20s)">
+    <input>
+      <argument name="menuName" type="string or number" desc="The name or id of the menu to open"/>
+      <argument name="timeOut" type="number" desc="(Optional)Time in seconds after the last menu selection before the menu times out"/>
+    </input>
+  </word>
+  <word text="EDX:closeMenu" insert="+()" desc="Forces any open menu closed">
+  </word>
+  <word text="EDX:isGameInit" insert="+()" desc="Returns true if the EDX initialization process is in progress, used to delay actions">
+  </word>
+  <word text="EDX:registerEventHandler" insert="+()" desc="Creates pointer references to all scripts that contain the named event handler (used with EDX:fireEventHandler function)">
+    <input>
+      <argument name="handlerName" type="string" desc="The name of the event handler to register with the EDX"/>
+    </input>
+  </word>
+  <word text="EDX:fireEventHandler" insert="+()" desc="Fires an event handler that has been registered with the EDX:registerEventHandler function (more efficient than distribute function)">
+    <input>
+      <argument name="handlerName" type="string" desc="The name of the event handler to fire"/>
+      <argument name="..." type="any" desc="Any number and type of comma separated variables to pass to the event handler"/>
+    </input>
+  </word>
+<!--Camera module commands-->
+  <word text="EDX:initCams" insert="+()" desc="Activates the CAM script">
+  </word>
+  <word text="EDX:getCameraPosition()" desc="Returns the x,y,z coordinates of the current camera as long as it was generated by the CAM script">
+  </word>
+  <word text="EDX:disableCams" insert="+()" desc="Deactivates the CAM script to save CPU but maintains the variables already set in the script">
+  </word>
+  <word text="EDX:createCamera" insert="+()" desc="Creates a camera entry and returns the CAM ID for use with CAM commands">
+    <input>
+      <argument name="returnCamera" type="string" desc="The entity name the camera should return to on camera deactivation (usually the player name)"/>
+    </input>
+  </word>
+  <word text="EDX:setCamera" insert="+()" desc="Sets up the cam with the given ID from the createCam function.  This must be run to use a camera">
+    <input>
+      <argument name="cameraID" type="number" desc="The cameraID number returned from the createCam function when the camera entry was created"/>
+      <argument name="cameraPosition" type="string or table" desc="Table of x,y,z coordinates or entity name to set the initial position of the camera"/>
+      <argument name="cameraAngle" type="number" desc="1= Level, 2= 22 degrees down, 3= 45 degrees down"/>
+      <argument name="cameraDirection" type="number" desc="The Direction in degrees to aim the camera, determines the direction of travel"/>
+      <argument name="cameraFacingOffset" type="number" desc="-180 thru 180 degrees the difference between the direction and the actual facing of the camera"/>
+      <argument name="showOsdLetterBox" type="boolean" desc="True to display the osd letterbox cinema look when using this camera"/>
+    </input>
+  </word>
+  <word text="EDX:setCameraMotion" insert="+()" desc="Sets the motion of the camera with the given ID from the createCam function">
+    <input>
+      <argument name="cameraID" type="number" desc="The cameraID number returned from the createCam function when the camera entry was created"/>
+      <argument name="cameraSpeed" type="number" desc="The speed of the camera movement in meters per sec.  + forward, - backward"/>
+      <argument name="cameraTurnSpeed" type="number" desc="The turn speed of the camera in degrees per second.  -deg turns left, +deg turns right"/>
+      <argument name="cameraRotationSpeed" type="number" desc="The rotation speed of the camera in degrees per second.  -deg rotates left, +deg rotates right"/>
+      <argument name="cameraAscentSpeed" type="number" desc="The speed of the camera ascent in meters per second. + up, - down"/>
+    </input>
+  </word>
+  <word text="EDX:setCameraTarget" insert="+()" desc="The camera will rotate to maintain the given target in the center of the frame independent of movement direction">
+    <input>
+      <argument name="cameraID" type="number" desc="The cameraID number returned from the createCam function when the camera entry was created"/>
+      <argument name="targetEntity" type="string" desc="A target entity for the camera to point towards"/>
+    </input>
+  </word>
+  <word text="EDX:setCameraFollowTarget" insert="+()" desc="The camera will lock on to the given target entity and maintain the current offset at the time the camera was activated">
+    <input>
+      <argument name="cameraID" type="number" desc="The cameraID number returned from the createCam function when the camera entry was created"/>
+      <argument name="targetEntity" type="string" desc="A target entity for the camera to follow"/>
+    </input>
+  </word>
+  <word text="EDX:camTargetEntity" insert="+()" desc="Causes the current camera to face the given entity regardless of the camera motion or the entity motion">
+    <input>
+      <argument name="entityName" type="string" desc="A target entity for the camera to face"/>
+    </input>
+  </word>
+  <word text="EDX:camMoveToTarget" insert="+()" desc="Moves the camera to the given target entity or coordinate at the given speed">
+    <input>
+      <argument name="target" type="string or table" desc="A target entity or table of 3d coordinates for the entity to move to"/>
+      <argument name="speed" type="number" desc="The speed of the camera motion expressed in meters per second"/>
+    </input>
+  </word>
+  <word text="EDX:camRotateToTarget" insert="+()" desc="Rotates the camera independent of camera motion to face the given target entity or coordinate at the given rate">
+    <input>
+      <argument name="target" type="string or table" desc="A target entity or table of 3d coordinates for the entity to move to"/>
+      <argument name="speed" type="number" desc="The speed of the camera motion expressed in degrees per second (negative number rotates left, positive number rotates right)"/>
+    </input>
+  </word>
+  <word text="EDX:activateCamera" insert="+()" desc="Switches to the camera with the given ID">
+    <input>
+      <argument name="cameraID" type="number" desc="The cameraID number returned from the createCam function when the camera entry was created"/>
+    </input>
+  </word>
+  <word text="EDX:deactivateCamera" insert="+()" desc="Switches from the active camera to the entity given when the camera was created">
+  </word>
+  <word text="EDX:deleteCamera" insert="+()" desc="Deletes the camera entry with the given ID">
+    <input>
+      <argument name="cameraID" type="number" desc="The cameraID number returned from the createCam function when the camera entry was created"/>
+    </input>
+  </word>
+  <word text="EDX:camSnapShot" insert="+()" desc="Creates a snapshot of all conditions of the currently selected camera returns cameraID">
+    <input>
+      <argument name="cameraID" type="number" desc="Optional- if existing camID is entered it will save snapshot to that entry, otherwise a new entry is created"/>
+    </input>
+  </word>
+  <word text="EDX:activateControlledCamera" insert="+()" desc="Activates a camera and hotkey controls to control it">
+    <input>
+      <argument name="cameraID" type="number" desc="The camID of the camera to control"/>
+    </input>
+  </word>
+  <word text="EDX:displayCameraInfo" insert="+()" desc="Displays the camera information generated by the CAM script">
+    <input>
+      <argument name="trueOrFalse" type="boolean" desc="true = display camera info, false = hide camera info"/>
+    </input>
+  </word>
+<!--Transport Helicopter Module commands-->
+  <word text="EDX:openTransportMenu" insert="+()" desc="Opens the hotkey driven menu option for the transport helicopter">
+    <input>
+      <argument name="unitGroupOrEchelonName" type="string" desc="The name of the unit, group or echelon to be transported by the helo"/>
+      <argument name="transportTo" type="string or table" desc="An entity, 3d coordinate table, or table of entities/coordinates to be used as dropoff points for the helo"/>
+      <argument name="pickupPos" type="string or table" desc="Optional- An entity or 3d coordinate table for the helo to pickup... goes to the entity, group or echelon if not specified"/>
+    </input>
+  </word>
+  <word text="EDX:transportPickup" insert="+()" desc="Sends in the transport helo for pickup and transport to the given location">
+    <input>
+      <argument name="unitGroupOrEchelonName" type="string" desc="The name of the unit, group or echelon to be transported by the helo"/>
+      <argument name="transportTo" type="string or table" desc="An entity, 3d coordinate table, or table of entities/coordinates to be used as dropoff points for the helo"/>
+      <argument name="pickupPos" type="string or table" desc="Optional- An entity or 3d coordinate table for the helo to pickup... goes to the entity, group or echelon if not specified"/>
+    </input>
+  </word>
+  <word text="EDX:transportPatrol" insert="+()" desc="Sends in the transport helo to randomly patrol an area around the given center point">
+    <input>
+      <argument name="centerPoint" type="string or table" desc="An entity or 3d coordinate table to patrol around"/>
+    </input>
+  </word>
+  <word text="EDX:transportDropoff" insert="+()" desc="If the intended entity, group or echelon is on board the helo this command will drop them off at the given destination">
+    <input>
+      <argument name="destination" type="string or table" desc="An entity or 3d coordinate table to land"/>
+    </input>
+  </word>
+  <word text="EDX:transportLeave" insert="+()" desc="If none of the entity, group or ecehlon are on board the helo it will leave">
+  </word>
+  <word text="EDX:transportBailout" insert="+()" desc="If all of the entity, group or echelon are on board the helo they will paracute out one by one, players must jump on their own(requires parachute module)">
+  </word>
+  <word text="EDX:getTransportHelo" insert="+()" desc="Returns the name of the active transport helo">
+  </word>
+  <word text="EDX:getTransportEchelon" insert="+()" desc="Returns the name of the active transport helos crew echelon">
+  </word>
+  <word text="EDX:isAllInTransport" insert="+()" desc="Returns true if all of the entity, group or echelon named for pick up are on board the helicopter">
+  </word>
+  <word text="EDX:isNotInTransport" insert="+()" desc="Returns true if none of the entity, group or echelon named for pick up are on board the helicopter">
+  </word>
+<!--Debug commands-->
+  <word text="debug:getCurrentWeaponIndex" insert="+()" desc="The specified unit calls in an airstrike on the target.">
+    <input>
+      <argument name="unitName" type="string" desc="The entity to get the weapon index of"/>
+    </input>
+  </word>
+  <word text="debug:getWeaponName" insert="+()" desc="Gets the name of the unit's weapon at the given index">
+    <input>
+      <argument name="unitName" type="string" desc="The entity to get the weapon name"/>
+      <argument name="weaponIndex" type="number" desc="The weapon index"/>
+    </input>
+  </word>
+  <word text="debug:getNumberOfFireModes" insert="+()" desc="Gets the number of firemodes for given weapon">
+    <input>
+      <argument name="weaponName" type="string" desc="The weapon"/>
+      <argument name="weaponIndex" type="number" desc="The index to get the number of fire modes of"/>
+    </input>
+  </word>
+  <word text="debug:getCurrentFireMode" insert="+()" desc="Returns the firemode index of the weapon at the given index">
+    <input>
+      <argument name="unitName" type="string" desc="The unit name to get the current fire mode of"/>
+      <argument name="weaponIndex" type="number" desc="The index to get the fire mode of"/>
+    </input>
+  </word>
+  <word text="debug:getFireModeName" insert="+()" desc="Gets the name of the firemode">
+    <input>
+      <argument name="unitName" type="string" desc="The unit name to get the current fire mode of"/>
+      <argument name="weaponIndex" type="number" desc="The index of the weapon"/>
+      <argument name="modeIndex" type="number" desc="The index of the fire mode"/>
+    </input>
+  </word>
+  <word text="debug:canSee" insert="+()" desc="Returns true if the unit can see the target unit">
+    <input>
+      <argument name="unitName" type="string" desc="The unit name doing the looking"/>
+      <argument name="targetName" type="string" desc="The unit name to see"/>
+    </input>
+  </word>
+  <word text="debug:getNumberOfCrewPoints" insert="+()" desc="Returns the number of crew points for the given vehicle">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle to get the number of crew points of"/>
+    </input>
+  </word>
+  <word text="debug:getCrewPointName" insert="+()" desc="Returns the name of the crew point at the given index">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle to get the crew point name from"/>
+      <argument name="index" type="number" desc="The index of the crewpoint to get the name of"/>
+    </input>
+  </word>
+  <word text="debug:getSoldierInCrewPoint" insert="+()" desc="Returns the name of the soldier at the indexed crew point">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle to get the unit name from"/>
+      <argument name="index" type="number" desc="The index of the crewpoint to get the unit name"/>
+    </input>
+  </word>
+  <word text="debug:getCurrentVehicleWeaponName" insert="+()" desc="Returns the name of the current weapon of the given vehicle">
+    <input>
+      <argument name="vehicleName" type="string" desc="The vehicle name to get the current weapon of"/>
+    </input>
+  </word>
+  <word text="debug:getCurrentTarget" insert="+()" desc="Returns the target name of the given unit">
+    <input>
+      <argument name="unitName" type="string" desc="The unit to get the current target of"/>
+    </input>
+  </word>
+  <word text="debug:getTemplateName" insert="+()" desc="Returns the template name of the given entity">
+    <input>
+      <argument name="entityName" type="string" desc="The entity to get the template name of"/>
+    </input>
+  </word>
+  <word text="TJD:addKTower" insert="+()" desc="Spawns in a K Tower(requires complex structure modual).">
+        <input>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+            <argument name="direction" type="string" desc="8 available directions. 'no' , 'so', 'ea','we', 'ne', 'sw', 'nw', 'se'."/>
+            <argument name="guntype" type="string" desc="'mg' or 'gl' (machine gun or grenade emplacement.)"/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+    </word>
+    <word text="TJD:addStackTower" insert="+()" desc="Spawns in a Stack Tower(requires complex structure modual).">
+        <input>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+            <argument name="direction" type="string" desc="8 available directions. 'no' , 'so', 'ea','we', 'ne', 'sw', 'nw', 'se'."/>
+            <argument name="guntype" type="string" desc="'mg' or 'gl' (machine gun or grenade emplacement.)"/>
+            <argument name="stackHeight" type="string" desc="1 - 9 determines tower height"/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+    </word>
+    <word text="TJD:addCom1Tower" insert="+()" desc="Spawns in a communication Tower(requires complex structure modual).">
+      <input>
+          <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+          <argument name="stackHeight" type="string" desc="1 - 9 determines tower height"/>
+          <argument name="side" type="string" desc="'us' or 'pla'"/>
+      </input>
+  </word>
+  <word text="TJD:add5GunTower" insert="+()" desc="Spawns in a 5 Gun Tower(requires complex structure modual).">
+        <input>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+            <argument name="direction" type="string" desc="4 available directions. 'north' , 'south', 'east', 'west'"/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+  </word>
+    <word text="TJD:addIgloo1" insert="+()" desc="Spawns in an Igloo requires complex structure modual).">
+        <input>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+            <argument name="direction" type="string" desc="8 available directions. 'no' , 'so', 'ea','we', 'ne', 'sw', 'nw', 'se'."/>
+            <argument name="guntype" type="string" desc="'mg' or 'gl' (machine gun or grenade emplacement.)"/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+    </word>
+    <word text="TJD:addWatchTower" insert="+()" desc="Spawns in a watch tower requires complex structure modual).">
+        <input>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+            <argument name="direction" type="string" desc="8 available directions. 'no' , 'so', 'ea','we', 'ne', 'sw', 'nw', 'se'."/>
+            <argument name="guntype" type="string" desc="'mg' or 'gl' (machine gun or grenade emplacement.)"/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+    </word>
+    <word text="TJD:addWaterTower" insert="+()" desc="Spawns in a water tower requires complex structure modual).">
+        <input>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn tower at."/>
+            <argument name="direction" type="string" desc="8 available directions. 'no' , 'so', 'ea','we', 'ne', 'sw', 'nw', 'se'."/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+    </word>
+    <word text="TJD:setZoneControl" insert="+()" desc="Set Zone control to dictate bunker spawning).">
+        <input>
+            <argument name="triggerzone" type="string" desc="Name of triggerzone."/>
+            <argument name="control" type="string" desc="which bunkers to spawn 'us'(only),'pla'(only),'none' or 'all'"/>
+        </input>
+    </word>
+    <word text="TJD:placeSimpleBunker" insert="+()" desc="Spawns in a water tower requires complex structure modual).">
+        <input>
+            <argument name="location" type="triggerzone" desc="Name of the triggerzone spawning the bunker."/>
+            <argument name="location" type="string" desc="Name of placed reconpoint to spawn bunker at."/>
+            <argument name="bunkerType" type="string" desc="'sb1'(sandbag1),'sb2'(sandbag2),'bb1'(brickbunker1),'hb1'(haybunker),'lb1'(logbunker),'cb1'(Cinderblock) bunkers currently available"/>
+            <argument name="direction" type="string" desc="8 available directions. 'no' , 'so', 'ea','we', 'ne', 'sw', 'nw', 'se'."/>
+            <argument name="gunType" type="string" desc="'mg' or 'gl' (machine gun or grenade emplacement.)"/>
+            <argument name="side" type="string" desc="'us' or 'pla'"/>
+        </input>
+    </word>
+</AutoList>
+

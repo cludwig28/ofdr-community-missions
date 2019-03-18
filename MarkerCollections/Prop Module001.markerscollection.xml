@@ -1,0 +1,248 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="propModScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="-78.64471" Y="-2580.593">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="propMod">
+          <Script>--[[				Prop Spawn module by
+       ___         ___                     ___          ___          ___          ___          ___          ___     
+      /\  \       /\__\         ___       /\  \        /\  \        /\  \        /\  \        /\__\        /\  \    
+      \:\  \     /:/  /        /\  \     /::\  \      /::\  \      /::\  \      /::\  \      /:/  /       /::\  \   
+       \:\  \   /:/  /         \:\  \   /:/\:\  \    /:/\:\  \    /:/\:\  \    /:/\:\  \    /:/  /       /:/\ \  \  
+       /::\  \ /:/__/  ___     /::\__\ /:/  \:\  \  /:/  \:\  \  /::\~\:\  \  /:/  \:\  \  /:/  /  ___  _\:\~\ \  \ 
+      /:/\:\__\|:|  | /\__\ __/:/\/__//:/__/_\:\__\/:/__/ \:\__\/:/\:\ \:\__\/:/__/ \:\__\/:/__/  /\__\/\ \:\ \ \__\
+     /:/  \/__/|:|  |/:/  //\/:/  /   \:\  /\ \/__/\:\  \ /:/  /\/_|::\/:/  /\:\  \ /:/  /\:\  \ /:/  /\:\ \:\ \/__/
+    /:/  /     |:|__/:/  / \::/__/     \:\ \:\__\   \:\  /:/  /    |:|::/  /  \:\  /:/  /  \:\  /:/  /  \:\ \:\__\  
+    \/__/       \::::/__/   \:\__\      \:\/:/  /    \:\/:/  /     |:|\/__/    \:\/:/  /    \:\/:/  /    \:\/:/  /  
+                 ~~~~        \/__/       \::/  /      \::/  /      |:|  |       \::/  /      \::/  /      \::/  /   
+                                          \/__/        \/__/        \|__|        \/__/        \/__/        \/__/    
+]]
+
+INFO = "Prop Mod v002 by tvig0r0us";
+logtofile = true;
+
+function onCreate()
+--======================================================================
+------------------------------------------------------------------------
+--Trigger zones should start with a t and sets start with an s
+--(ie- "tMyPropSetName" and "sMyPropSetName"
+--Then place the your prop set names in the table below.
+--The script will handle the rest
+	ZONES = {"MyPropSetName"};
+
+------------------------------------------------------------------------
+--======================================================================
+end
+
+function onEDXInitialized()
+	--Initialize script functions to the EDX for use in other scripts
+	function EDX:getPropObject(zoneName)
+		return getPropObj(zoneName);
+	end
+	function EDX:newPropObject(zoneName,setName)
+		return newPropObj(zoneName, setName);
+	end
+end
+
+function onLoadCheckpoint()
+	--To make the objects checkpoint friendly we reinitialize the functions for each object
+	for i,v in pairs(propSets) do
+		log("Resetting functions for "..i);
+		v.spawn = spawn;
+		v.despawn = despawn;
+		v.entities = entities;
+		v.delete = delete;
+	end
+end
+
+function onMissionStart()
+	spawned = {};
+	propSets = {};
+	for i,v in pairs(ZONES) do
+		newPropObj("t"..v,"s"..v);
+	end
+end
+
+function delayStart()
+	for i,v in pairs(propSets) do
+		if OFP:isInTrigger(EDX:getPlayerEchelon(),i) then
+			v:spawn();
+		end
+	end
+end
+
+--Create a new lua object for each prop zone. Zone name can be any name for use with script generated prop models
+function newPropObj(zoneName,setName)
+	if not zoneName or not setName then 
+		debugInfo = "ERROR[newPropObj]: Trigger or set name not specified"; 
+		return debugInfo;
+	elseif propSets[string.lower(zoneName)] then
+		debugInfo = "WARNING[newPropObj]: Prop object already exists";
+		return propSets[string.lower(zoneName)];
+	else
+		local zone = string.lower(zoneName);
+		local obj = {};
+		obj.zn = zone;
+		obj.sn = setName;
+		obj.id = -1;
+		obj.pr = {};
+		obj.em = {};
+		obj.wp = {};
+		obj.rp = {};
+		obj.fx = {};
+		obj.spawn = spawn;
+		obj.despawn = despawn;
+		obj.entities = entities;
+		obj.delete = delete;
+		
+		propSets[zone] = obj;
+		
+		return propSets[zone];
+	end
+end
+
+--Returns a prop object from it's associated name
+function getPropObj(zoneName)
+	if not zoneName then 
+		debugInfo = "ERROR[getPropObj]: Zone name not specified"; 
+		return debugInfo;
+	elseif not propSets[string.lower(zoneName)] then
+		debugInfo = "ERROR[getPropObj]: Invalid zone name or zone does not exist";
+		return debugInfo;
+	else
+		return propSets[string.lower(zoneName)];
+	end
+end
+
+----------------------------FUNCTIONS TO BE LOADED INTO EACH OBJECT
+function spawn(self)
+	if self.id ~= -1 then
+		debugInfo = "WARNING[spawn]: Set for "..self.zn.." has is already spawned!";
+		return
+	else
+		local setID =  OFP:spawnEntitySet(self.sn);
+		propSets[self.zn].id = setID;
+		spawned[setID] = self.zn;
+	end
+end
+
+function despawn(self)
+	if self.id == -1 then
+		debugInfo = "WARNING[despawn]: Cannot despawn nonexistant set!";
+		return
+	else
+		OFP:destroyEntitySet(self.id);
+		self.id = -1;
+		self.pr = {};
+		self.em = {};
+		self.wp = {};
+		self.rp = {};
+		self.fx = {};
+	end
+end
+
+function entities(self,entityType)
+	if not entityType then
+		return {};
+	elseif entityType == "waypoint" then
+		return self.wp;
+	elseif entityType == "reconpoint" then
+		return self.rp;
+	elseif entityType == "emplacement" then
+		return self.em;
+	elseif entityType == "effect" then
+		return self.fx;
+	elseif entityType == "prop" then
+		return self.pr;
+	end
+end
+
+function delete(self)
+	if self.id ~= -1 then
+		OFP:destroyEntitySet(self.id);
+	end
+	propSets[self.zn] = nil;
+end
+
+function onEnter(zoneName, unitName)
+	if propSets[zoneName] then
+		if OFP:isInEchelon(unitName,EDX:getPlayerEchelon()) and propSets[zoneName].id == -1 then
+			log("Spawn prop set for trigger "..zoneName);
+			propSets[zoneName]:spawn();
+		end
+	end
+end
+
+function onLeave(zoneName, unitName)
+	if propSets[zoneName] then
+		if OFP:isInEchelon(unitName,EDX:getPlayerEchelon()) then
+			if not OFP:isInTrigger(EDX:getPlayerEchelon(),zoneName) and propSets[zoneName].id ~= -1 then
+				log("onLeave Despawn prop set for trigger "..zoneName);
+				propSets[zoneName]:despawn();
+			end
+		end
+	end
+end
+
+function onDeath(victim, killer)
+	if OFP:isInEchelon(victim,EDX:getPlayerEchelon()) then
+		for i,v in pairs(propSets) do
+			if not OFP:isInTrigger(EDX:getPlayerEchelon(),v.zn) and v.id ~= -1 then
+				log("onDeath Despawn prop set for trigger "..i);
+				v:despawn();
+			end
+		end
+	end
+end
+
+function onRespawn(entityName)
+	for i,v in pairs(propSets) do
+		if OFP:isInTrigger(EDX:getPlayerEchelon(),v.zn) and v.id == -1 then
+			log("onRespawn spawn prop set for trigger "..i);
+			v:spawn();
+		end
+	end
+end
+
+function onSpawnedReady( setName, setID, tableOfEntities, errorCode )
+	if not spawned[setID] then return end
+	local obj = propSets[spawned[setID]];
+	for i,v in ipairs(tableOfEntities) do
+		if OFP:isUnit(v) and OFP:getBroadUnitCategory(v) == "BROAD_UNIT_STATIC" then
+			obj.em[#obj.em+1] = v;
+		elseif debug:getTemplateName(v) == "waypoint" then
+			obj.wp[#obj.wp+1] = v;
+		elseif debug:getTemplateName(v) == "reconpoint" then
+			obj.rp[#obj.rp+1] = v;
+		elseif debug:getTemplateName(v) == "particlesystem" or debug:getTemplateName(v) == "AudioPlaceable" then
+			obj.fx[#obj.fx+1] = v;
+		else
+			obj.pr[#obj.pr+1] = v;
+		end
+	end
+	EDX:distributeFunction("onPropsSpawned",spawned[setID],setID)
+	spawned[setID] = nil;
+end
+
+function log(message)
+    if logtofile then
+    local logFile = io.open("./Prop Module Log.txt", "a+")
+        if message ~= nil then
+            logFile:write(os.date() .. ": " .. message .. "\n")
+        else
+            logFile:write(os.date() .. ": (nil)\n")
+        end
+        logFile:close()
+    end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

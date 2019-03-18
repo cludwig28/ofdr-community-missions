@@ -1,0 +1,1088 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="transp" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="False" Exportable="False" />
+      </Marker>
+      <Marker SerializationID="3" Name="transportScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="1502.599" Y="-430.2619">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="transport">
+          <Script>function onEDXInitialized()
+--------------------------------------------------------------------------------Register public functions to the EDX
+	scripts.mission.waypoints.registerFunction("openTransportMenu")
+	scripts.mission.waypoints.registerFunction("transportBailout")
+	scripts.mission.waypoints.registerFunction("transportPatrol")
+	scripts.mission.waypoints.registerFunction("transportPickup")
+	scripts.mission.waypoints.registerFunction("transportLeave")
+	scripts.mission.waypoints.registerFunction("transportDropoff")
+	scripts.mission.waypoints.registerFunction("getTransportHelo")
+	scripts.mission.waypoints.registerFunction("getTransportEchelon")
+	scripts.mission.waypoints.registerFunction("isAllInTransport")
+	scripts.mission.waypoints.registerFunction("isNotInTransport")
+end
+
+
+------------------------------------------------------------------------------User interface/menu handling
+function openTransportMenu(self, unitGroupOrEchelon, transportTo, pickupPos)
+	selection = nil
+	pickup = unitGroupOrEchelon
+	moveTo = transportTo
+	pickupPoint = pickupPos
+	if type(transportTo) == "table" then
+		if type(transportTo[1]) == "string" or type(transportTo[1]) == "table" then
+			destinations = transportTo
+		end
+	end
+	if not heloID then
+		menu1()
+	elseif heloMode ==  "pickup" then
+		menu2()
+	elseif heloMode ==  "patrol" then
+		if isInTransport() then
+			menu5()
+		else
+			menu3()
+		end
+	elseif heloMode == "exit" then
+		menu4()
+	elseif heloMode == "dropoff" then
+		menu5()
+	elseif heloMode == "waiting" then
+		if validDestinations and isInTransport() then
+			menu5()
+		elseif notInTransport() then
+			menu7()
+		end
+	end
+end
+
+function menu1()
+	OFP:displaySystemMessage("----TRANSPORT MENU----")
+	OFP:displaySystemMessage("1 - Pick me up")
+	OFP:displaySystemMessage("2 - Patrol my area")
+	OFP:displaySystemMessage("-")
+	OFP:displaySystemMessage("0 - Close Menu")
+	menuHandler("menu1", "m1")
+end
+
+function menu2()
+	if heloID then
+		OFP:displaySystemMessage("----TRANSPORT MENU----"..heloMode)
+		OFP:displaySystemMessage("1 - Send new coordinates")
+		OFP:displaySystemMessage("2 - Patrol my area")
+		OFP:displaySystemMessage("3 - Abort pickup")
+		OFP:displaySystemMessage("0 - Close Menu")
+		menuHandler("menu2", "m2")
+	else
+		selection = true
+		menuHandler("menu2", "m2")
+		menu1()
+	end
+end
+
+function menu3()
+	if heloID then
+		OFP:displaySystemMessage("----TRANSPORT MENU----"..heloMode)
+		OFP:displaySystemMessage("1 - Pick me up")
+		OFP:displaySystemMessage("2 - Abort patrol")
+		OFP:displaySystemMessage("-")
+		OFP:displaySystemMessage("0 - Close Menu")
+		menuHandler("menu3", "m3")
+	else
+		selection = true
+		menuHandler("menu3", "m3")
+		menu1()
+	end
+end
+
+function menu4()
+	if heloID then
+		OFP:displaySystemMessage("----TRANSPORT MENU----"..heloMode)
+		OFP:displaySystemMessage("1 - Come back and get me")
+		OFP:displaySystemMessage("2 - Patrol my area")
+		OFP:displaySystemMessage("-")
+		OFP:displaySystemMessage("0 - Close Menu")
+		menuHandler("menu4", "m4")
+	else
+		selection = true
+		menuHandler("menu4", "m4")
+		menu1()
+	end
+end
+
+function menu6()
+	if heloID then
+		if isInTransport() then
+			getValidDestinations()
+			if not DI then
+				DI = 0
+			end
+			OFP:displaySystemMessage("----SELECT DROPOFF----"..heloMode)
+			if validDestinations[DI + 1] then
+				OFP:displaySystemMessage("1 - "..displayDestination(validDestinations[DI + 1]))
+			else
+				OFP:displaySystemMessage("-")
+			end
+			if validDestinations[DI + 2] then
+				OFP:displaySystemMessage("2 - "..displayDestination(validDestinations[DI + 2]))
+			else
+				OFP:displaySystemMessage("-")
+			end
+			if validDestinations[DI + 3] then
+				OFP:displaySystemMessage("3 - "..displayDestination(validDestinations[DI + 3]))
+			else
+				OFP:displaySystemMessage("-")
+			end
+			if validDestinations[DI + 4] then
+				OFP:displaySystemMessage("0 - Close Menu     4 - More locations")
+			else
+				OFP:displaySystemMessage("0 - Close Menu  4 - Beginning of the list")
+			end
+		end
+		menuHandler("menu6", "m6")
+	else
+		selection = true
+		menuHandler("menu6", "m6")
+		menu1()
+	end
+end
+
+function menu7()
+	if heloID then
+		OFP:displaySystemMessage("----TRANSPORT MENU----"..heloMode)
+		OFP:displaySystemMessage("1 - Abort pickup")
+		OFP:displaySystemMessage("2 - Patrol my area")
+		OFP:displaySystemMessage("-")
+		OFP:displaySystemMessage("0 - Close Menu")
+		menuHandler("menu7", "m7")
+	else
+		selection = true
+		menuHandler("menu7", "m7")
+		menu1()
+	end
+end
+
+function menu5()
+	if heloID then
+		getValidDestinations()
+		OFP:displaySystemMessage("----TRANSPORT MENU----"..heloMode)
+		if validDestinations then
+			if heloMode == "patrol" then
+				OFP:displaySystemMessage("1 - Pick destination")
+			else
+				OFP:displaySystemMessage("1 - Change destination  2- Patrol area")
+			end
+		else
+			if heloMode == "patrol" then
+				OFP:displaySystemMessage("1- Go to destination")
+			else
+				OFP:displaySystemMessage("1- Patrol area")
+			end	
+		end
+		if heloMode ~= waiting then
+			OFP:displaySystemMessage("3 - Land now")
+		else
+			OFP:displaySystemMessage("-")
+		end
+		if scripts.mission.parachute and heloMode ~= "waiting" then
+			OFP:displaySystemMessage("4 - Bail out")
+		else
+			OFP:displaySystemMessage("-")
+		end	
+		OFP:displaySystemMessage("0 - Close Menu")
+		menuHandler("menu5", "m5")
+	else
+		selection = true
+		menuHandler("menu5", "m5")
+		menu1()
+	end
+end
+
+function onKeyPress(key)
+	if m1 then
+		if key == "Numpad1" then
+			selection = true
+			EDX:transportPickup(pickup, moveTo)
+		elseif key == "Numpad2" then
+			selection = true
+			EDX:transportPatrol(pickup)
+		elseif key == "Numpad0" then
+			selection = true
+			resetScript()
+		end
+		return true
+	elseif m2 then
+		if key == "Numpad1" then
+			selection = true
+			heloPickup()
+		elseif key == "Numpad2" then
+			selection = true
+			heloPatrol()
+		elseif key == "Numpad3" then
+			selection = true
+			heloLeave()
+		elseif key == "Numpad0" then
+			selection = true
+		end
+		return true
+	elseif m3 then
+		if key == "Numpad1" then
+			selection = true
+			heloPickup()
+		elseif key == "Numpad2" then
+			selection = true
+			heloLeave()
+		elseif key == "Numpad0" then
+			selection = true
+		end
+		return true
+	elseif m4 then
+		if key == "Numpad1" then
+			selection = true
+			heloPickup()
+		elseif key == "Numpad2" then
+			selection = true
+			heloPatrol()
+		elseif key == "Numpad0" then
+			selection = true
+		end
+		return true
+	elseif m5 then
+		getValidDestinations()
+		if validDestinations then
+			if heloMode == "patrol" then
+				if key == "Numpad1" then
+					selection = true
+					menuHandler("menu5", "m5")
+					menu6()
+				end
+			else
+				if key == "Numpad1" then
+					selection = true
+					menuHandler("menu5", "m5")
+					menu6()
+				elseif key == "Numpad2" then
+					selection = true
+					heloPatrol()
+				end
+			end
+		else
+			if key == "Numpad1" then
+				if heloMode == "patrol" then
+					heloDropoff()
+				else
+					heloPatrol()
+				end
+			end
+		end
+		if key == "Numpad3" and heloMode ~= "waiting" then
+			selection = true
+			heloLand()
+		elseif key == "Numpad4" then
+			if scripts.mission.parachute and heloMode ~= "waiting" and not jumpTimer then
+				selection = true
+				bailOut()
+			end
+		elseif key == "Numpad0" then
+			selection = true
+		end
+		return true
+	elseif m6 then
+		if key == "Numpad1" then
+			if validDestinations[DI + 1] then
+				selection = true
+				moveTo = validDestinations[DI + 1]
+				heloDropoff()
+			end
+		elseif key == "Numpad2" then
+			if validDestinations[DI + 2] then
+				selection = true
+				moveTo = validDestinations[DI + 2]
+				heloDropoff()
+			end
+		elseif key == "Numpad3" then
+			if validDestinations[DI + 3] then
+				selection = true
+				moveTo = validDestinations[DI + 3]
+				heloDropoff()
+			end
+		elseif key == "Numpad4" then
+			if validDestinations[DI + 4] then
+				DI = DI + 3
+			else
+				DI = 0
+			end
+		elseif key == "Numpad0" then
+			selection = true
+			DI = 0
+		end
+		return true
+	elseif m7 then
+		if key == "Numpad1" then
+			selection = true
+			heloPatrol()
+		elseif key == "Numpad2" then
+			selection = true
+			heloLeave()
+		elseif key == "Numpad0" then
+			selection = true
+		end
+		return true
+	end
+end
+
+function getValidDestinations()
+	debugInfo = "getValidDestinations Start"
+	if destinations then
+		validDestinations = {}
+		local x,y,z = OFP:getPosition(pickup)
+		for i,v in ipairs(destinations) do
+			if type(v) == "table" then
+				if EDX:get2dDistance(v[1], v[3], x, z ) &gt; 500 then
+					table.insert(validDestinations, v)
+				end
+			else
+				if EDX:getEntity2dDistance(v, x, z) &gt; 500 then
+					table.insert(validDestinations, v)
+				end
+			end
+		end
+		if #validDestinations == 0 then
+			validDestinations = nil
+		end
+	end
+	debugInfo = nil
+end
+
+function displayDestination(dest)
+	debugInfo = "displayDestinations Start "
+	local x, y, z = OFP:getPosition(pickup)
+	local pos = dest
+	if type(dest) == "string" then
+		debugInfo = "destination is string"
+		pos = {OFP:getPosition(dest)}
+	end
+	debugInfo = "aquiring destination data"
+	local bearing = math.floor( EDX:getBearing(x, z, pos[1], pos[3]) )
+	local heading = EDX:bearing2heading(bearing)
+	local distance = math.floor( EDX:get3dDistance(x, y, z, pos[1], pos[2], pos[3]) )
+	debugInfo = nil
+	return distance.." meters "..heading..", bearing "..bearing.." degrees"
+end
+
+function menuHandler(menuName, menuVar)
+	if selection then
+		scripts.mission.transport[menuVar] = nil
+		selection = nil
+		menuOpen = nil
+		wipeDisplay()
+		EDX:deleteTimer(menuName)
+	else
+		if scripts.mission.transport[menuVar] then
+			menuOpen = true
+			EDX:setTimer(menuName, 500)
+		else
+			menuOpen = true
+			scripts.mission.transport[menuVar] = EDX:simpleTimer(menuName, 500)
+		end
+	end
+end
+
+function wipeDisplay()
+	OFP:displaySystemMessage("")
+	OFP:displaySystemMessage("")
+	OFP:displaySystemMessage("")
+	OFP:displaySystemMessage("")
+	OFP:displaySystemMessage("")
+end
+
+-------------------------------------------------Public Functions
+
+function transportPickup(self, unitGroupOrEchelon, transportTo, pickupPos)
+	debugInfo = "transportPickup Start"
+	pickup = unitGroupOrEchelon
+	moveTo = transportTo
+	heloMode = "pickup"
+	if type(transportTo) == "table" then
+		if type(transportTo[1]) == "string" or type(transportTo[1]) == "table" then
+			destinations = transportTo
+		end
+	else
+		destinations = nil
+	end
+	if pickupPos then
+		pickupPoint = pickupPos
+	end
+	if not heloID then
+		spawnHelo()
+	else
+		heloPickup()
+	end
+	debugInfo = nil
+end
+
+function transportPatrol(self, centerPosition)
+	debugInfo = "transportPatrol Start"
+	if type(centerPosition) == "string" then
+		if OFP:isUnit(centerPosition) or OFP:isGroup(centerPosition) or OFP:isEchelon(centerPosition) then
+			pickupPoint = nil
+			pickup = centerPosition
+		else
+			pickupPoint = centerPosition
+		end
+	else
+		pickupPoint = centerPosition
+	end
+	heloMode = "patrol"
+	if not heloID then
+		spawnHelo()
+	else
+		heloPatrol()
+	end
+	debugInfo = nil
+end
+
+function transportDropoff(self,destination)
+	debugInfo = "transportDropoff Start"
+	if heloID then
+		if isInTransport() then
+			if  heloMode == "patrol" or heloMode == "dropoff" then
+				moveTo = destination
+				heloDropoff()
+			end
+		end
+	end
+	debugInfo = nil
+end
+
+function transportLeave(self)
+	debugInfo = "transportLeave Start"
+	if heloID then
+		if notInTransport() then
+			heloLeave()
+		end
+	end
+	debugInfo = nil
+end
+
+function transportBailout(self)
+	bailOut()
+end
+
+function getTransportHelo(self)
+	if helo then
+		return helo
+	end
+end
+
+function getTransportEchelon(self)
+	if heloCrew then
+		return heloCrew
+	end
+end
+
+function isAllInTransport(self)
+	if heloID then
+		return isInTransport()
+	end
+	return false
+end
+
+function isNotInTransport(self)
+	if heloID then
+		return notInTransport()
+	end
+	return true
+end
+
+---------------------------------------------------Vehicle spawning and initial assignment
+
+function spawnHelo()
+	debugInfo = "spawnHelo start"
+	if not heloID then
+		local pos
+		if pickupPoint then
+			if type(pickupPoint) == "string" then
+				pos = {OFP:getPosition(pickupPoint)}
+			elseif type(pickupPoint) == "table" then
+				pos = pickupPoint
+			end
+		elseif pickup then
+			pos = {OFP:getPosition(pickup)}
+		else
+			return
+		end
+		local nx,ny,nz = EDX:get360Coordinates(pos, -1, 0, 2500)
+		ny = ny + 100
+		if EDX:isInWorld(nx, ny, nz) then
+			if EDX:isOcean(nx, nz) then
+				ny =  140
+			end
+			heloID = OFP:spawnEntitySetAtLocation("heloset", nx, ny, nz)
+			debugInfo = "Spawned helo"
+		else
+			spawnHelo()
+			return
+		end
+	end
+	debugInfo = nil
+end
+
+-----------------------------------------------------------------Vehicle mode handling
+function heloPickup()
+	if heloID then
+		debugInfo = "heloPickup start"
+		patrolPos = nil
+		local pos = {OFP:getPosition(pickup)}
+		if pickupPoint then
+			if type(pickupPoint) == "string" then
+				pos = {OFP:getPosition(pickupPoint)}
+			elseif type(pickupPoint) == "table" then
+				pos = pickupPoint
+			end
+			pickupPoint = nil
+		end
+		resetWP()
+		wpID = OFP:spawnEntitySetAtLocation("helowp", pos[1], pos[2], pos[3])
+		heloMode = "pickup"
+		if waiting then
+			EDX:deleteTimer("heloPatrol")
+			waiting = nil
+		end
+		debugInfo = nil
+	end
+end
+
+function heloDropoff()
+	if heloID then
+		debugInfo = "heloPickup start"
+		patrolPos = nil
+		local pos = moveTo
+		if type (moveTo) == "string" then
+			pos = {OFP:getPosition(moveTo)}
+		end
+		resetWP()
+		wpID = OFP:spawnEntitySetAtLocation("helowp", pos[1], pos[2], pos[3])
+		heloMode = "dropoff"
+		DI = nil
+		if waiting then
+			EDX:deleteTimer("heloPatrol")
+			waiting = nil
+		end
+		debugInfo = nil
+	end
+end
+
+function heloLeave()
+	pickupPoint = nil
+	if heloID then
+		debugInfo = "heloLeave start"
+		patrolPos = nil
+		local pos = {OFP:getPosition(pickup)}
+		local nx,ny,nz = EDX:get360Coordinates(pos, -1, 0, 3000)
+		ny = ny + 100
+		if EDX:isInWorld(nx, ny, nz) then
+			if EDX:isOcean(nx, nz) then
+				ny =  140
+			end
+			resetWP()
+			wpID = OFP:spawnEntitySetAtLocation("helowp", nx, ny, nz)
+			heloMode = "exit"
+			debugInfo = "Spawned exit point"
+		else
+			heloLeave()
+			return
+		end
+		if waiting then
+			EDX:deleteTimer("heloPatrol")
+			waiting = nil
+		end
+		debugInfo = nil
+	end
+end
+
+function heloPatrol()
+	if heloID then
+		if waiting and not isInTransport and not notInTransport then
+			EDX:setTimer("heloPatrol", 60000)
+			return
+		end
+		debugInfo = "heloPatrol start"
+		local pos
+		if pickupPoint then
+			if type(pickupPoint) == "string" then
+				pos = (OFP:getPosition(pickupPoint))
+			elseif type(pickupPoint) == "table" then
+				pos = pickupPoint
+			end
+		elseif pickup then
+			pos = {OFP:getPosition(pickup)}
+		else
+			return
+		end
+		if isInTransport() then
+			if not patrolPos then
+				patrolPos = pos
+			end
+			pos = patrolPos
+		end
+		local heloPos = {OFP:getPosition(helo)}
+		local bearing = -1
+		local minDist, maxDist = 300, 1000
+		if isInTransport() then
+			bearing = EDX:getBearing(pos[1], pos[3], heloPos[1], heloPos[3])
+			minDist, maxDist = 1000, 2000
+		end
+		local nx,ny,nz = EDX:get360Coordinates(pos, bearing, 270, minDist, maxDist)
+		ny = ny + 100
+		if EDX:isInWorld(nx, ny, nz) then
+			if EDX:isOcean(nx, nz) then
+				ny =  140
+			end
+			resetWP()
+			wpID = OFP:spawnEntitySetAtLocation("helowp", nx, ny, nz)
+			if waiting then
+				EDX:deleteTimer("heloPatrol")
+				waiting = nil
+			end
+			heloMode = "patrol"
+			debugInfo = "Spawned patrol point"
+		else
+			heloPatrol()
+			return
+		end
+		debugInfo = nil
+	end
+end
+
+function heloLand()
+	if heloID then
+		patrolPos = nil
+		resetWP()
+		OFP:land(heloCrew, "OVERRIDE")
+	end
+end
+
+function bailOut()
+	pickupPoint = nil
+	if OFP:isGroup(pickup) or OFP:isEchelon(pickup) then
+		local jumpers = EDX:grpToTable(pickup)
+		jumpTimer = EDX:simpleTimer("jumpOut", 1000, jumpers)
+	end
+end
+
+function jumpOut(jumpers)
+	local jumpTable = jumpers
+	local index = #jumpTable
+	if OFP:isAlive(jumpTable[index]) then
+		if not OFP:isPlayer(jumpTable[index]) 
+		and not OFP:isSecondaryPlayer(jumpTable[index]) then
+			OFP:forceDismountVehicle(jumpTable[index], "ADDTOFRONT")
+		else
+			if OFP:getParentEchelon(jumpTable[index]) ~= "" then
+				OFP:forceDismountVehicle(OFP:getParentEchelon(jumpTable[index]), "ADDTOFRONT")
+			else
+				OFP:forceDismountVehicle(jumpTable[index], "ADDTOFRONT")
+			end
+		end
+	end
+	table.remove(jumpTable, index)
+	if #jumpTable &gt; 0 then
+		EDX:setTimer("jumpOut", 1000, jumpTable)
+	else
+		EDX:deleteTimer("jumpOut")
+		jumpTimer = nil
+		EDX:distributeFunction("onAllJumpersOut")
+	end
+end
+
+
+------------------------------------------------------Waypoint and Trigger handling
+function onEnter(zoneName, unitName)
+	if zoneName == trigger and unitName == OFP:getVehicleLeaderSoldier(helo) then
+		if heloMode == "exit" then
+			if OFP:getDistance(helo, pickup) &gt; 2500 then
+				OFP:destroyEntitySet(heloID)
+			else
+				heloLeave()
+			end
+		elseif heloMode == "patrol" then
+			heloPatrol()
+		end
+	end
+end
+
+function resetWP()
+	if wpID then
+		OFP:destroyEntitySet(wpID)
+		wpID = nil
+		trigger = nil
+	end
+end
+
+
+------------------------------------------------------------Vehicle loading and unloading
+function onMount(vehicleName, unitName, echelonName)
+	debugInfo = "onMount"..vehicleName
+	if vehicleName == helo and echelonName ~= heloCrew then
+		if isVehicleFull(helo)
+		or pickup and isInTransport() then
+			if destinations then
+				menu6()
+			else
+				heloDropoff()
+			end
+			EDX:distributeFunction("onTransportMounted", pickup)
+		end
+	end
+	debugInfo = nil
+end
+
+function onLand(HelicopterName)
+	if HelicopterName == helo then
+		if heloMode == "pickup" then
+			waiting = EDX:simpleTimer("heloPatrol", 300000)
+			heloMode = "waiting"
+			EDX:distributeFunction("onTransportPickup", pickup)
+		elseif heloMode == "dropoff" then
+			heloMode = "waiting"
+			waiting = EDX:simpleTimer("heloPatrol", 300000)
+			EDX:distributeFunction("onTransportDropoff", pickup)
+		end
+	end
+end
+
+function onDismount(vehicleName, unitName, echelonName)
+	if vehicleName == helo then
+		if echelonName == heloCrew then
+			if not OFP:isAnyMounted(heloCrew) then
+				OFP:defendPerimeter(heloCrew, "OVERRIDE")
+			end
+		else
+			if not OFP:isAnyMounted(pickup) then
+				heloLeave()
+				EDX:distributeFunction("onTansportDismounted", pickup)
+			end
+		end
+	end
+end
+
+function isVehicleFull(vehicleName)
+	debugInfo = "isVehicleFull"..vehicleName
+    local crewSize = debug:getNumberOfCrewPoints(vehicleName)
+    for i=0, crewSize - 1 do
+        local crewPointName = debug:getCrewPointName(vehicleName, i)
+        local unitName = debug:getSoldierInCrewPoint(vehicleName,i)
+        if unitName == "" then
+        	debugInfo = nil
+        	return false
+        end
+    end
+    debugInfo = nil
+    return true
+end
+
+function isInTransport()
+	if OFP:isUnit(pickup) then
+		if OFP:getMountedVehicle(pickup) == helo then
+			return true
+		end
+	elseif OFP:isGroup(pickup) then
+		if OFP:isAllMounted(pickup) then
+			local unit = OFP:getGroupMember(pickup, 0)
+			if OFP:getMountedVehicle(unit) == helo then
+				return true
+			end
+		end
+	elseif OFP:isEchelon(pickup) then
+		if OFP:isAllMounted(pickup) then
+			local unit = OFP:getEchelonMember(pickup, 0)
+			if OFP:getMountedVehicle(unit) == helo then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function notInTransport()
+	if OFP:isUnit(pickup) then
+		if OFP:getMountedVehicle(pickup) ~= helo then
+			return true
+		end
+	elseif OFP:isGroup(pickup) then
+		if OFP:isAnyMounted(pickup) then
+			local size = OFP:getGroupSize(pickup)
+			for i = 0, size - 1 do
+				local unit = OFP:getGroupMember(pickup, i)
+				if OFP:getMountedVehicle(unit) == helo then
+					return false
+				end
+			end
+		end
+	elseif OFP:isEchelon(pickup) then
+		if OFP:isAnyMounted(pickup) then
+			local size = OFP:getEchelonSize(pickup)
+			for i = 0, size - 1 do
+				local unit = OFP:getEchelonMember(pickup, i)
+				if OFP:getMountedVehicle(unit) == helo then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+--------------------------------------------------------------------Spawned set handling
+function onSpawnedReady( setName, setID, tableOfEntities, errorCode )
+	if setID == heloID then
+		for i,v in ipairs(tableOfEntities) do
+			if EDX:isVehicle(v) then
+				helo = v
+			elseif OFP:isEchelon(v) then
+				heloCrew = v
+			end
+		end
+		OFP:setVehicleMountableStatus(helo, 1)
+		EDX:simpleTimer("heloCheck", 1000)
+		if heloMode ==  "pickup" then
+			heloPickup()
+		elseif heloMode == "patrol" then
+			heloPatrol()
+		end
+	elseif setID == wpID then
+		local wp = getWaypoint(tableOfEntities)
+		trigger = getTrigger(tableOfEntities)
+		OFP:move(heloCrew, wp, "OVERRIDE")
+	end
+end
+
+function getWaypoint(tableOfEntities)
+	for i,v in ipairs(tableOfEntities) do
+		if debug:getTemplateName(v) == "waypoint" then
+			return v
+		end
+	end
+end
+
+function getTrigger(tableOfEntities)
+	for i,v in ipairs(tableOfEntities) do
+		if debug:getTemplateName(v) == "triggerzone" then
+			return v
+		end
+	end
+end
+
+----------------------------------------------------------Helo damage and despawn handling
+function heloCheck()
+	if heloID then
+		if OFP:isMainRotorDestroyed(helo)
+		or OFP:isTailRotorDestroyed(helo) 
+		or OFP:isMobilityKill(helo) then
+			EDX:simpleTimer("heloDestroy", 10000)
+			EDX:deleteTimer("heloCheck")
+		else
+			EDX:setTimer("heloCheck", 10000)
+		end
+	end
+	if heloCrew then
+		if not OFP:isAlive(heloCrew) then
+			if not despawnTimer then
+				despawnTimer = EDX:simpleTimer("heloDespawn", 10000)
+			end
+			EDX:deleteTimer("heloCheck")
+			if not oldHelos then oldHelos = {} end
+			oldHelos[helloID] = helo
+			resetScript()
+		elseif not OFP:isAnyMounted(heloCrew) then
+			if OFP:getDistance(pickup, heloCrew) &gt; 1200 then
+				for i=0, OFP:getEchelonSize(heloCrew) - 1 do
+					OFP:despawnEntity( OFP:getEchelonMember(heloCrew, i) )
+				end
+			end
+		end
+	end
+end
+
+function heloDestroy ()
+	OFP:damageVehicle(helo, "catastrophic")
+	EDX:distributeFunction("onTransportDestroyed", helo)
+	if not despawnTimer then
+		despawnTimer = EDX:simpleTimer("heloDespawn", 10000)
+	end
+	EDX:deleteTimer("heloDestroy")
+	if not oldHelos then oldHelos = {} end
+	oldHelos[helloID] = helo
+	resetScript()
+end
+
+function heloDespawn(force)
+	local reset = false
+	for i,v in pairs(oldHelos) do
+		if OFP:getDistance(pickup, v) &gt; 1200 then
+			OFP:destroyEntitySet(i)
+			oldHelos[i] = nil
+		else
+			reset = true
+		end
+	end
+	if reset then
+		EDX:setTimer("heloDespawn", 10000)
+	else
+		EDX:deleteTimer("heloDespawn")
+		despawnTimer = nil
+	end
+end
+
+function onDespawnEntitySet( setID )
+	if setID == heloID then
+		if menuOpen then
+			holdScript()
+		else
+			resetScript()
+		end
+	end
+end
+
+function holdScript()
+	scriptHold = true
+	helo = nil
+	heloCrew = nil
+	heloID = nil
+	heloMode = nil
+	waiting = nil
+	resetWP()
+	EDX:deleteTimer("heloPatrol")
+	EDX:deleteTimer("heloPickup")
+end
+
+function resetScript()
+	scriptHold = nil
+	menuOpen = nil
+	helo = nil
+	heloCrew = nil
+	heloID = nil
+	pickup = nil
+	moveTo = nil
+	patrolPos = nil
+	heloMode = nil
+	waiting = nil
+	resetWP()
+	EDX:deleteTimer("heloPatrol")
+	EDX:deleteTimer("heloPickup")
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="4" Name="heloset" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="5" Name="Echelon" TemplateID="67298535397422246" TemplateName="Echelon" X="1501.695" Y="-573.9375">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_fireteam" UIArtName="fireteam" UIEchelonName="#ofp_unitname_ft_helitransp" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="6" Name="iu33uspilot" TemplateID="58976938154551445" TemplateName="iu33uspilot" X="1498.804" Y="-591.3291">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="10" SeatName="Pilot" Mounted="True" />
+        <PersonaProperties Surname="Essig" Rank="11" HeadTexture="c_head_cau_setH" HeadModel="c_head_cau_08" Voice="Marine05" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1498.804, -40, -591.3291, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="7" Name="iu33uspilotI1" TemplateID="58976938154551445" TemplateName="iu33uspilot" X="1498.804" Y="-591.3291">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="10" SeatName="Copilot" Mounted="True" />
+        <PersonaProperties Surname="Woodcock" Rank="11" HeadTexture="c_head_cau_setB" HeadModel="c_head_cau_02" Voice="Marine01" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1498.804, -40, -591.3291, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="8" Name="iu34usdoorgun" TemplateID="58976944479561877" TemplateName="iu34usdoorgun" X="1498.804" Y="-591.3291">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="10" SeatName="Gunner" Mounted="True" />
+        <PersonaProperties Surname="Salazar" Rank="1" HeadTexture="c_head_his_setA" HeadModel="c_head_his_01" Voice="Marine09" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1498.804, -40, -591.3291, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="9" Name="iu34usdoorgunI1" TemplateID="58976944479561877" TemplateName="iu34usdoorgun" X="1498.804" Y="-591.3291">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="10" SeatName="Gunner2" Mounted="True" />
+        <PersonaProperties Surname="Park" Rank="1" HeadTexture="c_head_asn_setH" HeadModel="c_head_asn_08" Voice="Marine01" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1498.804, -40, -591.3291, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="10" Name="vu25mh60s" TemplateID="63240479899150556" TemplateName="vu25mh60s" X="1498.804" Y="-591.3291">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1498.804, -40, -591.3291, 1" AltitudeMode="SeaLevel" />
+        <VehicleMountProperties VirtualCrew="False" MovingAtStart="True" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="11" Name="helowp" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="12" Name="waypoint" TemplateID="130425489857996851" TemplateName="waypoint" X="1499.981" Y="-500.0586">
+        <EntityProperties ParentEntitySetID="11" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1499.981, -40, -500.0586, 1" AltitudeMode="SeaLevel" />
+        <WaypointProperties RapidMove="False" BlockerLogic="And" Delay="0" UserScript="" />
+      </Marker>
+      <Marker SerializationID="13" Name="triggerzone" TemplateID="130252823392184388" TemplateName="triggerzone" X="1499.533" Y="-499.167">
+        <EntityProperties ParentEntitySetID="11" Description="" />
+        <PolygonProperties Top="2000" Bottom="-1000" AltitudeMode="SeaLevel">
+          <Points>
+            <Point X="1699.00623" Y="-499.167023" />
+            <Point X="1672.28162" Y="-399.429718" />
+            <Point X="1599.2699" Y="-326.418976" />
+            <Point X="1499.53357" Y="-299.6934" />
+            <Point X="1399.79529" Y="-326.418976" />
+            <Point X="1326.78357" Y="-399.429718" />
+            <Point X="1300.059" Y="-499.167023" />
+            <Point X="1326.78357" Y="-598.9043" />
+            <Point X="1399.79529" Y="-671.916" />
+            <Point X="1499.53357" Y="-698.6406" />
+            <Point X="1599.2699" Y="-671.916" />
+            <Point X="1672.28162" Y="-598.9043" />
+          </Points>
+        </PolygonProperties>
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

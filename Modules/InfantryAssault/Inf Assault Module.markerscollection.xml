@@ -1,0 +1,647 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="assaultMod" TemplateID="59584148284663864" TemplateName="secondaryScript" X="10449.16" Y="-537.6992">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="assault">
+          <Script>SCRIPT_NAME = "assault"
+logtofile = true
+
+startMin = 500
+startMax = 800
+readyMin = 250
+readyMax = 350
+suppressGroups = {
+	["us"] = "aspla",
+	["pla"] = "asus",
+	[0] = "aspla",
+	[1] = "asus",
+}
+
+
+function onEDXInitialized()
+-------------------------------------declare public functions
+	function EDX:assaultLocation(location, side, size, direction)
+		return assaultLocation(location, side, size, direction)
+	end
+	
+	function EDX:abortAssault(assaultID)
+		if assaultTable[assaultID] then
+			assaultTable[assaultID].abort = true
+		end
+	end
+	
+	function EDX:setAssaultSuppression(assaultID, unitEchelonOrGroupName)
+		setAssaultSuppression(assaultID, unitEchelonOrGroupName)
+	end
+	
+end
+
+function onMissionStart()
+	assaultTable = {}
+	spawned = {}
+	IDNum = 1
+	moveWP = {}
+	rapidWP = {}
+	assaultWP = {}
+	fallbackWP = {}
+	defendWP = {}
+	sets = {
+		[0] = {"asus1", "asus2"},
+		[1] = {"aspla1", "aspla2"},
+		["us"] = {"asus1", "asus2"},
+		["pla"] = {"aspla1", "aspla2"},
+	}
+end
+
+function setAssaultSuppression(assaultID, unitEchelonOrGroup)
+	if assaultTable[assaultID] then
+		if OFP:isUnit(unitEchelonOrGroup)
+		or OFP:isEchelon(unitEchelonOrGroup)
+		or OFP:isGroup(unitEchelonOrGroup) then
+			assaultTable[assaultID].suppressGroup = unitEchelonOrGroup
+		end
+	end
+end
+
+function assaultLocation(location, side, size, direction)
+	log("Assault location is "..location)
+	local max, used = OFP:getMissionQuota()
+	local spawnPool = max - used - 3
+	if size * 4 &gt; spawnPool then
+		debugInfo = "assaultLocation not enough space in spawn pool"
+		return
+	end
+	local _location = location
+	if type(location) == "string" then
+		_location = {OFP:getPosition(location)}
+	end
+	if EDX:isLake(_location[1], _location[3]) or EDX:isOcean(_location[1], _location[3]) then
+		debugInfo = "assaultLocation invalid location"
+		return
+	end
+	local entitySets = sets[side]
+	local dir = direction or -1
+	debugInfo = "calc spawn position"
+	--------------------------------------------calculate spawn position of assaulting force
+	local startAttempt = 1
+	local startLoc = {EDX:get360Coordinates(_location, dir, 22, startMin, startMax)}
+	while EDX:isLake(startLoc[1], startLoc[3]) or EDX:isOcean(startLoc[1], startLoc[3]) do
+		if startAttempt &lt;= 10 then
+			startAttempt = startAttempt + 1
+		else
+			debugInfo = "assaultLocaion could not find valid start location"
+			return
+		end
+		startLoc = {EDX:get360Coordinates(_location, dir, 22, startMin, startMax)}
+	end
+	debugInfo = "spawnLocation calculated"
+	------------------------------------------spawn assaulting force
+	for i = 1, size do
+		spawned[OFP:spawnEntitySetAtLocation(EDX:getRandom(entitySets), startLoc[1], startLoc[2], startLoc[3])] = IDNum
+	end
+	local tempEntry = {}
+	tempEntry.startLoc = startLoc
+	tempEntry.targetLoc = _location
+	tempEntry.side = side
+	tempEntry.suppressGroup = suppressGroups[side]
+	assaultTable[IDNum] = tempEntry
+	EDX:serialTimer("startAssault", 2000, IDNum)
+	local tempID = IDNum
+	IDNum = IDNum + 1
+	debugInfo = nil
+	return tempID
+end
+
+function startAssault( assaultID, timerID )
+	local temp = assaultTable[assaultID]
+----------------------------------------sort assault teams and give initial assault orders
+	local assignments = {}
+	assignments.reinforce = {}
+	local startLoc = temp.startLoc
+	local targetLoc = temp.targetLoc
+	local bft = EDX:getBearing(targetLoc[1], targetLoc[3], startLoc[1], startLoc[3])
+	for echelon, data in pairs(temp) do
+		if type(echelon) == "string" and OFP:isEchelon(echelon) then
+--------------------------------------------------------get frontal assault team
+			if not assignments.front then
+				assignments.front = echelon
+				local moveAttempt = 1
+				local x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+				while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+					if moveAttempt &lt;= 10 then
+						 x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+						 moveAttempt = moveAttempt + 1
+					else
+						table.insert(assignments.reinforce, echelon)
+						assignments.front = true
+						log("reinforce "..echelon)
+					end
+				end
+				if not EDX:isInTable(echelon, assignments.reinforce) then
+					rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+					temp[echelon].movePos = {x, y, z}
+					log("frontal assault "..echelon)
+				end
+------------------------------------------------------get flanking assault teams
+			elseif not assignments.flankLeft or not assignments.flankRight then
+				if assignments.flankRight then
+					local moveAttempt = 1
+					local btr = bft + 90
+					if btr &gt;= 360 then
+						btr = btr - 360
+					end
+					local x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+					while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+						if moveAttempt &lt;= 10 then
+							 x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+							 moveAttempt = moveAttempt + 1
+						else
+							table.insert(assignments.reinforce, echelon)
+							assignments.flankLeft = true
+							log("reinforce "..echelon)
+						end
+					end
+					if not EDX:isInTable(echelon, assignments.reinforce) then
+						rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+						temp[echelon].movePos = {x, y, z}
+						assignments.flankLeft = echelon
+						log("left flank "..echelon)
+					end
+				elseif assignments.flankLeft then
+					local moveAttempt = 1
+					local btr = bft - 90
+					if btr &lt; 0 then
+						btr = btr + 360
+					end
+					local x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+					while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+						if moveAttempt &lt;= 10 then
+							 x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+							 moveAttempt = moveAttempt + 1
+						else
+							table.insert(assignments.reinforce, echelon)
+							assignments.flankRight = true
+							log("reinforce "..echelon)
+						end
+					end
+					if not EDX:isInTable(echelon, assignments.reinforce) then
+						rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+						temp[echelon].movePos = {x, y, z}
+						assignments.flankRight = echelon
+						log("right flank "..echelon)
+					end
+				else
+					if EDX:randomChance(50) then
+						local moveAttempt = 1
+						local btr = bft + 90
+						if btr &gt;= 360 then
+							btr = btr - 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, echelon)
+								assignments.flankLeft = true
+								log("reinforce "..echelon)
+							end
+						end
+						if not EDX:isInTable(echelon, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+							temp[echelon].movePos = {x, y, z}
+							assignments.flankLeft = echelon
+							log("left flank "..echelon)
+						end
+					else
+						local moveAttempt = 1
+						local btr = bft - 90
+						if btr &lt; 0 then
+							btr = btr + 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, echelon)
+								assignments.flankRight = true
+								log("reinforce "..echelon)
+							end
+						end
+						if not EDX:isInTable(echelon, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+							temp[echelon].movePos = {x, y, z}
+							assignments.flankRight = echelon
+							log("right flank "..echelon)
+						end
+					end
+				end
+----------------------------------------------------get suppression team
+			elseif not assignments.suppress then
+				local moveAttempt = 1
+				local x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+				while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+					if moveAttempt &lt;= 10 then
+						 x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+						 moveAttempt = moveAttempt + 1
+					else
+						table.insert(assignments.reinforce, echelon)
+						assignments.suppress = true
+						log("reinforce "..echelon)
+					end
+				end
+				if not EDX:isInTable(echelon, assignments.reinforce) then
+					rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+					temp[echelon].movePos = {x, y, z}
+					assignments.suppress = echelon
+					log("suppression "..echelon)
+				end
+			else
+--------------------------------------------------store remaining teams to reinforcements
+				table.insert(assignments.reinforce, echelon)
+				log("reinforce "..echelon)
+			end
+		end
+	end
+	temp.assault = EDX:serialTimer("assaultCheck", 5000, assaultID)
+	temp.cleanup = EDX:serialTimer("assaultCleanup", 30000, assaultID)
+	temp.assignments = assignments
+	assaultTable[assaultID] = temp
+	EDX:deleteTimer(timerID)
+end
+
+function assaultCheck(assaultID, timerID)
+	log("start assaultCheck for "..assaultID)
+	local temp = assaultTable[assaultID]
+	local assignments = temp.assignments
+	local assaultBroken = true
+	for ech, data in pairs(temp) do
+		if type(ech) == "string" and OFP:isEchelon(ech) and OFP:isAlive(ech) then
+			local echMembers = EDX:grpToTable(ech)
+			for i, member in ipairs(echMembers) do
+				local morale = OFP:getMorale(member)
+				if morale ~= "EBroken" and morale ~= "EBreaking" then
+					assaultBroken = nil
+					break
+				end
+				if not assaultBroken then
+					break
+				end
+			end
+			if not assaultBroken then
+				break
+			end
+		end
+	end
+	if assaultBroken or temp.abort then
+		log("assault "..assaultID.." has been broken")
+		EDX:distributeFunction("onAssaultBroken", assaultID)
+		EDX:deleteTimer(timerID)
+		temp.abort = true
+		assaultTable[assaultID] = temp
+		abortAssault(assaultID)
+		return
+	end
+	for detail, echelon in pairs(assignments) do
+		if type(echelon) == "string" then
+			if OFP:isAlive(echelon) then
+				if not temp[echelon].go then
+					local tpos = temp[echelon].movePos
+					local cpos = {OFP:getPosition(echelon)}
+					if EDX:get2dDistance(tpos[1], tpos[3], cpos[1], cpos[3]) &lt;= 50 then
+						if detail ~= "suppress" then
+							local x, y, z = unpack(temp.targetLoc)
+							assaultWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+						else
+							OFP:suppress(echelon, suppressGroups[temp.side], "OVERRIDE")
+							log("suppression  ordered "..echelon)
+						end
+						temp[echelon].go = true
+					end
+				end
+			else
+				if #assignments.reinforce &gt; 0 then
+					local startLoc = temp.startLoc
+					local targetLoc = temp.targetLoc
+					local bft = EDX:getBearing(targetLoc[1], targetLoc[3], startLoc[1], startLoc[3])
+					local ech = assignments.reinforce[1]
+					assignments[detail] = ech
+					table.remove(assignments.reinforce, 1)
+					if detail == "front" then
+						local moveAttempt = 1
+						local x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("frontal assault ordered "..ech)
+						end
+					elseif detail == "flankLeft" then
+						local moveAttempt = 1
+						local btr = bft + 90
+						if btr &gt;= 360 then
+							btr = btr - 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("left flank ordered "..ech)
+						end
+					elseif detail == "flankRight" then
+						local moveAttempt = 1
+						local btr = bft - 90
+						if btr &lt; 0 then
+							btr = btr + 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, 20, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("right flank ordered "..ech)
+						end
+					elseif detail == "suppress" then
+						local moveAttempt = 1
+						local x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, bft, 20, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("suppression ordered "..ech)
+						end
+					end
+				end
+			end
+		end
+	end
+	temp.assignments = assignments
+	assaultTable[assaultID] = temp
+	EDX:setTimer(timerID, 5000)
+end
+
+function abortAssault(assaultID)
+	log("start abort for "..assaultID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		local retreatLoc = temp.retreatLoc or temp.startLoc
+		local targetLoc = temp.targetLoc
+		local retreatDir = temp.retreatDir or EDX:getBearing(targetLoc[1], targetLoc[3], retreatLoc[1], retreatLoc[3])
+		local x, y, z = EDX:get360Coordinates(retreatLoc, retreatDir, 0, 500)
+		local dirAdjust = 0
+		local dirAdjusted = retreatDir
+		local adjustment = 10
+		log("local variables set")
+		if EDX:randomChance(50) then
+			adjustment = -10
+		end
+		while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+			dirAdjust = dirAdjust + adjustment
+			dirAdjusted = dirAdjusted + dirAdjust
+			while dirAdjusted &gt;= 360 do
+				dirAdjusted = dirAdjusted - 360
+			end
+			while dirAdjusted &lt; 0 do
+				dirAdjusted = dirAdjusted + 360
+			end
+			x, y, z = EDX:get360Coordinates(retreatLoc, dirAdjusted, 0, 500)
+		end
+		log("retreat direction calculated "..dirAdjusted)
+		temp.retreatDir = dirAdjusted
+		temp.retreatLoc = {x, y, z}
+		for echelon, data in pairs(temp) do
+			if type(echelon) == "string" and OFP:isEchelon(echelon) and OFP:isAlive(echelon)  then
+				rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+				log("waypoint spawned for echelon "..echelon)
+				if not temp.smoke then
+					local leader = OFP:getLeaderOfEchelon(echelon)
+					local ne = OFP:getNearestEnemy(echelon, OFP:getSide(leader), false)
+					OFP:throwGrenade(leader, ne, "SmokeGrenade", "OVERRIDE")
+				 	log("throwing smoke "..leader)
+				end
+			end
+		end
+		log("Retreat ordered for assaultID "..assaultID.." to bearing "..dirAdjusted)
+		temp.retreat = EDX:serialTimer("retreatCheck", 5000, assaultID)
+		temp.smoke = true
+		assaultTable[assaultID] = temp
+	end
+end
+
+function retreatCheck(assaultID, timerID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		local retreatLoc = temp.retreatLoc
+		local newMove = true
+		local anyAlive = false
+		for ech, data in pairs(temp) do
+			if type(ech) == "string" and OFP:isEchelon(ech) then
+				if OFP:isAlive(ech) then
+					anyAlive = true
+					local echLoc = {OFP:getPosition(ech)}
+					if EDX:get2dDistance(echLoc[1], echLoc[3], retreatLoc[1], retreatLoc[3]) &gt; 100 then
+						newMove = nil
+						log("echelons are not in place, not ready for new move order")
+						break
+					end
+				end
+			end
+		end
+		if not anyAlive then
+			EDX:deleteTimer(timerID)
+			return
+		end
+		if newMove then
+			EDX:deleteTimer(timerID)
+			abortAssault(assaultID)
+		else
+			EDX:setTimer(timerID, 5000)
+		end
+	end
+end
+
+function assaultCleanup(assaultID, timerID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		local targetLoc = temp.targetLoc
+		local assaultRemove = true
+		for ech, data in pairs(temp) do
+			if type(ech) == "string" and OFP:isEchelon(ech) then
+				if OFP:isAlive(ech) then
+					assaultRemove =  nil
+					local echMembers = EDX:grpToTable(ech)
+					for i, member in ipairs(echMembers) do
+						if EDX:getPrimaryPlayer() ~= "" then
+							if OFP:getDistance(member,  EDX:getPrimaryPlayer()) &gt; 1000 then
+								OFP:despawnEntity(member)
+								log(member.." despawned")
+							end
+						else
+							local memberPos = {OFP:getPosition(member)}
+							if EDX:get3dDistance(memberPos[1], memberPos[2], memberPos[3], targetLoc[1], targetLoc[2], targetLoc[3]) &gt; 1000 then
+								OFP:despawnEntity(member)
+								log(member.." despawned")
+							end
+						end
+					end
+				end
+			end
+		end
+		if assaultRemove then
+			temp.rem = true
+			EDX:deleteTimer(timerID)
+			EDX:serialTimer("removeAssault", 120000, assaultID)
+		else
+			EDX:setTimer(timerID, 10000)
+		end
+		assaultTable[assaultID] = temp
+	end
+end
+
+function removeAssault(assaultID, timerID)
+	log("remove assault for "..assaultID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		for ech, data in pairs(temp) do
+			log("checking entry for "..tostring(ech))
+			if type(ech) == "string" and OFP:isEchelon(ech) then
+				log("entry is echelon "..ech)
+				if data.setID then
+					OFP:destroyEntitySet(data.setID)
+					log("destroying entity set "..data.setID)
+				end
+			end
+		end
+		if temp.assault then
+			EDX:deleteTimer(temp.assault)
+		end
+		if temp.cleanup then
+			EDX:deleteTimer(temp.cleanup)
+		end
+		if temp.retreat then
+			EDX:deleteTimer(temp.retreat)
+		end
+		assaultTable[assaultID] = nil
+		log("Assault "..assaultID.." has been removed")
+	end
+end
+
+function onDespawnEntitySet( setID )
+	log("entity set destroyed "..setID)
+end
+
+function onSpawnedReady( setName, setID, tableOfEntities, errorCode )
+	if spawned[setID] then
+		local temp = assaultTable[spawned[setID]] or {}
+		local echelon = EDX:getEchelon(tableOfEntities)
+		EDX:setAutoLights(echelon)
+		temp[echelon] = {}
+		temp[echelon].setID = setID
+		assaultTable[spawned[setID]] = temp
+		spawned[setID] = nil
+	elseif moveWP[setID] then
+		local echelon = moveWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:move(echelon, tableOfEntities[1], "OVERRIDE")
+		log("move order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		moveWP[setID] = nil
+	elseif rapidWP[setID] then
+		local echelon = rapidWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:rapidMove(echelon, tableOfEntities[1], "OVERRIDE")
+		log("rapid move order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		rapidWP[setID] = nil
+	elseif assaultWP[setID] then
+		local echelon = assaultWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:assault(echelon, tableOfEntities[1], "OVERRIDE")
+		log("assault order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		assaultWP[setID] = nil
+	end
+end
+
+function getID(unitOrEchelonName)
+	debugInfo = "searching for assault ID for "..unitOrEchelonName
+	if OFP:isUnit(unitOrEchelonName) then
+		for id, entry in pairs(assaultTable) do
+			for echelon, data in pairs(entry) do
+				if OFP:isInEchelon(unitOrEchelonName, echelon) then
+					debugInfo = nil
+					return id
+				end
+			end
+		end
+	elseif OFP:isEchelon(unitOrEchelonName) then
+		for id, entry in pairs(assaultTable) do
+			for echelon, data in pairs(entry) do
+				if unitOrEchelonName == echelon then
+					debugInfo = nil
+					return id
+				end
+			end
+		end
+	end
+end
+
+
+function log(message)
+    if logtofile then
+    local logFile = io.open("./"..SCRIPT_NAME.." Log.txt", "a+")
+        if message ~= nil then
+            logFile:write(os.date() .. ": " .. message .. "\n")
+        else
+            logFile:write(os.date() .. ": (nil)\n")
+        end
+        logFile:close()
+    end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

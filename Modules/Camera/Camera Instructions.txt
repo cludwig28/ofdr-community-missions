@@ -1,0 +1,44 @@
+OFDR Camera Module by tvig0r0us
+To use the camera module simply extract the camera folder to a location of your choice on your computer.
+You will need to import the module into the project.
+To do this, simply open the editor.
+Load your project.
+Go to the file menu option and go to "Marker Collection".
+Select "Load".
+Navigate to the camera folder you extracted from the zip and select the "Camera Module.markerscollection.xml".
+You should now have the script and all of the entity sets required to use the free cameras in your mission.
+In this case the camera functions have been incorporated into the autocomplete and can be accessed from your script by typing "EDX".
+A list will appear with all of the commands that are available from the camera script.
+
+For a very small example where a free cam is created on the player's position see the "simple freecam.mssn"
+
+Camera script command list
+
+EDX:initCams() --Initialized the cams script... you must allow a couple of seconds before you use a camera after the script is initialized.(by default the script is disabled)
+EDX:disableCams() --Disables the cams script... recommended when the cams are not in use (by default the script is disabled)
+EDX:createCamera(returnCamera) --creates a camera instance and retuns the newly created cameraID
+EDX:setCamera(cameraID, cameraPosition, CameraAngle, cameraDirection, cameraFacingOffset, showLetterbox) --creates/sets the settings for the given cameraID
+EDX:setCameraRotation(cameraID, cameraSpeed, cameraTurnSpeed, cameraRotationSpeed, camerAscentSpeed) --creates/sets the movement settings for the given cameraID
+EDX:setCameraTarget(cameraID, targetEntity) --sets a camera to keep the given target in the center of the frame on a horizontal plane(doesn't work for up and down)
+EDX:setCameraFollowTarget(cameraID, targetEntity) --sets a camera to move with the given target maintaining the offset at the time the camera was activated
+EDX:camTarget(targetEntity) --sets the currently selected camera to keep the given target in a selected frame(only use when a camera is active)
+EDX:camRotateToTarget(target, rotateSpeed) --makes the currently selected camera pan to the given target at the given speed in degrees per second
+EDX:camMoveToTarget(target, moveSpeed) --makes the currently selected camera move to a given target point at the given movement speed in meters per second
+EDX:activateCamera(cameraID) --activates or switches to the camera with the given ID
+EDX:activateControlledCamera(cameraID) --activates or switches to the camera with the given ID and allows hotkey control over the camera
+EDX:deactivateCamera() --deactivates the current camera and switches back to the player entity or entity given when the camera was created
+EDX:deleteCamera(cameraID) --removes the camera with the given camera ID
+EDX:camSnapShot(cameraID) --takes a snapshot of the current camera position and settings and records it to an existing cameraID or creates a new one if one is not specified
+EDX:getCameraPosition() --returns the x,y,z coordinate of the current camera at it's current position
+EDX:displayCameraInfo(onOff) --displays debugging information on screen for the current camera
+
+Events
+
+onCamRotateCompleted(camRotateTarget, camRotateSpeed) --fires when a camera has completed its rotation to a target from the EDX:camRotateToTarget command
+onCamMoveCompleted(camMoveTarget, camMoveSpeed) --fires when a camera has completed its move to a target from the EDX:camMoveToTarget command
+
+
+
+
+Cheers
+

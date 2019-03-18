@@ -1,0 +1,171 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="menuScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="-144.9399" Y="-2023.327">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="menuMod">
+          <Script>--[[Menu Module v001 by tvig0r0us
+
+LIST OF KEY VALUES PASSED TO BE USED AS THE KEY PARAMETER WHEN ADDING A MENU ITEM TO A MENU
+"Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6" , "Numpad7", "Numpad8", "Numpad9",
+"Numpad/", "Numpad*", "Numpad-", "Numpad+", "NumpadClear", "NumpadPgUp", "NumpadPgDn", "NumpadHome",
+"NumpadEnd", "NumpadIns", "NumpadDel", "Numpad.", "NumpadUp", "NumpadDown", "NumpadLeft", "NumpadRight"
+
+Only the first five entries in any menu will be displayed, even though you can create many more menu items.
+This is because the display is limited to five lines. Make sure if you create a menu with more than 5 selections
+that you list them in the five displayed lines.
+]]
+
+MENU_TIMEOUT = 20000; --sets the amount of time elapsed before the menu forces closed
+
+
+--======================DO NOT EDIT BELOW THIS POINT UNLESS YOU KNOW EXACTLY WHAT YOU'RE DOING!!============================
+function onCreate()
+	if not menus then menus = {} end
+	if not id then id = 0 end
+end
+
+function onEDXInitialized()
+	--Creates a new menu with the given menu name or id if no menu name is given... returns menu name or id of created menu
+	function EDX:newMenu(menuName)
+		return newMenu(menuName);
+	end
+	
+	--Adds a new menu item or overwrites an existing menu item. If the passed index is out of bounds the menu item
+	--will be placed at the end of the menu. Returns the index of the item created.
+	--Params:
+	--menuName[string or number]-name or id of menu
+	--disp[string]-The text displayed on the screen (first 5 entries only)
+	--key[string]-The key that triggers the function named (a list of valid key names can be found above)
+	--func[string]-The name of the function to be executed when the corresponding key is pressed
+	--params[array]-An array of parameters to pass to the function
+	--index[number]-The position in the menu where the item will appear. Uses the end of the menu if none or overwrites
+		--an item at the named index
+	function EDX:setMenuItem(menuName, disp, key, func, params, index)
+		return setMenuItem(menuName, disp, key, func, params, index);
+	end
+	
+	--Removes a menu item from a menu and ** shifts all items after the removed item up one index **
+	function EDX:removeMenuItem(menuName, index)
+		return removeMenuItem(menuName, index);
+	end
+	
+	--This function opens a menu that has been defined by the menu name or id used when the menu was created
+	function EDX:openMenu(menuName)
+		return openMenu(menuName);
+	end
+end
+
+function onKeyPress(key)
+	if activeMenu then
+		for index,item in ipairs(menus[activeMenu]) do
+			if item.key == key then
+				closeMenu();
+				EDX:distributeFunction(item.func, unpack(item.params));
+			end
+		end
+		return true;
+	end
+end
+
+function getNewId()
+	id = id + 1;
+	return id;
+end
+
+function newMenu(m)
+	local menuName = m or getNewId();
+	if menus[menuName] then
+		debugInfo = "WARNING[newMenu]:Menu "..menuName.." will be overwritten"
+	end
+	menus[menuName] = {};
+	return menuName;
+end
+
+function setMenuItem(menuName, disp, key, func, params, index)
+	if not menuName then
+		debugInfo = "WARNING[addMenuItem]:Missing required arguments";
+		return debugInfo;
+	elseif not menus[menuName] then
+		debugInfo = "WARNING[addMenuItem]:Menu does not exist";
+		return debugInfo;
+	else
+		local temp = {};
+		temp.disp = disp or "";
+		temp.key = key or "";
+		temp.func = func or "";
+		temp.params = params or {};
+		if index and index &gt; 0 and index &lt;= #menus[menuName] then
+			menus[menuName][index] = temp;
+			return index;
+		else
+			local i = #menus[menuName] + 1;
+			menus[menuName][i] = temp;
+			return i;
+		end
+	end
+end
+
+function removeMenuItem(n, i)
+	if not menus[n] then
+		debugInfo = "WARNING[removeMenuItem]:Menu does not exist";
+		return debugInfo;
+	else
+		local menu = menus[n];
+		if not menu[i] then
+			debugInfo = "WARNING[removeMenuItem]:Menu item does not exist";
+			return debugInfo;
+		else
+			table.remove(menu, i);
+			return "Item "..i.." has been removed from menu "..n;
+		end
+	end
+end
+
+function displayMenu(m)
+	local line = 1;
+	while line &lt;= 5 do
+		if m[line] then
+			local option = m[line].disp;
+			OFP:displaySystemMessage(option);
+		else
+			OFP:displaySystemMessage("-");
+		end
+		line = line + 1;
+	end
+	EDX:simpleTimer("closeMenu", MENU_TIMEOUT);
+end
+
+function openMenu(n)
+	if menus[n] then
+		activeMenu = n;
+		displayMenu(menus[activeMenu]);
+		return n;
+	else
+		debugInfo = "WARNING[openMenu]:Menu does not exist";
+		return debugInfo;
+	end
+end
+
+function closeMenu()
+	activeMenu = nil;
+	clearDisplay();
+	EDX:deleteTimer("closeMenu");
+end
+
+function clearDisplay()
+	for i=1,5 do
+		OFP:displaySystemMessage("-")
+	end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

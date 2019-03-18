@@ -1,0 +1,18 @@
+OFDR Parachute Module by tvig0r0us
+To use the Parachute Module simply extract the parachute folder to a location of your choice on your computer.
+You will need to import the module into the project.
+To do this, simply open the editor.
+Load your project.
+Go to the file menu option and go to "Marker Collection".
+Select "Load".
+Navigate to the transport helo folder you extracted from the zip and select the "Parachute Module.markerscollection.xml".
+You should now have the script and all of the entity sets required to use the Parachute Module in your mission.
+
+For an example featuring the use of the Parachute Module see the "transportHelo2.mssn"
+
+Transport Helicopter Events
+
+onParachuteInitialized() --fires after the parachute script is completely initialized.  It's recommended to wait until this function fires before doing anything else in your mission as the initialization process is very intensive.
+
+
+Cheers

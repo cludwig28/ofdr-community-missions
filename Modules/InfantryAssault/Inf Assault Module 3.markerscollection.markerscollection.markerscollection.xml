@@ -1,0 +1,1002 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="assaultmodule" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="False" Exportable="False" />
+      </Marker>
+      <Marker SerializationID="3" Name="assaultMod" TemplateID="59584148284663864" TemplateName="secondaryScript" X="10449.16" Y="-537.6992">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="assault">
+          <Script>SCRIPT_NAME = "assault"
+logtofile = false
+INFO = "Infantry Assault Module v1.0 by tvig0r0us"
+--This module requires EDX v20130101 or better.
+
+startMin = 500
+startMax = 800
+readyMin = 250
+readyMax = 350
+flankAngle = 65
+angleSpread = 30
+breakThreshold = 30 --set break points per echelon
+suppressGroups = {
+	["us"] = "aspla",
+	["pla"] = "asus",
+	[0] = "aspla",
+	[1] = "asus",
+}
+
+function onEDXInitialized()
+-------------------------------------declare public functions
+
+	--Initializes an assault on the given location, by the given side, of the given size in echelons, from the given direction in degrees (-1 picks random direction)
+	function EDX:assaultLocation(location, side, size, direction)
+		return assaultLocation(location, side, size, direction)
+	end
+	
+	--Invokes the abort sequence for the given assaultID.  Aborted assault will also fire onAssaultBroken event.
+	function EDX:abortAssault(assaultID)
+		if assaultTable[assaultID] then
+			assaultTable[assaultID].abort = true
+		end
+	end
+	
+	------------------This function does nothing right now... Testing search and destroy instead of assault.
+	function EDX:setAssaultSuppression(assaultID, unitEchelonOrGroupName)
+		setAssaultSuppression(assaultID, unitEchelonOrGroupName)
+	end
+	
+	--Sets the center position used for distance calculations to despawn assault forces, centerLocation can be entity or table of 3d coords
+	function EDX:setDespawnCenter(assaultID, centerLocation)
+		setDespawnCenter(assaultID, centerLocation)
+	end
+	
+	function EDX:setBreakThreshold(assaultID, threshold)
+		if assaultTable[assaultID] then
+			assaultTable[assaultID].breakThreshold =  threshold
+		end
+	end
+	
+	function EDX:setBreakPoints(assaultID, points)
+		if assaultTable[assaultID] then
+			assaultTable[assaultID].breakPoint =  points
+		end
+	end
+	
+	function EDX:getBreakPoints(assaultID)
+		if assaultTable[assaultID] then
+			local count = EDX:getSoldierCount(assaultID)
+			return assaultTable[assaultID].breakPoint + (assaultTable[assaultID].forceSize - count), math.floor(assaultTable[assaultID].breakThreshold*(count/assaultTable[assaultID].forceSize))
+		end
+	end
+	
+	--Returns the number of soldiers remaining in the force for the given assaultID
+	function EDX:getSoldierCount(assaultID)
+		return getSoldierCount(assaultID)
+	end
+	
+end
+
+function onMissionStart()
+	assaultTable = {}
+	spawned = {}
+	IDNum = 1
+	moveWP = {}
+	rapidWP = {}
+	searchWP = {}
+	assaultWP = {}
+	fallbackWP = {}
+	defendWP = {}
+	command_ID = {}
+	sets = {
+		[0] = {"asus1", "asus2"},
+		[1] = {"aspla1", "aspla2"},
+		["us"] = {"asus1", "asus2"},
+		["pla"] = {"aspla1", "aspla2"},
+	}
+end
+
+function getSoldierCount(assaultID)
+	if assaultTable[assaultID] then
+		local soldierCount = 0
+		local temp = assaultTable[assaultID]
+		for ech, data in pairs(temp) do
+			if type(ech) == "string" and OFP:isEchelon(ech) and OFP:isAlive(ech) then
+				soldierCount = soldierCount + OFP:getEchelonSize(ech)
+			end
+		end
+		return soldierCount
+	end
+end
+
+function setAssaultSuppression(assaultID, unitEchelonOrGroup)
+	if assaultTable[assaultID] then
+		if OFP:isUnit(unitEchelonOrGroup)
+		or OFP:isEchelon(unitEchelonOrGroup)
+		or OFP:isGroup(unitEchelonOrGroup) then
+			assaultTable[assaultID].suppressGroup = unitEchelonOrGroup
+		end
+	end
+end
+
+function setDespawnCenter(assaultID, center)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		temp.despawnCenter = center
+		if type(center) == "string" then
+			temp.despawnCenter = {OFP:getPosition(center)}
+		end
+		assaultTable[assaultID] = temp
+	end
+end
+
+function assaultLocation(location, side, size, direction)
+	log("Assault location is "..location)
+	local max, used = OFP:getMissionQuota()
+	local spawnPool = max - used - 3
+	if size * 4 &gt; spawnPool then
+		debugInfo = "assaultLocation not enough space in spawn pool"
+		return
+	end
+	local _location = location
+	if type(location) == "string" then
+		_location = {OFP:getPosition(location)}
+	end
+	if EDX:isLake(_location[1], _location[3]) or EDX:isOcean(_location[1], _location[3]) then
+		debugInfo = "assaultLocation invalid location"
+		return
+	end
+	local entitySets = sets[side]
+	local dir = direction or -1
+	debugInfo = "calc spawn position"
+	--------------------------------------------calculate spawn position of assaulting force
+	local startAttempt = 1
+	local startLoc = {EDX:get360Coordinates(_location, dir, angleSpread, startMin, startMax)}
+	while EDX:isLake(startLoc[1], startLoc[3]) or EDX:isOcean(startLoc[1], startLoc[3]) do
+		if startAttempt &lt;= 10 then
+			startAttempt = startAttempt + 1
+		else
+			debugInfo = "assaultLocaion could not find valid start location"
+			return
+		end
+		startLoc = {EDX:get360Coordinates(_location, dir, angleSpread, startMin, startMax)}
+	end
+	debugInfo = "spawnLocation calculated"
+	------------------------------------------spawn assaulting force
+	for i = 1, size do
+		spawned[OFP:spawnEntitySetAtLocation(EDX:getRandom(entitySets), startLoc[1], startLoc[2], startLoc[3])] = IDNum
+	end
+	local tempEntry = {}
+	tempEntry.startLoc = startLoc
+	tempEntry.targetLoc = _location
+	tempEntry.side = side
+	tempEntry.suppressGroup = suppressGroups[side]
+	tempEntry.forceSize = size * 4
+	tempEntry.breakThreshold = breakThreshold * size
+	tempEntry.breakPoint = 0
+	assaultTable[IDNum] = tempEntry
+	EDX:serialTimer("startAssault", 2000, IDNum)
+	local tempID = IDNum
+	IDNum = IDNum + 1
+	debugInfo = nil
+	return tempID
+end
+
+function startAssault( assaultID, timerID )
+	local temp = assaultTable[assaultID]
+----------------------------------------sort assault teams and give initial assault orders
+	local assignments = {}
+	assignments.reinforce = {}
+	local startLoc = temp.startLoc
+	local targetLoc = temp.targetLoc
+	local bft = EDX:getBearing(targetLoc[1], targetLoc[3], startLoc[1], startLoc[3])
+	for echelon, data in pairs(temp) do
+		if type(echelon) == "string" and OFP:isEchelon(echelon) then
+--------------------------------------------------------get frontal assault team
+			if not assignments.front then
+				assignments.front = echelon
+				local moveAttempt = 1
+				local x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+				while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+					if moveAttempt &lt;= 10 then
+						 x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+						 moveAttempt = moveAttempt + 1
+					else
+						table.insert(assignments.reinforce, echelon)
+						assignments.front = true
+						log("reinforce "..echelon)
+					end
+				end
+				if not EDX:isInTable(echelon, assignments.reinforce) then
+					rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+					temp[echelon].movePos = {x, y, z}
+					log("frontal assault "..echelon)
+				end
+------------------------------------------------------get flanking assault teams
+			elseif not assignments.flankLeft or not assignments.flankRight then
+				if assignments.flankRight then
+					local moveAttempt = 1
+					local btr = bft + flankAngle
+					if btr &gt;= 360 then
+						btr = btr - 360
+					end
+					local x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+					while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+						if moveAttempt &lt;= 10 then
+							 x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+							 moveAttempt = moveAttempt + 1
+						else
+							table.insert(assignments.reinforce, echelon)
+							assignments.flankLeft = true
+							log("reinforce "..echelon)
+						end
+					end
+					if not EDX:isInTable(echelon, assignments.reinforce) then
+						rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+						temp[echelon].movePos = {x, y, z}
+						assignments.flankLeft = echelon
+						log("left flank "..echelon)
+					end
+				elseif assignments.flankLeft then
+					local moveAttempt = 1
+					local btr = bft - flankAngle
+					if btr &lt; 0 then
+						btr = btr + 360
+					end
+					local x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+					while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+						if moveAttempt &lt;= 10 then
+							 x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+							 moveAttempt = moveAttempt + 1
+						else
+							table.insert(assignments.reinforce, echelon)
+							assignments.flankRight = true
+							log("reinforce "..echelon)
+						end
+					end
+					if not EDX:isInTable(echelon, assignments.reinforce) then
+						rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+						temp[echelon].movePos = {x, y, z}
+						assignments.flankRight = echelon
+						log("right flank "..echelon)
+					end
+				else
+					if EDX:randomChance(50) then
+						local moveAttempt = 1
+						local btr = bft + flankAngle
+						if btr &gt;= 360 then
+							btr = btr - 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, echelon)
+								assignments.flankLeft = true
+								log("reinforce "..echelon)
+							end
+						end
+						if not EDX:isInTable(echelon, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+							temp[echelon].movePos = {x, y, z}
+							assignments.flankLeft = echelon
+							log("left flank "..echelon)
+						end
+					else
+						local moveAttempt = 1
+						local btr = bft - flankAngle
+						if btr &lt; 0 then
+							btr = btr + 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, echelon)
+								assignments.flankRight = true
+								log("reinforce "..echelon)
+							end
+						end
+						if not EDX:isInTable(echelon, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+							temp[echelon].movePos = {x, y, z}
+							assignments.flankRight = echelon
+							log("right flank "..echelon)
+						end
+					end
+				end
+----------------------------------------------------get suppression team
+			elseif not assignments.suppress then
+				local moveAttempt = 1
+				local x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+				while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+					if moveAttempt &lt;= 10 then
+						 x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+						 moveAttempt = moveAttempt + 1
+					else
+						table.insert(assignments.reinforce, echelon)
+						assignments.suppress = true
+						log("reinforce "..echelon)
+					end
+				end
+				if not EDX:isInTable(echelon, assignments.reinforce) then
+					rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+					temp[echelon].movePos = {x, y, z}
+					assignments.suppress = echelon
+					log("suppression "..echelon)
+				end
+			else
+--------------------------------------------------store remaining teams to reinforcements
+				table.insert(assignments.reinforce, echelon)
+				log("reinforce "..echelon)
+			end
+		end
+	end
+	temp.assault = EDX:serialTimer("assaultCheck", 5000, assaultID)
+	temp.cleanup = EDX:serialTimer("assaultCleanup", 30000, assaultID)
+	temp.assignments = assignments
+	assaultTable[assaultID] = temp
+	EDX:deleteTimer(timerID)
+end
+
+function assaultCheck(assaultID, timerID)
+	--log("start assaultCheck for "..assaultID)
+	local temp = assaultTable[assaultID]
+	local assignments = temp.assignments
+	local assaultBroken = false
+	local resetPoints = true
+	local size = 0
+	for ech, data in pairs(temp) do
+		if type(ech) == "string" and OFP:isEchelon(ech) then
+			if  OFP:isAlive(ech) then
+				local echMembers = EDX:grpToTable(ech)
+				for i, member in ipairs(echMembers) do
+					size = size + 1
+					local morale = OFP:getMorale(member)
+					if morale == "EBroken"
+					or morale == "EBreaking" then
+						resetPoints = false
+						temp.breakPoint = temp.breakPoint + 1
+					end
+				end
+			end
+		end
+	end
+	if resetPoints then
+		temp.breakPoint = 0
+	elseif temp.breakPoint + (temp.forceSize - size) &gt; math.floor(temp.breakThreshold * (size / temp.forceSize)) then
+		assaultBroken = true
+	else
+		log("assault "..assaultID.." has break points "..temp.breakPoint)	
+	end
+	if assaultBroken or temp.abort then
+		log("assault "..assaultID.." has been broken")
+		EDX:distributeFunction("onAssaultBroken", assaultID)
+		EDX:deleteTimer(timerID)
+		temp.abort = true
+		assaultTable[assaultID] = temp
+		abortAssault(assaultID)
+		return
+	end
+	for detail, echelon in pairs(assignments) do
+		if type(echelon) == "string" then
+			if OFP:isAlive(echelon) then
+				if not temp[echelon].go then
+					local tpos = temp[echelon].movePos
+					local cpos = {OFP:getPosition(echelon)}
+					if EDX:get2dDistance(tpos[1], tpos[3], cpos[1], cpos[3]) &lt;= 50 then
+						if detail ~= "suppress" then
+							local x, y, z = unpack(temp.targetLoc)
+							assaultWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+						else
+							--OFP:suppress(echelon, suppressGroups[temp.side], "OVERRIDE")
+							searchWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+							log("suppression  ordered "..echelon)
+						end
+						temp[echelon].go = true
+					end
+				end
+			else
+				if #assignments.reinforce &gt; 0 then
+					local startLoc = temp.startLoc
+					local targetLoc = temp.targetLoc
+					local bft = EDX:getBearing(targetLoc[1], targetLoc[3], startLoc[1], startLoc[3])
+					local ech = assignments.reinforce[1]
+					assignments[detail] = ech
+					table.remove(assignments.reinforce, 1)
+					if detail == "front" then
+						local moveAttempt = 1
+						local x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("frontal assault ordered "..ech)
+						end
+					elseif detail == "flankLeft" then
+						local moveAttempt = 1
+						local btr = bft + flankAngle
+						if btr &gt;= 360 then
+							btr = btr - 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("left flank ordered "..ech)
+						end
+					elseif detail == "flankRight" then
+						local moveAttempt = 1
+						local btr = bft - flankAngle
+						if btr &lt; 0 then
+							btr = btr + 360
+						end
+						local x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, btr, angleSpread, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("right flank ordered "..ech)
+						end
+					elseif detail == "suppress" then
+						local moveAttempt = 1
+						local x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+						while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+							if moveAttempt &lt;= 10 then
+								 x, y, z = EDX:get360Coordinates(targetLoc, bft, angleSpread, readyMin, readyMax)
+								 moveAttempt = moveAttempt + 1
+							else
+								table.insert(assignments.reinforce, ech)
+							end
+						end
+						if not EDX:isInTable(ech, assignments.reinforce) then
+							rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = ech
+							temp[ech].movePos = {x, y, z}
+							log("suppression ordered "..ech)
+						end
+					end
+				end
+			end
+		end
+	end
+	temp.assignments = assignments
+	assaultTable[assaultID] = temp
+	EDX:setTimer(timerID, 1000)
+end
+
+function abortAssault(assaultID)
+	--log("start abort for "..assaultID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		local retreatLoc = temp.retreatLoc or temp.startLoc
+		local targetLoc = temp.targetLoc
+		local retreatDir = temp.retreatDir or EDX:getBearing(targetLoc[1], targetLoc[3], retreatLoc[1], retreatLoc[3])
+		local x, y, z = EDX:get360Coordinates(retreatLoc, retreatDir, 0, 500)
+		local dirAdjust = 0
+		local dirAdjusted = retreatDir
+		local adjustment = 10
+		--log("local variables set")
+		if EDX:randomChance(50) then
+			adjustment = -10
+		end
+		while EDX:isLake(x, z) or EDX:isOcean(x, z) do
+			dirAdjust = dirAdjust + adjustment
+			dirAdjusted = dirAdjusted + dirAdjust
+			while dirAdjusted &gt;= 360 do
+				dirAdjusted = dirAdjusted - 360
+			end
+			while dirAdjusted &lt; 0 do
+				dirAdjusted = dirAdjusted + 360
+			end
+			x, y, z = EDX:get360Coordinates(retreatLoc, dirAdjusted, 0, 500)
+		end
+		--log("retreat direction calculated "..dirAdjusted)
+		temp.retreatDir = dirAdjusted
+		temp.retreatLoc = {x, y, z}
+		for echelon, data in pairs(temp) do
+			if type(echelon) == "string" and OFP:isEchelon(echelon) and OFP:isAlive(echelon)  then
+				if not temp.smoke then
+					local leader = OFP:getLeaderOfEchelon(echelon)
+					local ne = OFP:getNearestEnemy(echelon, OFP:getSide(leader), false)
+					command_ID[OFP:throwGrenade(leader, ne, "SmokeGrenade", "OVERRIDE")] = {rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)],echelon}
+				 	log("throwing smoke "..leader)
+				else
+ 					rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)] = echelon
+ 					log("waypoint spawned for echelon "..echelon)
+				end
+			end
+		end
+		log("Retreat ordered for assaultID "..assaultID.." to bearing "..dirAdjusted)
+		temp.retreat = EDX:serialTimer("retreatCheck", 1000, assaultID)
+		temp.smoke = true
+		assaultTable[assaultID] = temp
+	end
+end
+
+function retreatCheck(assaultID, timerID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		local retreatLoc = temp.retreatLoc
+		local newMove = true
+		local anyAlive = false
+		for ech, data in pairs(temp) do
+			if type(ech) == "string" and OFP:isEchelon(ech) then
+				if OFP:isAlive(ech) then
+					anyAlive = true
+					local echLoc = {OFP:getPosition(ech)}
+					if EDX:get2dDistance(echLoc[1], echLoc[3], retreatLoc[1], retreatLoc[3]) &gt; 100 then
+						newMove = nil
+						log("echelons are not in place, not ready for new move order")
+						break
+					end
+				end
+			end
+		end
+		if not anyAlive then
+			EDX:deleteTimer(timerID)
+			return
+		end
+		if newMove then
+			log("Retreat echelons ready for new move "..assaultID)
+			EDX:deleteTimer(timerID)
+			abortAssault(assaultID)
+		else
+			EDX:setTimer(timerID, 1000)
+		end
+	end
+end
+
+function assaultCleanup(assaultID, timerID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		local targetLoc = temp.targetLoc
+		local assaultRemove = true
+		local centerPos = targetLoc
+		if temp.despawnCenter then
+			local centerPos = temp.despawnCenter
+		elseif EDX:getPrimaryPlayer() ~= "" then
+			local centerPos = {OFP:getPosition(EDX:getPrimaryPlayer())}
+		end
+		for ech, data in pairs(temp) do
+			if type(ech) == "string" and OFP:isEchelon(ech) then
+				if OFP:isAlive(ech) then
+					assaultRemove =  nil
+					local echMembers = EDX:grpToTable(ech)
+					for i, member in ipairs(echMembers) do
+						local memberPos = {OFP:getPosition(member)}
+						if EDX:get2dDistance(memberPos[1], memberPos[3], centerPos[1], centerPos[3]) &gt; 1000 then
+							OFP:despawnEntity(member)
+							log(member.." despawned")
+						end
+					end
+				end
+			end
+		end
+		if assaultRemove then
+			log("Assault ready for final cleanup and removal "..assaultID)
+			temp.rem = true
+			EDX:deleteTimer(timerID)
+			EDX:serialTimer("removeAssault", 120000, assaultID)
+		else
+			EDX:setTimer(timerID, 10000)
+		end
+		assaultTable[assaultID] = temp
+	end
+end
+
+function removeAssault(assaultID, timerID)
+	--log("remove assault for "..assaultID)
+	if assaultTable[assaultID] then
+		local temp = assaultTable[assaultID]
+		for ech, data in pairs(temp) do
+			log("checking entry for "..tostring(ech))
+			if type(ech) == "string" and OFP:isEchelon(ech) then
+				log("entry is echelon "..ech)
+				if data.setID then
+					OFP:destroyEntitySet(data.setID)
+					log("destroying entity set "..data.setID)
+				end
+			end
+		end
+		if temp.assault then
+			EDX:deleteTimer(temp.assault)
+		end
+		if temp.cleanup then
+			EDX:deleteTimer(temp.cleanup)
+		end
+		if temp.retreat then
+			EDX:deleteTimer(temp.retreat)
+		end
+		assaultTable[assaultID] = nil
+		log("Assault "..assaultID.." has been removed")
+	end
+end
+
+function onDespawnEntitySet( setID )
+	log("entity set destroyed "..setID)
+end
+
+function onSpawnedReady( setName, setID, tableOfEntities, errorCode )
+	if spawned[setID] then
+		local temp = assaultTable[spawned[setID]] or {}
+		local echelon = EDX:getEchelon(tableOfEntities)
+		EDX:setAutoLights(echelon)
+		temp[echelon] = {}
+		temp[echelon].setID = setID
+		assaultTable[spawned[setID]] = temp
+		spawned[setID] = nil
+	elseif moveWP[setID] then
+		local echelon = moveWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:move(echelon, tableOfEntities[1], "OVERRIDE")
+		log("move order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		moveWP[setID] = nil
+	elseif rapidWP[setID] then
+		local echelon = rapidWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:rapidMove(echelon, tableOfEntities[1], "OVERRIDE")
+		log("rapid move order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		rapidWP[setID] = nil
+	elseif searchWP[setID] then
+		local echelon = searchWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:searchAndDestroy(echelon, tableOfEntities[1], 300, true, "OVERRIDE")
+		log("search and destroy order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		searchWP[setID] = nil
+	elseif assaultWP[setID] then
+		local echelon = assaultWP[setID]
+		local assaultID = getID(echelon)
+		local temp = assaultTable[assaultID]
+		temp[echelon].orderID = OFP:assault(echelon, tableOfEntities[1], "OVERRIDE")
+		log("assault order to "..echelon)
+		OFP:destroyEntitySet(setID)
+		assaultWP[setID] = nil
+	end
+end
+
+function getID(unitOrEchelonName)
+	debugInfo = "searching for assault ID for "..unitOrEchelonName
+	if OFP:isUnit(unitOrEchelonName) then
+		for id, entry in pairs(assaultTable) do
+			for echelon, data in pairs(entry) do
+				if OFP:isInEchelon(unitOrEchelonName, echelon) then
+					debugInfo = nil
+					return id
+				end
+			end
+		end
+	elseif OFP:isEchelon(unitOrEchelonName) then
+		for id, entry in pairs(assaultTable) do
+			for echelon, data in pairs(entry) do
+				if unitOrEchelonName == echelon then
+					debugInfo = nil
+					return id
+				end
+			end
+		end
+	end
+end
+
+function onCmdCompleted(commandID,commandName, unitorechelonName, isSuccessful)
+	command_ID[OFP:throwGrenade(leader, ne, "SmokeGrenade", "OVERRIDE")] = {rapidWP[OFP:spawnEntitySetAtLocation("aswpset", x, y, z)],echelon}
+	if command_ID[commandID] then -- and commandName == "" 
+		OFP:displaySystemMessage("commandName = "..commandName)
+		command_ID[commandID][1] = command_ID[commandID][2]
+		command_ID[commandID] = nil 
+ 	end
+end
+
+
+function log(message)
+    if logtofile then
+    local logFile = io.open("./"..SCRIPT_NAME.." Log.txt", "a+")
+        if message ~= nil then
+            logFile:write(os.date() .. ": " .. message .. "\n")
+        else
+            logFile:write(os.date() .. ": (nil)\n")
+        end
+        logFile:close()
+    end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="4" Name="aspla1" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="5" Name="EchelonI1" TemplateID="67298535397422246" TemplateName="Echelon" X="10454.6" Y="-563.7451">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_fireteam" UIArtName="rifle" UIEchelonName="#ofp_unitname_ft_assault" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="6" Name="ip06plfldr" TemplateID="58818106646096021" TemplateName="ip06plfldr" X="10450.1" Y="-567.7451">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="He" Rank="3" HeadTexture="c_head_asn_setF" HeadModel="c_head_asn_06" Voice="pla3" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10450.1, 0, -567.7451, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="7" Name="ip17pllmg" TemplateID="59006225351993493" TemplateName="ip17pllmg" X="10453.1" Y="-567.7451">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Shiming" Rank="1" HeadTexture="c_head_asn_setH" HeadModel="c_head_asn_08" Voice="pla4" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10453.1, 0, -567.7451, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="8" Name="ip21plqb" TemplateID="60297897280563420" TemplateName="ip21plqb" X="10456.1" Y="-567.7451">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Yu" Rank="2" HeadTexture="c_head_asn_setE" HeadModel="c_head_asn_05" Voice="pla2" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10456.1, 0, -567.7451, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="9" Name="ip21plqbI1" TemplateID="60297897280563420" TemplateName="ip21plqb" X="10459.1" Y="-567.7451">
+        <EntityProperties ParentEntitySetID="4" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Fangzhuo" Rank="2" HeadTexture="c_head_asn_setD" HeadModel="c_head_asn_04" Voice="pla2" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10459.1, 0, -567.7451, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="5" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="10" Name="aspla2" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="11" Name="EchelonI2" TemplateID="67298535397422246" TemplateName="Echelon" X="10454.6" Y="-551.2822">
+        <EntityProperties ParentEntitySetID="10" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_fireteam" UIArtName="rifle" UIEchelonName="#ofp_unitname_ft_cqbass" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="12" Name="ip06plfldrI1" TemplateID="58818106646096021" TemplateName="ip06plfldr" X="10450.1" Y="-555.2822">
+        <EntityProperties ParentEntitySetID="10" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Xhendong" Rank="3" HeadTexture="c_head_asn_setC" HeadModel="c_head_asn_03" Voice="pla1" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10450.1, 0, -555.2822, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="11" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="13" Name="ip08plrfl" TemplateID="58818108843911317" TemplateName="ip08plrfl" X="10453.1" Y="-555.2822">
+        <EntityProperties ParentEntitySetID="10" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Huang" Rank="0" HeadTexture="c_head_asn_setC" HeadModel="c_head_asn_03" Voice="pla1" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10453.1, 0, -555.2822, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="11" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="14" Name="ip12plgren" TemplateID="60297882516613340" TemplateName="ip12plgren" X="10456.1" Y="-555.2822">
+        <EntityProperties ParentEntitySetID="10" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Su" Rank="1" HeadTexture="c_head_asn_setC" HeadModel="c_head_asn_03" Voice="pla1" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10456.1, 0, -555.2822, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="11" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="15" Name="ip28pleng" TemplateID="59006247011379349" TemplateName="ip28pleng" X="10459.1" Y="-555.2822">
+        <EntityProperties ParentEntitySetID="10" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Tu" Rank="1" HeadTexture="c_head_asn_setF" HeadModel="c_head_asn_06" Voice="pla3" />
+        <GroupMemberProperties Group1="aspla" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10459.1, 0, -555.2822, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="11" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="16" Name="asus1" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="17" Name="EchelonI3" TemplateID="67298535397422246" TemplateName="Echelon" X="10438.45" Y="-563.3936">
+        <EntityProperties ParentEntitySetID="16" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_fireteam" UIArtName="rifle" UIEchelonName="#ofp_unitname_ft_assault" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="18" Name="iu06usfldrI1" TemplateID="58919030522669205" TemplateName="iu06usfldr" X="10433.95" Y="-567.3936">
+        <EntityProperties ParentEntitySetID="16" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Sanchez" Rank="3" HeadTexture="c_head_his_setB" HeadModel="c_head_his_02" Voice="Marine03" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10433.95, 0, -567.3936, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="17" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="19" Name="iu15uslmgI1" TemplateID="58976500587980949" TemplateName="iu15uslmg" X="10436.95" Y="-567.3936">
+        <EntityProperties ParentEntitySetID="16" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Kula" Rank="1" HeadTexture="c_head_cau_setC" HeadModel="c_head_cau_03" Voice="Marine07" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10436.95, 0, -567.3936, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="17" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="20" Name="iu19usatI1" TemplateID="58976893829146773" TemplateName="iu19usat" X="10439.95" Y="-567.3936">
+        <EntityProperties ParentEntitySetID="16" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Bourlakis" Rank="2" HeadTexture="c_head_cau_setC" HeadModel="c_head_cau_03" Voice="Marine09" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10439.95, 0, -567.3936, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="17" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="21" Name="iu08usrflI1" TemplateID="58919059597584533" TemplateName="iu08usrfl" X="10442.95" Y="-567.3936">
+        <EntityProperties ParentEntitySetID="16" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Mark" Rank="0" HeadTexture="c_head_cau_setE" HeadModel="c_head_cau_05" Voice="Marine04" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10442.95, 0, -567.3936, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="17" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="22" Name="asus2" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="23" Name="EchelonI4" TemplateID="67298535397422246" TemplateName="Echelon" X="10438.45" Y="-551.1064">
+        <EntityProperties ParentEntitySetID="22" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_fireteam" UIArtName="rifle" UIEchelonName="#ofp_unitname_ft_cqbass" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="24" Name="iu06usfldrI2" TemplateID="58919030522669205" TemplateName="iu06usfldr" X="10433.95" Y="-555.1064">
+        <EntityProperties ParentEntitySetID="22" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Mathews" Rank="3" HeadTexture="c_head_cau_setD" HeadModel="c_head_cau_04" Voice="Marine03" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10433.95, 0, -555.1064, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="23" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="25" Name="iu11usgren" TemplateID="58919121354516629" TemplateName="iu11usgren" X="10436.95" Y="-555.1064">
+        <EntityProperties ParentEntitySetID="22" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Traynor" Rank="1" HeadTexture="c_head_cau_setF" HeadModel="c_head_cau_06" Voice="Marine04" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10436.95, 0, -555.1064, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="23" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="26" Name="iu73uscqbrfl" TemplateID="66183150048929847" TemplateName="iu73uscqbrfl" X="10439.95" Y="-555.1064">
+        <EntityProperties ParentEntitySetID="22" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Burman" Rank="2" HeadTexture="c_head_cau_setA" HeadModel="c_head_cau_01" Voice="Marine01" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10439.95, 0, -555.1064, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="23" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="27" Name="iu27useng" TemplateID="58976911495555221" TemplateName="iu27useng" X="10442.95" Y="-555.1064">
+        <EntityProperties ParentEntitySetID="22" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" />
+        <PersonaProperties Surname="Cruz" Rank="1" HeadTexture="c_head_his_setA" HeadModel="c_head_his_01" Voice="Marine08" />
+        <GroupMemberProperties Group1="asus" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10442.95, 0, -555.1064, 1" AltitudeMode="SeaLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="23" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="28" Name="aswpset" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="2" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="29" Name="aswp" TemplateID="130425489857996851" TemplateName="waypoint" X="10466.31" Y="-557.583">
+        <EntityProperties ParentEntitySetID="28" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 10466.31, 0, -557.583, 1" AltitudeMode="SeaLevel" />
+        <WaypointProperties RapidMove="False" BlockerLogic="And" Delay="0" UserScript="" />
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

@@ -1,0 +1,599 @@
+﻿<MissionEditor.Mission Version="0.60">
+  <UserData>
+    <PerMissionState>
+      <MapView ViewCenterX="791.0713" ViewCenterY="-8006.716" ViewScale="35.27378" ViewRotation="0" />
+    </PerMissionState>
+  </UserData>
+  <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
+  <MarkerManager>
+    <MarkerAspectManagers></MarkerAspectManagers>
+    <Markers>
+      <Marker SerializationID="1" Name="Startup" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="True" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="2" Name="tgrid" TemplateID="130252823392184388" TemplateName="triggerzone" X="2497.926" Y="-13499.93">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <PolygonProperties Top="2000" Bottom="-1000" AltitudeMode="SeaLevel">
+          <Points>
+            <Point X="1997.92627" Y="-13999.9336" />
+            <Point X="2997.92627" Y="-13999.9336" />
+            <Point X="2997.92627" Y="-12999.9336" />
+            <Point X="1997.92627" Y="-12999.9336" />
+          </Points>
+        </PolygonProperties>
+        <GroupMemberProperties Group1="triggrid" />
+      </Marker>
+      <Marker SerializationID="3" Name="troad" TemplateID="130252823392184388" TemplateName="triggerzone" X="2025.015" Y="-10700.01">
+        <EntityProperties ParentEntitySetID="8" Description="" />
+        <PolygonProperties Top="2000" Bottom="-1000" AltitudeMode="SeaLevel">
+          <Points>
+            <Point X="2050.46167" Y="-10700.0146" />
+            <Point X="2047.05164" Y="-10687.292" />
+            <Point X="2037.738" Y="-10677.9756" />
+            <Point X="2025.01453" Y="-10674.5664" />
+            <Point X="2012.29138" Y="-10677.9756" />
+            <Point X="2002.97754" Y="-10687.292" />
+            <Point X="1999.56775" Y="-10700.0146" />
+            <Point X="2002.97754" Y="-10712.7373" />
+            <Point X="2012.29138" Y="-10722.0537" />
+            <Point X="2025.01453" Y="-10725.4619" />
+            <Point X="2037.738" Y="-10722.0537" />
+            <Point X="2047.05164" Y="-10712.7373" />
+          </Points>
+        </PolygonProperties>
+        <GroupMemberProperties Group1="trigroad" />
+      </Marker>
+      <Marker SerializationID="4" Name="sroadb1" TemplateID="64079280547853478" TemplateName="EntitySet" X="0" Y="0">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="5" Name="levelScript" TemplateID="130338588799821875" TemplateName="levelScript" X="-77.09756" Y="-2996.972">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="level">
+          <Script>--[[
+We only need to use the level script for some basic configuration of the EDX.
+The EDX retroutes some of the games event handlers so they can be used on secondary scripts.
+Because of this it is strongly recommended that you not use the level script to code any elements
+of your mission.  If you do so and things do not work, you were warned!
+]]--
+
+DEBUG = true --this enables the built in EDX debugging mechanism and generates a file in the main game directory called "EDX DEBUG.txt"
+
+DISPLAY = true --this enables the on screen debug message display linked to the EDX debugger.  If DEBUG is false this will be inactive as well.
+
+logEdexToFile = false --this enables the internal logging for the EDX itself and is not necessary for mission creators.
+
+disableEdexTimer = false --this disables the EDX timing mechanism which inturn will disable the EDX timers and hotkeys.  Keep false unless you have a good reason to deactivate them.
+
+
+--[[
+This should be all you need in your level script at any time.  If you have any questions feel free to contact tvig0r0us
+on the True OFDR Community Forums at:
+http://operationflashpoint.forummotion.com/t396-official-ofdr-mission-editor-expansion#2886
+]]--</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="6" Name="missionScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="-79.80197" Y="-2834.708">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="mission">
+          <Script>
+
+function onEDXInitialized()
+	
+	EDX:registerPlayerEchelon("echelonName",false)
+	
+	--EDX:registerPlayer("playerEntityName")
+	--EDX:registerPlayable("playableEntityName", false)
+end
+
+
+function onMissionStart()
+	EDX:setTimeOfDay(12, 00, 00)
+	--EDX:setRandomTime()
+	
+	EDX:setWeatherCurrent("clear")
+	EDX:setFogCurrent(0)
+	--EDX:setRandomWeather()
+	--EDX:randomizeWeather(30)
+	EDX:setObservationGroup("obsgrp");
+end
+
+function numpad1()
+	EDX:roadMove("testveh","dest");
+	OFP:displaySystemMessage("test veh ordered to move");
+end
+
+function numpad2()
+	EDX:roadMove("testveh","desti1");
+	OFP:displaySystemMessage("test veh ordered to move");
+end
+
+function numpad3()
+	EDX:roadMove("testveh","desti2");
+	OFP:displaySystemMessage("test veh ordered to move");
+end
+
+function numpad4()
+	EDX:roadMove("testveh2","dest");
+	OFP:displaySystemMessage("test veh ordered to move");
+end
+
+function numpad5()
+	EDX:roadMove("testveh2","desti1");
+	OFP:displaySystemMessage("test veh ordered to move");
+end
+
+function numpad6()
+	EDX:roadMove("testveh2","desti2");
+	OFP:displaySystemMessage("test veh ordered to move");
+end
+
+function numpad7()
+--	EDX:roadMove("testveh2","desti2");
+--	OFP:move("testveh","roadpt","OVERRIDE");
+--	OFP:displaySystemMessage("test veh ordered to move");
+	OFP:addLogColoured(0xffff0000, "getSpawnedUnit() invalid more than 1 entity in the table")
+end
+
+function onKeyPress(key)
+	if key == "!F9" then
+		for i,v in pairs(scripts.mission) do
+			local scr = tostring(i);
+			if scr ~= "level" then
+				EDX:saveTable(v,scr,scr.."ScriptSave.lua");
+			end
+		end
+		return true;
+	elseif key == "!F8" then
+		EDX:getTimeOfDay(true);
+		return true;
+	end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="7" Name="roadScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="26.29907" Y="-10986.46">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="roadmod">
+          <Script>
+function onRoadMoveCompleted(vehicleName)
+	OFP:displaySystemMessage("Road move for "..vehicleName.." has completed.")
+end
+
+function onRoadMoveFailed(vehicleName,target)
+	OFP:displaySystemMessage("Road move for "..vehicleName.." has failed with target "..target..".")
+end
+
+PATH_BUFFER = -5;
+
+function onEDXInitialized()
+	function EDX:roadMove(vehicleName,targetName)
+		roadMove(vehicleName,targetName);
+	end
+end
+
+function onLoadCheckpoint()
+	for i,v in pairs(moves) do
+		v.move = move;
+		v.delete = delete;
+	end
+end
+
+function onMissionStart()
+	ID = 0;
+	moves = {};
+	spawned = {};
+end
+
+function onEnter(zoneName, unitName)
+	--OFP:displaySystemMessage("onEnter "..unitName.." "..zoneName);
+	if moves[unitName]
+	and moves[unitName].trig
+	and moves[unitName].trig == zoneName then
+		--moves[unitName].trig = nil;
+		OFP:destroyEntitySet(moves[unitName].tid);
+		if moves[unitName].cur == moves[unitName].tar then
+			moves[unitName]:delete();
+			EDX:distributeFunction("onRoadMoveCompleted",unitName);
+		else
+			moves[unitName]:move();
+		end
+	end
+end
+
+function onLeave(zoneName, unitName)
+
+end
+
+function onSpawnedReady( setName, setID, tableOfEntities, errorCode )
+	--OFP:displaySystemMessage("onSpawnedReady "..setName.." "..setID);
+	if spawned[setID] then
+		if setName == "trdmove" then
+			local mv = moves[spawned[setID]];
+			mv.trig = tableOfEntities[1];
+		end
+	end
+	spawned[setID] = nil;
+end
+
+function onDeath(victim, killer)
+	if moves[victim] then
+		if moves[victim].tid then
+			OFP:destroyEntitySet(moves[victim].tid);
+		end
+		moves[victim] = nil;
+	end
+
+end
+
+function onMobilityKill(vehicle)
+	if moves[vehicle] then
+		if moves[vehicle].tid then
+			OFP:destroyEntitySet(moves[vehicle].tid);
+		end
+		moves[vehicle] = nil;
+	end
+end
+
+function roadMove(vehicleName,targetName)
+	if OFP:getDistance(vehicleName,vehicleName) == -1
+	or not EDX:isVehicle(vehicleName)
+	or not OFP:isAlive(vehicleName)
+	or OFP:isMobilityKill(vehicleName)
+	or OFP:isDestroyed(vehicleName) then
+		debugInfo = "ERROR[roadMod]:Invalid vehicle";
+		return;
+	elseif OFP:getDistance(targetName,targetName) == -1 then
+		debugInfo = "ERROR[roadMod]:Invalid target";
+		return;
+	elseif moves[vehicleName] then
+		EDX:setTimer(moves[vehicleName].to,180000)
+		moves[vehicleName].used = {};
+		moves[vehicleName].trig = nil;
+		moves[vehicleName].cur = nil;
+		if moves[vehicleName].tid then
+			OFP:destroyEntitySet(moves[vehicleName].tid);
+		end
+		moves[vehicleName].tar = targetName;
+		moves[vehicleName]:move();
+		return;
+	else
+		local mv = {};
+		mv.veh = vehicleName;
+		mv.tar = targetName;
+		mv.used = {};
+		mv.to = EDX:serialTimer("timeOut",180000,vehicleName);
+		mv.move = move;
+		mv.delete = delete;
+		moves[vehicleName] = mv;
+		mv:move();
+	end
+end
+
+function timeOut(vehicleName,timerID)
+	EDX:deleteTimer(timerID);
+	local target = moves[vehicleName].tar
+	moves[vehicleName] = nil;
+	EDX:distributeFunction("onRoadMoveFailed",vehicleName,target);
+end
+
+function move(self)
+	local nd = 999999;
+	local np = "";
+	for i=0,OFP:getGroupSize("roadpt")-1 do
+		local pt = OFP:getGroupMember("roadpt",i);
+	    local ip = false;
+	    if EDX:isInTable(pt,self.used) or --[[OFP:getDistance(self.veh,pt) &gt; 200 or]] pt == self.cur then
+	        ip = true;
+	    end
+	    if not ip then
+	        local tard = 0;
+	        if self.cur ~= nil then
+	            tard = OFP:getDistance(self.cur,self.tar);
+	        else
+	            tard = OFP:getDistance(self.veh,self.tar);
+	        end
+	        local ptd = OFP:getDistance(pt,self.tar);
+	        if ptd &lt; tard + PATH_BUFFER then
+	        	local td = OFP:getDistance(self.veh,pt);
+	            if td &lt; nd --[[and td &gt; 25]] then
+	                nd = td;
+	                np = pt;
+	            end
+	        end
+	    end
+	end
+	if OFP:getGroupMember("roadpt",OFP:getNearestGroupMemberIndex(self.tar,"roadpt")) == self.cur
+	or np == "" then
+		np = self.tar;
+	end
+	OFP:displaySystemMessage("New point is "..np);
+	EDX:setTimer(self.to,180000)
+	local x,y,z = OFP:getPosition(np);
+	self.tid = OFP:spawnEntitySetAtLocation("trdmove",x,y,z);
+	OFP:move(self.veh,np,"CAddToEnd")
+	spawned[self.tid] = self.veh;
+	self.used[#self.used+1]=self.cur;
+	self.cur = np;
+end
+
+function delete(self)
+	EDX:deleteTimer(self.to);
+	moves[self.veh] = nil;
+end
+
+function moveToPath(echelonName)
+	log("Starting path finder")
+	local _newPoint = ""
+	if not eng.currentPath[echelonName] then
+		--log("getting initial path point")
+		local nearestPathPoint = getNearest(echelonName,path_points)
+		local nearestDist = 999999
+		for i,v in ipairs(scripts.mission.sosltlinks.linkTable[nearestPathPoint]) do
+			local tempDist = OFP:getDistance(v,eng.leader)
+			if tempDist &lt; nearestDist then
+				_newPoint = v
+				nearestDist = tempDist
+			end
+		end
+		if _newPoint == "deadend" then
+			local nDist = 99999
+			for i,v in ipairs(scripts.mission.sosltlinks.linkTable[nearestPathPoint]) do
+				if v ~= "deadend" then
+					local tempDist = OFP:getDistance(v,eng.leader)
+					if tempDist &lt; nearestDist then
+						nearestDist = tempDist
+						_newPoint = v
+					end
+				end
+			end
+		end
+		if _newPoint ~= "" then
+			OFP:move(echelonName,_newPoint,"OVERRIDE")
+			log("Initial point is ".._newPoint)
+			eng.lastPath[echelonName] = nearestPathPoint
+			eng.currentPath[echelonName] = _newPoint
+		else
+			log("No path point found")
+		end
+	else
+		--log("current point is "..eng.currentPath[echelonName].." and lastpoint is "..eng.lastPath[echelonName])
+		local nearestDist = 99999
+		for i,v in ipairs(scripts.mission.sosltlinks.linkTable[eng.currentPath[echelonName]]) do
+			if v ~= eng.lastPath[echelonName] then
+				local tempDist = OFP:getDistance(v,eng.leader)
+				if tempDist &lt; nearestDist then
+					nearestDist = tempDist
+					_newPoint = v
+				end
+			end
+		end
+		if _newPoint == "deadend" then
+			local nDist = 99999
+			for i,v in ipairs(scripts.mission.sosltlinks.linkTable[eng.currentPath[echelonName]]) do
+				if v ~= "deadend" then
+					local tempDist = OFP:getDistance(v,eng.leader)
+					if tempDist &lt; nearestDist then
+						nearestDist = tempDist
+						_newPoint = v
+					end
+				end
+			end
+		end
+		if _newPoint ~= "" then
+			eng.lastPath[echelonName] = eng.currentPath[echelonName]
+			eng.currentPath[echelonName] = _newPoint
+			OFP:move(echelonName,_newPoint,"OVERRIDE")
+			log("New point is ".._newPoint)
+		else
+			log("No path point found")
+		end
+	end
+end
+</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="8" Name="trdmove" TemplateID="64079280547853478" TemplateName="EntitySet" X="460.6957" Y="-10756.21">
+        <EntityProperties ParentEntitySetID="0" Description="" />
+        <EntitySetProperties Active="False" Exportable="True" />
+      </Marker>
+      <Marker SerializationID="9" Name="testveh" TemplateID="60237765508884700" TemplateName="vu06lav25" X="2870.967" Y="-8368.136">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties Group1="obsgrp" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2870.967, 0, -8368.136, 1" AltitudeMode="GroundLevel" />
+        <VehicleMountProperties VirtualCrew="True" MovingAtStart="False" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="10" Name="dest" TemplateID="130425489857899990" TemplateName="reference" X="1951.687" Y="-8178.681">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 1951.687, 0, -8178.681, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="11" Name="huntercqb" TemplateID="69556600966002848" TemplateName="huntercqb" X="2954.981" Y="-8572.879">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="Player" />
+        <PersonaProperties Surname="Mok" Rank="3" HeadTexture="c_head_asn_setG" HeadModel="c_head_asn_07" Voice="Marine02" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="0.9816276, 0, 0.1908091, 0, 0, 1, 0, 0, -0.1908091, 0, 0.9816276, 0, 2954.981, 0, -8572.879, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="12" Name="destI1" TemplateID="130425489857899990" TemplateName="reference" X="3280.998" Y="-8659.257">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 3280.998, 0, -8659.257, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="13" Name="destI2" TemplateID="130425489857899990" TemplateName="reference" X="2154.419" Y="-8616.89">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2154.419, 0, -8616.89, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+      <Marker SerializationID="14" Name="testveh2" TemplateID="60238293101996252" TemplateName="vu17dpv" X="2907.685" Y="-8426.866">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <GroupMemberProperties Group1="obsgrp" />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2907.685, 0, -8426.866, 1" AltitudeMode="GroundLevel" />
+        <VehicleMountProperties VirtualCrew="False" MovingAtStart="False" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="15" Name="Echelon" TemplateID="67298535397422246" TemplateName="Echelon" X="2920.318" Y="-8427.177">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <GameObjectProperties UIName="#ofp_unitname_fireteam" UIArtName="rifle_mv" UIEchelonName="#ofp_unitname_ft_rifle" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="0" BaseLeadership="0" ManualLevel="1" TooOnly="False" />
+      </Marker>
+      <Marker SerializationID="16" Name="iu07usmtfldr" TemplateID="58919055252285589" TemplateName="iu07usmtfldr" X="2867.011" Y="-8503.038">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="14" SeatName="Gunner" Mounted="True" />
+        <PersonaProperties Surname="Hutchins" Rank="3" HeadTexture="c_head_blk_setA" HeadModel="c_head_blk_01" Voice="Marine09" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2867.011, 0, -8503.038, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="15" BaseLeadership="200" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="17" Name="iu10uscqbrfl" TemplateID="60297994638747868" TemplateName="iu10uscqbrfl" X="2867.011" Y="-8503.038">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="14" SeatName="Gunner2" Mounted="True" />
+        <PersonaProperties Surname="Nguyen" Rank="2" HeadTexture="c_head_asn_setG" HeadModel="c_head_asn_07" Voice="Marine07" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2867.011, 0, -8503.038, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="15" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="18" Name="iu10uscqbrflI1" TemplateID="60297994638747868" TemplateName="iu10uscqbrfl" X="2867.011" Y="-8503.038">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <AttachmentsProperties>
+          <Slots />
+        </AttachmentsProperties>
+        <CharacterProperties ControlMode="AI" VehicleID="14" SeatName="Driver" Mounted="True" />
+        <PersonaProperties Surname="Robinson" Rank="2" HeadTexture="c_head_blk_setC" HeadModel="c_head_blk_03" Voice="Marine08" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 2867.011, 0, -8503.038, 1" AltitudeMode="GroundLevel" />
+        <AssignedWaypointProperties AssignedWaypointID="0" />
+        <HierarchyProperties ParentEchelonID="15" BaseLeadership="100" ManualLevel="1" TooOnly="False" />
+        <AlternateTemplateProperties />
+      </Marker>
+      <Marker SerializationID="19" Name="obsScript" TemplateID="59584148284663864" TemplateName="secondaryScript" X="0.1105957" Y="-10611.24">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <LuaScriptProperties ScriptName="obsmod">
+          <Script>--[[				Group Observation mod by
+       ___         ___                     ___          ___          ___          ___          ___          ___     
+      /\  \       /\__\         ___       /\  \        /\  \        /\  \        /\  \        /\__\        /\  \    
+      \:\  \     /:/  /        /\  \     /::\  \      /::\  \      /::\  \      /::\  \      /:/  /       /::\  \   
+       \:\  \   /:/  /         \:\  \   /:/\:\  \    /:/\:\  \    /:/\:\  \    /:/\:\  \    /:/  /       /:/\ \  \  
+       /::\  \ /:/__/  ___     /::\__\ /:/  \:\  \  /:/  \:\  \  /::\~\:\  \  /:/  \:\  \  /:/  /  ___  _\:\~\ \  \ 
+      /:/\:\__\|:|  | /\__\ __/:/\/__//:/__/_\:\__\/:/__/ \:\__\/:/\:\ \:\__\/:/__/ \:\__\/:/__/  /\__\/\ \:\ \ \__\
+     /:/  \/__/|:|  |/:/  //\/:/  /   \:\  /\ \/__/\:\  \ /:/  /\/_|::\/:/  /\:\  \ /:/  /\:\  \ /:/  /\:\ \:\ \/__/
+    /:/  /     |:|__/:/  / \::/__/     \:\ \:\__\   \:\  /:/  /    |:|::/  /  \:\  /:/  /  \:\  /:/  /  \:\ \:\__\  
+    \/__/       \::::/__/   \:\__\      \:\/:/  /    \:\/:/  /     |:|\/__/    \:\/:/  /    \:\/:/  /    \:\/:/  /  
+                 ~~~~        \/__/       \::/  /      \::/  /      |:|  |       \::/  /      \::/  /      \::/  /   
+                                          \/__/        \/__/        \|__|        \/__/        \/__/        \/__/    
+]]
+
+disableScript = false;
+
+function onEDXInitialized()
+	function EDX:setObservationGroup(groupName)
+		obsGroup = groupName;
+	end
+end
+
+function onKeyPress(key)
+	if key == "!F5" then
+		if not obsGroup then obsGroup = "obsgrp" end
+		if OFP:getGroupSize(obsGroup) == 0 then return end
+		if not currentCam then currentCam = EDX:getPlayerLeader() end
+		if not groupIndex then groupIndex = 0 end
+		if currentCam ~= EDX:getPlayerLeader() then
+			OFP:selectCamera(EDX:getPlayerLeader());
+			currentCam = EDX:getPlayerLeader();
+		else
+			local obsEntity = OFP:getGroupMember(obsGroup, groupIndex);
+			if obsEntity then
+				OFP:selectCamera(obsEntity);
+				currentCam = obsEntity;
+			else
+				groupIndex = 0;
+				obsEntity = OFP:getGroupMember(obsGroup, groupIndex);
+				OFP:selectCamera(obsEntity);
+				currentCam = obsEntity;
+			end
+		end
+		return true;
+	elseif key == "!F6" then
+		if OFP:getGroupSize(obsGroup) == 0 then return end
+		if not currentCam then currentCam = EDX:getPlayerLeader() end
+		if not groupIndex then groupIndex = 0 end
+		if groupIndex &lt; OFP:getGroupSize(obsGroup) - 1 then
+			groupIndex = groupIndex + 1;
+		else
+			groupIndex = 0;
+		end
+		local obsEntity = OFP:getGroupMember(obsGroup, groupIndex);
+		if obsEntity then
+			OFP:selectCamera(obsEntity);
+			currentCam = obsEntity;
+		else
+			groupIndex = 0;
+			obsEntity = OFP:getGroupMember(obsGroup, groupIndex);
+			OFP:selectCamera(obsEntity);
+			currentCam = obsEntity;
+		end
+		return true;
+	elseif key == "!F7" then
+		if OFP:getGroupSize(obsGroup) == 0 then return end
+		if not currentCam then currentCam = EDX:getPlayerLeader() end
+		if not groupIndex then groupIndex = 0 end
+		if groupIndex &gt; 0 then
+			groupIndex = groupIndex - 1;
+		else
+			groupIndex = OFP:getGroupSize(obsGroup) - 1;
+		end
+		local obsEntity = OFP:getGroupMember(obsGroup, groupIndex);
+		if obsEntity then
+			OFP:selectCamera(obsEntity);
+			currentCam = obsEntity;
+		else
+			groupIndex = 0;
+			obsEntity = OFP:getGroupMember(obsGroup, groupIndex);
+			OFP:selectCamera(obsEntity);
+			currentCam = obsEntity;
+		end
+		return true;
+	end
+end
+
+function onDeath(victim, killer)
+	if OFP:wasInGroup(victim, obsGroup) then
+		if currentCam == victim then
+			currentCam = EDX:getPrimaryPlayer();
+			OFP:selectCamera(currentCam);
+		end
+	end
+end</Script>
+        </LuaScriptProperties>
+      </Marker>
+      <Marker SerializationID="20" Name="location" TemplateID="130425489857799990" TemplateName="location" X="4441.906" Y="-11128.44">
+        <EntityProperties ParentEntitySetID="1" Description="" />
+        <GroupMemberProperties />
+        <TransformProperties GameMatrix="-1, 0, 8.742278E-08, 0, 0, 1, 0, 0, -8.742278E-08, 0, -1, 0, 4441.906, 0, -11128.44, 1" AltitudeMode="GroundLevel" />
+      </Marker>
+    </Markers>
+  </MarkerManager>
+</MissionEditor.Mission>

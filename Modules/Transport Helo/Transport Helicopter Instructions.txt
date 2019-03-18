@@ -1,0 +1,39 @@
+OFDR Transport Helicopter Module by tvig0r0us
+To use the transport helicopter module simply extract the transport helo folder to a location of your choice on your computer.
+You will need to import the module into the project.
+To do this, simply open the editor.
+Load your project.
+Go to the file menu option and go to "Marker Collection".
+Select "Load".
+Navigate to the transport helo folder you extracted from the zip and select the "Transport Helicopter Module.markerscollection.xml".
+You should now have the script and all of the entity sets required to use the transport helicopter in your mission.
+In this case the camera functions have been incorporated into the autocomplete and can be accessed from your script under the prefix EDX.
+A list will appear with all of the commands that are available from the transport helo script.
+
+For an example featuring the use of the transport helicopter menu see the "transportHelo2.mssn"
+
+Transport Helicopter Module Commands list:
+
+EDX:openTransportMenu(unitGroupOrEchelonName, transportTo, pickupPosition) --Opens the transport helo menu
+EDX:transportPickup(unitGroupOrEchelonName, transportTo, pickupPosition) --Transport helo flies to the unitGroupOrEchelonName or PickupPosition(if given), waits for all of the entityGroupOrEchelon to board and flies to the transportTo, lands and waits for all to exit the helo then leaves.
+EDX:transportPatrol(centerPosition) --Transport helo will come and patrol around the given centerPosition (can be an entity or table of 3d coordinates)
+EDX:transportDropoff(destination) --If the unit, group or echelon to transport is on board this command will send them to the given destination
+EDX:transportLeave() --If the crew is alone in the helicopter this will make it leave the area and despawn
+EDX:transportBailout() --if the unit, group or echelon to transport is on board this command will make them bail out one at a time (Players must bail out on their own!!)
+EDX:getTransportHelo() --This commands returns the name of the transport helicopter entity
+EDX:getTransportEchelon() --This command returns the name of the helicopter crew's echelon
+EDX:isAllInTransport() --Returns true if ALL of the entityGroupOrEchelon to transport are aboard the transport helicopter
+EDX:isNotInTransport() --Returns true if NONE of the entityGroupOrEchelon to transport are aboard the transport helicopter
+
+Events
+
+onTransportPickup(entityGroupOrEchelonName) --Fires when the transport helicopter lands to pickup the unit, group or echelon to transport
+onTransportDropoff(entityGroupOrEchelonName) --Fires when the transport helicopter lands to dropoff the unit, group or echelon to transport
+onTransportMounted(entityGroupOrEchelonName) --Fires when all unit, group or echelon members to transport have mounted the transport helo
+onTransportDismounted(entityGroupOrEchelonName) --Fires when all unit, group or echelon members to transport have dismounted the transport helo
+onAllJumpersOut() --fires when all of the unit, group or echelon to transport has bailed out of the helicopter after a transportBailout command
+onHeloDestroyed() --fires if the currently operating transport helo is destroyed in combat
+
+
+
+Cheers

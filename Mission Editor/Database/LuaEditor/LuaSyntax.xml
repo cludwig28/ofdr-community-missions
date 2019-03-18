@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="UTF-8"?><Language Name="Lua" Startblock="LUA Code">
+
+  <FileTypes>
+    <FileType Extension=".lua" Name="Lua code file"/>
+  </FileTypes>
+
+  <Block Name="LUA Code" Style="LUA Code" EscapeChar="" IsMultiline="true">
+    
+    <Scope Start="function" StartIsKeyWord="true" End="end" EndIsKeyWord="true" EndIsSeparator="true" Style="LUA Keyword" Text="function..." CauseIndent="true"/>
+    <Scope Start="if" StartIsKeyWord="true" End="end" EndIsKeyWord="true" Style="LUA Keyword" Text="if..." CauseIndent="true"/>
+    <Scope Start="for" StartIsKeyWord="true" End="end" EndIsKeyWord="true" Style="LUA Keyword" Text="for..." CauseIndent="true"/>
+    <Scope Start="while" StartIsKeyWord="true" End="end" EndIsKeyWord="true" Style="LUA Keyword" Text="while..." CauseIndent="true"/>
+    <Scope Start="repeat" StartIsKeyWord="true" End="until" EndIsKeyWord="true" Style="LUA Keyword" Text="repeat..." CauseIndent="true"/>
+
+    <Bracket Start="(" End=")" Style="LUA Code"/>
+    <Bracket Start="[" End="]" Style="LUA Code"/>
+
+    <Keywords>
+      <PatternGroup Name="Keywords" Style="LUA Keyword" CaseSensitive="true">
+        <Patterns>
+			_ALERT
+			_ERRORMESSAGE
+			_G
+			_INPUT
+			_OUTPUT
+			_PROMPT
+			_STDERR
+			_STDIN
+			_STDOUT
+			_VERSION
+			abs
+			acos
+			and
+			appendto
+			asin
+			assert
+			atan
+			atan2
+			break
+			call
+			ceil
+			clock
+			closefile
+			collectgarbage
+			coroutine
+			coroutine.create
+			coroutine.resume
+			coroutine.status
+			coroutine.wrap
+			coroutine.yield
+			cos
+			date
+			debug
+			deg
+			difftime
+			do
+			dofile
+			dostring
+			else
+			elseif
+			end
+			error
+			execute
+			exit
+			exp
+			false
+			floor
+			flush
+			for
+			foreach
+			foreachi
+			format
+			frexp
+			function
+			gcinfo
+			getenv
+			getfenv
+			getmetatable
+			getn
+			globals
+			gsub
+			if
+			in
+			io
+			io.close
+			io.flush
+			io.input
+			io.lines
+			io.open
+			io.output
+			io.read
+			io.stderr
+			io.stdin
+			io.stdout
+			io.tmpfile
+			io.type
+			io.write
+			ipairs
+			ldexp
+			loadfile
+			loadlib
+			loadstring
+			local
+			log
+			log10
+			math
+			math.abs
+			math.acos
+			math.asin
+			math.atan
+			math.atan2
+			math.ceil
+			math.cos
+			math.deg
+			math.exp
+			math.floor
+			math.frexp
+			math.ldexp
+			math.log
+			math.log10
+			math.max
+			math.min
+			math.mod
+			math.pi
+			math.rad
+			math.random
+			math.randomseed
+			math.sin
+			math.sqrt
+			math.tan
+			max
+			min
+			mod
+			newtype
+			next
+			nil
+			not
+			openfile
+			or
+			os
+			os.clock
+			os.date
+			os.difftime
+			os.execute
+			os.exit
+			os.getenv
+			os.remove
+			os.rename
+			os.setlocale
+			os.time
+			os.tmpname
+			pairs
+			pcall
+			print
+			rad
+			random
+			randomseed
+			rawegal
+			rawget
+			rawget
+			rawset
+			rawset
+			read
+			readfrom
+			remove
+			rename
+			repeat
+			require
+			require
+			return
+			seek
+			setfenv
+			setlocale
+			setmetatable
+			sin
+			sort
+			sqrt
+			strbyte
+			strchar
+			strfind
+			string
+			string.byte
+			string.char
+			string.dump
+			string.find
+			string.format
+			string.gfind
+			string.gsub
+			string.len
+			string.lower
+			string.rep
+			string.sub
+			string.upper
+			strlen
+			strlower
+			strrep
+			strsub
+			strupper
+			table
+			table.concat
+			table.foreach
+			table.foreachi
+			table.getn
+			table.insert
+			table.remove
+			table.setn
+			table.sort
+			tan
+			then
+			time
+			tinsert
+			tmpfile
+			tmpname
+			tonumber
+			tostring
+			tremove
+			true
+			type
+			unpack
+			until
+			while
+			write
+			writeto
+			xpcall
+        </Patterns>
+      </PatternGroup>
+
+      <PatternGroup Name="Numbers" Style="LUA Number">
+        <Pattern Text="([0-9]+(.[0-9]+)?)" IsComplex="true"/>
+        <Pattern Text="([0-9]+(.[0-9]+)?((e|E)(\+|\-)?[0-9]+)?)" IsComplex="true"/>
+        <Pattern Text="(0(x|X)[0-9a-fA-F]+)" IsComplex="true"/>
+      </PatternGroup>
+
+      <PatternGroup Name="OFPFunctions" Style="LUA OFP functions" CaseSensitive="false">
+        <Patterns>
+          connectToWaypoint
+          disconnectFromWaypoint
+          OFP:activateEntitySet
+          OFP:activateRVChain
+          OFP:addLog
+          OFP:addLogColoured
+          OFP:addTimer
+          OFP:addToGroup
+          OFP:allowPlayerFire
+          OFP:allowPlayerMovement
+          OFP:allowSoldierSpeaker
+          OFP:assault
+          OFP:assaultBuilding
+          OFP:assert
+          OFP:attach
+          OFP:blockCommandAndReportFeedback
+          OFP:breakMorale
+          OFP:callAirStrike
+          OFP:callArtilleryStrike
+          OFP:cancelCheckpoints
+          OFP:checkpoint
+          OFP:clearCommandQueue
+          OFP:clearLog
+          OFP:convertTimeToHMS
+          OFP:convertTimeToMilliSeconds
+          OFP:createParticleEffect
+          OFP:damage
+          OFP:damageBuilding
+          OFP:damageVehicle
+          OFP:defendBuilding
+          OFP:defendDirByPosition
+          OFP:defendLocation
+          OFP:defendPerimeter
+          OFP:defendPos
+          OFP:defendUnit
+          OFP:despawnEntity
+          OFP:despawnEntity
+          OFP:destroyEntitySet
+          OFP:destroyParticleEffect
+          OFP:destroyVehicle
+          OFP:detach
+          OFP:disableCheckpoint
+          OFP:disableEvent
+          OFP:dismountVehicle
+          OFP:displaySystemMessage
+          OFP:doParticleEffect
+          OFP:enableAirStrike
+          OFP:enableArtilleryStrike
+          OFP:enableCheckpoint
+          OFP:enableEvent
+          OFP:engage
+          OFP:escortLeft
+          OFP:escortRight
+          OFP:escortWithOffset
+          OFP:follow
+          OFP:forceDismountVehicle
+          OFP:forceRegroup
+          OFP:forceSetROE
+          OFP:getAirStrikeCount
+          OFP:getAirStrikeCountBySize
+          OFP:getAmmoCount
+          OFP:getArmiesRelationship
+          OFP:getArtilleryStrikeCount
+          OFP:getArtilleryStrikeCountBySize
+          OFP:getBroadUnitCategory
+          OFP:getBuildingGuid
+          OFP:getCurrentRVPoint
+          OFP:getDistance
+          OFP:getDoctrine
+          OFP:getEchelonFullSize
+          OFP:getEchelonMember
+          OFP:getEchelonSize
+          OFP:getFormation
+          OFP:getGroupMember
+          OFP:getGroupSize
+          OFP:getHeight
+          OFP:getHoldFire
+          OFP:getLeader
+          OFP:getLeaderOfEchelon
+          OFP:getMissionQuota
+          OFP:getMissionTime
+          OFP:getMood
+          OFP:getMorale
+          OFP:getMountedVehicle
+          OFP:getNearestDeadEnemy
+          OFP:getNearestDeadFriend
+          OFP:getNearestDeadNeutralUnit
+          OFP:getNearestEnemy
+          OFP:getNearestFriend
+          OFP:getNearestGroupMemberIndex
+          OFP:getNearestNeutralUnit
+          OFP:getNearestPath
+          OFP:getNearestWaypoint
+          OFP:getNextRVPoint
+          OFP:getNextWaypoint
+          OFP:getObjectiveState
+          OFP:getParentEchelon
+          OFP:getPosition
+          OFP:getROE
+          OFP:getRVChainName
+          OFP:getSide
+          OFP:getSpeed
+          OFP:getStance
+          OFP:getTerrainHeight
+          OFP:getTimer
+          OFP:getUnitCategory
+          OFP:getVehicleLeaderSoldier
+          OFP:getVehicleMountableStatus
+          OFP:isAlive
+          OFP:isAllInTrigger
+          OFP:isAllMounted
+          OFP:isAnyMounted
+          OFP:isBuildingDestroyed
+          OFP:isBuildingPartDestroyed
+          OFP:isCatastrophicallyDestroyed
+          OFP:isCombatEffective
+          OFP:isControlledByParent
+          OFP:isDestroyed
+          OFP:isEchelon
+          OFP:isFirepowerKill
+          OFP:isGroup
+          OFP:isInEchelon
+          OFP:isInGroup
+          OFP:isInTrigger
+          OFP:isInvulnerable
+          OFP:isMainRotorDestroyed
+          OFP:isMobilityKill
+          OFP:isObjectiveVisible
+          OFP:isPlaceableDestroyed
+          OFP:isPlayer
+          OFP:isPrimaryPlayer
+          OFP:isSecondaryPlayer
+          OFP:isTailRotorDestroyed
+          OFP:isUnit
+          OFP:isVehicleIgnoredByAI
+          OFP:isVehicleMountable
+          OFP:land
+          OFP:loadAudioProject
+          OFP:lookAt
+          OFP:lookAtDefault
+          OFP:lookAtEntity
+          OFP:manEmplacementWeapon
+          OFP:missionCompleted
+          OFP:missionFailed
+          OFP:missionFailedKIA
+          OFP:missionFailedMIA
+          OFP:mountVehicle
+          OFP:move
+          OFP:particleEffect
+          OFP:patrol
+          OFP:playNPCSpeech
+          OFP:playPlayerSpeech
+          OFP:playSpeech
+          OFP:playSpeech3
+          OFP:popFrontCommand
+          OFP:rapidMove
+          OFP:registerOnReconFunction
+          OFP:regroup
+          OFP:removeFromGroup
+          OFP:removeTimer
+          OFP:scriptedCheckpoint
+          OFP:searchAndDestroy
+          OFP:setAIConfigPropertyValue
+          OFP:setAIDispersionSystemAimOffset
+          OFP:setAIDispersionSystemDRBlock
+          OFP:setAIDispersionSystemPropertyValue
+          OFP:setAIInaccuracy
+          OFP:setAirStrikeCount
+          OFP:setAIWeaponUsageBurstLength
+          OFP:setAIWeaponUsageDispersionRadius
+          OFP:setAIWeaponUsageFireRate
+          OFP:setAmmoCount
+          OFP:setArmiesRelationship
+          OFP:setArmy
+          OFP:setArtilleryStrikeCount
+          OFP:setDoctrine
+          OFP:setFogCurrent
+          OFP:setFogTarget
+          OFP:setFormation
+          OFP:setHoldFire
+          OFP:setInvulnerable
+          OFP:setIsControlledByParent
+          OFP:setLights
+          OFP:setMaxSpeed
+          OFP:setMissionTime
+          OFP:setMood
+          OFP:setNonRevivable
+          OFP:setObjectiveMarkerVisibility
+          OFP:setObjectiveState
+          OFP:setObjectiveVisibility
+          OFP:setParticleSystemEffect
+          OFP:setRallyPoint
+          OFP:setROE
+          OFP:setRVChainVisibility
+          OFP:setStance
+          OFP:setTimeOfDay
+          OFP:setTimer
+          OFP:setVehicleIgnoredByAI
+          OFP:setVehicleIsMountable
+          OFP:setVehicleMood
+          OFP:setVehicleMountableStatus
+          OFP:setWeatherCurrent
+          OFP:setWeatherTarget
+          OFP:showLetterBoxOsd
+          OFP:showPopup
+          OFP:spawnEntitySet
+          OFP:spawnEntitySetAtLocation
+          OFP:spawnEntitySetAtEntityPosition
+          OFP:startParticleSystem
+          OFP:stop
+          OFP:stopForTime
+          OFP:stopInfinite
+          OFP:stopParticleSystem
+          OFP:suppress
+          OFP:takeoff
+          OFP:teleport
+          OFP:throwGrenade
+          OFP:unregisterOnReconFunction
+          OFP:wasInGroup
+          onAllPlayersDead
+          onArriveAtWaypoint
+          onButtonPressed
+          onCmdCompleted
+          onCreate
+          onDeath
+          onDespawnEntity
+          onDespawnEntitySet
+          onDismount
+          onEnter
+          onEnterRVPoint
+          onFirepowerKill
+          onFiring
+          onHit
+          onIdentified
+          onIncap
+          onLand
+          onLeave
+          onMissionStart
+          onMobilityKill
+          onMount
+          onMultiplayerMissionLoaded
+          onNoAmmo
+          onNoAmmoAll
+          onObjectDamage
+          onObjectiveCompleted
+          onObjectiveFailed
+          onObjectiveVisible
+          onOffboardSupp
+          onPinned
+          onPlaceableKill
+          onPlayDone
+          onPlayEnter
+          onPlayFailed
+          onPlayInvalid
+          onPvPMissionEnd
+          onRespawn
+          onSpawnedReady
+          onSpeechEnd
+          onSuppressed
+          onSuspected
+          onUnderfire
+          onUnsuppressed
+          updateFrame
+		onKeyPress
+		onEDXInitialized
+		onLoadCheckpoint
+		onTransportPickup
+		onTransportDropoff
+		onTransportMounted
+		onTransportDismounted
+		onAllJumpersOut
+		onHeloDestroyed
+		onCamMoveCompleted
+		onCamRotateCompleted
+		onMenuTimeout
+          OFP:scriptedCheckpoint
+          OFP:heal
+          OFP:gameplaySprint
+          OFP:isBleeding
+          OFP:deployCounterMeasures
+          OFP:spawnEntitySetAtEntityPosition
+          OFP:playOffmapSpeech
+          OFP:particleEffect
+          OFP:selectCamera
+          OFP:getMovementStyle
+          OFP:setMovementStyle
+          OFP:getPlatform
+          OFP:showPopupAndIcon
+	EDX:setMissionFolder
+	EDX:getMissionFolder
+	EDX:distributeFunction
+	EDX:simpleTimer
+	EDX:serialTimer
+	EDX:setTimer
+	EDX:triggerTimer
+	EDX:serializeTimer
+	EDX:disableTimer
+	EDX:deleteTimer
+	EDX:setTimerVar
+	EDX:getTimerVar
+	EDX:deleteTimerVar
+	EDX:setVar
+	EDX:getVar
+	EDX:deleteVar
+	EDX:setDeadID
+	EDX:setDeadIDBuffer
+	EDX:setAutoLights
+	EDX:setAutoLightsHours
+	EDX:disableAutoLights
+	EDX:canSeeAny
+	EDX:getSquadEchelons
+	EDX:fireTeamRecruiter
+	EDX:squadRecruiter
+	EDX:condenseSquad
+	EDX:getNearest
+	EDX:getFurthest
+	EDX:get4Nearest
+	EDX:getNearestGroupMember
+	EDX:isAnyInRange
+	EDX:isAllInRange
+	EDX:getCurrentWeapon
+	EDX:grpToTable
+	EDX:isInTable
+	EDX:getRandom
+	EDX:randomChance
+	EDX:getGridPosition
+	EDX:getLocalGridPosition
+	EDX:getGlobalGridPosition
+	EDX:get3dDistance
+	EDX:getEntity3dDistance
+	EDX:get2dDistance
+	EDX:getEntity2dDistance
+	EDX:getEntities2dDistance
+	EDX:getTimeOfDay
+	EDX:setTimeOfDay
+	EDX:advanceTime
+	EDX:setRandomTime
+	EDX:randomizeWeather
+	EDX:stopRandomizedWeather
+	EDX:cycleWeatherType
+	EDX:cycleFogDensity
+	EDX:setRandomWeather
+	EDX:setRandomWeatherTarget
+	EDX:setWeatherCurrent
+	EDX:setFogCurrent
+	EDX:setWeatherTarget
+	EDX:setFogTarget
+	EDX:getWeatherType
+	EDX:getFogDensity
+	EDX:getHeading
+	EDX:getBearing
+	EDX:getBearing2
+	EDX:bearing2heading
+	EDX:get360Coordinates
+	EDX:canSpawn
+	EDX:isGroundLevel
+	EDX:isInLOS
+	EDX:isInWorld
+	EDX:isOcean
+	EDX:isLake
+	EDX:saveTable
+	EDX:loadTable
+	EDX:fileExists
+	EDX:loadFile
+	EDX:saveFile
+	EDX:isVehicle
+	EDX:isGround
+	EDX:isArmored
+	EDX:isAir
+	EDX:isStatic
+	EDX:isSoldier
+	EDX:getOffset
+	EDX:trim
+	EDX:split
+	EDX:round
+	EDX:deepcopy
+	EDX:startsWith
+	EDX:endsWith
+	EDX:despawner
+	EDX:getEchelon
+	EDX:getImmediateParent
+	EDX:getVersion
+	EDX:filterTable
+	EDX:getPath
+	EDX:getDriver
+	EDX:getGunners
+	EDX:setActiveScript
+	EDX:playOwpSound
+	EDX:registerPlayerEchelon
+	EDX:getPlayerEchelon
+	EDX:registerPlayer
+	EDX:registerPlayable
+	EDX:isCoop
+	EDX:getPlayers
+	EDX:getPrimaryPlayer
+	EDX:getPlayerLeader
+	EDX:getPlayerBearing
+	EDX:setBearingDist
+	EDX:removeDictionaryElements
+	EDX:removeArrayElements
+	EDX:newMenu
+	EDX:setMenuItem
+	EDX:removeMenuItem
+	EDX:openMenu
+	EDX:closeMenu
+	EDX:isGameInit
+	EDX:registerEventHandler
+	EDX:fireEventHandler
+	EDX:initCams
+	EDX:disableCams
+	EDX:createCamera
+	EDX:setCamera
+	EDX:setCameraMotion
+	EDX:setCameraTarget
+	EDX:setCameraFollowTarget
+	EDX:activateCamera
+	EDX:deactivateCamera
+	EDX:deleteCamera
+	EDX:camSnapShot
+	EDX:activateControlledCamera
+	EDX:displayCameraInfo
+	EDX:getCameraPosition
+	EDX:camMoveToTarget
+	EDX:camRotateToTarget
+	EDX:camTargetEntity
+	EDX:openTransportMenu
+	EDX:transportPickup
+	EDX:transportPatrol
+	EDX:transportDropoff
+	EDX:transportLeave
+	EDX:transportBailout
+	EDX:getTransportHelo
+	EDX:getTransportEchelon
+	EDX:isAllInTransport
+	EDX:isNotInTransport
+	numpad0
+	numpad1
+	numpad2
+	numpad3
+	numpad4
+	numpad5
+	numpad6
+	numpad7
+	numpad8
+	numpad9
+	numpadPlus
+	numpadMinus
+	numpadMult
+	numpadDiv
+	numpadDecimal
+	numpadClear
+	numpadIns
+	numpadPgUp
+	numpadPgDn
+	numpadHome
+	numpadEnd
+	numpadDel
+	numpadUp
+	numpadDn
+	numpadLt
+	numpadRt
+	debug:teleportToPosition
+	debug:triggerSequence
+	debug:woundAbdomen
+	debug:teleportToEntity
+	debug:getCurrentWeaponIndex
+	debug:getTemplateName
+	debug:setDebugLevel
+	debug:teleportToLocation
+	debug:getFireModeName
+	debug:getSoldierInCrewPoint
+	debug:getCurrentFireMode
+	debug:isSmokeTestEnabled
+	debug:getWeaponName
+	debug:canSee
+	debug:getNumberOfFireModes
+	debug:woundLeg
+	debug:getNumberOfWeaponSlots
+	debug:getCrewPointName
+	debug:setGroupStatus
+	debug:setInfluenceMapArmyDebug
+	debug:cancelSequence
+	debug:clearLog
+	debug:getCurrentTarget
+	debug:getCurrentVehicleWeaponName
+	debug:getNumberOfCrewPoints
+	debug:triggerSequenceOverrideListener
+	scripts.mission.waypoints.initScript
+	scripts.mission.waypoints.registerFunction
+	TJD:addKTower
+	TJD:addStackTower
+	TJD:addCom1Tower
+	TJD:add5GunTower
+	TJD:addIgloo1
+	TJD:addWatchTower
+	TJD:addWaterTower
+	TJD:setZoneControl
+	TJD:placeSimpleBunker
+          </Patterns>
+      </PatternGroup>
+
+      <PatternGroup Name="GeneratedOFPFunc" Style="LUA OFP functions" CaseSensitive="true">
+        <Pattern Text="(onEnter_\w+)" IsComplex="true"/>
+        <Pattern Text="(onLeave_\w+)" IsComplex="true"/>
+        <Pattern Text="(onSuspected_\w+)" IsComplex="true"/>
+        <Pattern Text="(onIdentified_\w+)" IsComplex="true"/>
+        <Pattern Text="(onDeath_\w+)" IsComplex="true"/>
+        <Pattern Text="(onHit_\w+)" IsComplex="true"/>
+        <Pattern Text="(onPlaceableKill_\w+)" IsComplex="true"/>
+        <Pattern Text="(onFiring_\w+)" IsComplex="true"/>
+        <Pattern Text="(onNoAmmo_\w+)" IsComplex="true"/>
+        <Pattern Text="(onSuppressed_\w+)" IsComplex="true"/>
+        <Pattern Text="(onPinned_\w+)" IsComplex="true"/>
+        <Pattern Text="(onUnsuppressed_\w+)" IsComplex="true"/>
+        <Pattern Text="(onCmdCompleted_\w+)" IsComplex="true"/>
+        <Pattern Text="(onMissionTime_\d{2}x\d{2}x\d{2})" IsComplex="true"/>
+        <Pattern Text="(onButtonPressed_\w+)" IsComplex="true"/>
+	<Pattern Text="(onTimer\w+)" IsComplex="true"/>
+	</PatternGroup>
+    </Keywords>
+
+    <Operators>
+      <PatternGroup name="Operators" Style="LUA Operator">
+        <Pattern Text="."/>
+        <Pattern Text=","/>
+        <Pattern Text=":"/>
+        <Pattern Text="+"/>
+        <Pattern Text="-"/>
+        <Pattern Text="*"/>
+        <Pattern Text="/"/>
+        <Pattern Text="%"/>
+        <Pattern Text="^"/>
+        <Pattern Text="#"/>
+        <Pattern Text="="/>
+        <Pattern Text="~"/>
+        <Pattern Text="&gt;"/>
+        <Pattern Text="&lt;"/>
+      </PatternGroup>
+    </Operators>
+
+    <ChildBlocks>
+      <Child Name="LUA Multiline Comment"/>
+      <Child Name="LUA Singleline Comment"/>
+      <Child Name="LUA String"/>
+      <Child Name="LUA Char"/>
+      <Child Name="LUA Literal String"/>
+      <Child Name="LUA Literal Char"/>
+      <Child Name="LUA Code"/>
+    </ChildBlocks>
+  </Block>
+
+  <Block Name="LUA Multiline Comment" Style="LUA Comment" EscapeChar="" IsMultiline="true">
+    <Scope Start="--[[" End="]]" Style="LUA Comment" Text="--[[...]]"/>
+  </Block>
+
+  <Block Name="LUA Singleline Comment" Style="LUA Comment" EscapeChar="" IsMultiline="false">
+    <Scope Start="--" End="" Style="LUA Comment"/>
+  </Block>
+
+  <Block Name="LUA String" Style="LUA String" EscapeChar="\" IsMultiline="false">
+    <Scope Start="&quot;" End="&quot;" EscapeChar="\" Style="LUA String"/>
+  </Block>
+
+  <Block Name="LUA Char" Style="LUA String" EscapeChar="" IsMultiline="false">
+    <Scope Start="'" End="'" EscapeChar="\" Style="LUA String"/>
+  </Block>
+
+  <Style Name="LUA Code" ForeColor="255, 175, 25" BackColor="" Bold="false" Italic="false" Underline="false"/>
+  <Style Name="LUA Comment" ForeColor="172, 168, 153" BackColor="" Bold="false" Italic="true" Underline="false"/>
+  <Style Name="LUA String" ForeColor="190, 90, 40" BackColor="" Bold="false" Italic="false" Underline="false"/>
+  <Style Name="LUA Number" ForeColor="190, 90, 40" BackColor="" Bold="false" Italic="false" Underline="false"/>
+  <Style Name="LUA Operator" ForeColor="255, 175, 25" BackColor="" Bold="false" Italic="false" Underline="false"/>
+  <Style Name="LUA Keyword" ForeColor="255, 200, 75" BackColor="" Bold="true" Italic="false" Underline="false"/>
+  <Style Name="LUA OFP functions" ForeColor="75, 140, 175" BackColor="" Bold="false" Italic="false" Underline="false"/>
+</Language>
