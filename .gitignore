@@ -39,3 +39,18 @@ luac.out
 *.x86_64
 *.hex
 
+AudioEffects/
+DLC/
+Heightmap/
+Icons/
+LibraryScripts/
+Localisation/
+Metrics/
+NewMap2/
+ParticleEffects/
+Persona/
+Help/
+ColorSchemes.xml/
+*.xsl
+Database/ScriptGeneration2/*.xml
+Database/ComponentsOrder.txt
