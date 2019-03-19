@@ -1,4 +1,9 @@
 ﻿<MissionEditor.Mission Version="0.60">
+  <UserData>
+    <PerMissionState>
+      <MapView ViewCenterX="16000" ViewCenterY="-8000" ViewScale="50" ViewRotation="0" />
+    </PerMissionState>
+  </UserData>
   <MissionProperties AlternativeSetup2Description="" AlternativeSetup2Name="" AlternativeSetup1Description="" AlternativeSetup1Name="" AlternativeSetup0Description="" AlternativeSetup0Name="" DLCBitMask="0" InitialWeather="0" Time="01/01/2000 12:00:00" MultiplayerDescription="" MultiplayerAttackingArmy="0" MultiplayerModes="0" MultiplayerMaxServerBandwidth="2048" MultiplayerMaxPlayers="16" EnemyIntel="#ofp_missint_defaulte" FriendlyIntel="#ofp_missint_defaultf" Debriefing="#ofp_missdeb_default" DetailedBriefing="#ofp_missbrief_default" MultiplayerArenaSubdivisions="5, 5" MultiplayerArenaWarningSize="200" MultiplayerArenaSize="1500, 1500" MultiplayerArenaCenter="16000, -8000" MapImageSize="4000" MapImageCenter="16000, -8000" MissionImagePath="" Description="#ofp_missdesc_default" Group="Mission Editor" Name="#ofp_missname_default" />
   <MarkerManager>
     <MarkerAspectManagers></MarkerAspectManagers>
