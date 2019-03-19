@@ -50,7 +50,7 @@ NewMap2/
 ParticleEffects/
 Persona/
 Help/
-ColorSchemes.xml/
+ColorSchemes.xml
 *.xsl
 Database/ScriptGeneration2/*.xml
 Database/ComponentsOrder.txt
